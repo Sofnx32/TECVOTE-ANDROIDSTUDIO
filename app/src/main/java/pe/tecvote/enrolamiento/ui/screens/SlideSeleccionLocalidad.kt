@@ -1,14 +1,15 @@
 package pe.tecvote.enrolamiento.ui.screens
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,21 +18,28 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pe.tecvote.enrolamiento.ui.Espaciados
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
 import pe.tecvote.enrolamiento.ui.EspacioMedio
 import pe.tecvote.enrolamiento.ui.EspacioGrande
 import pe.tecvote.enrolamiento.ui.EspacioExtraGrande
 import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
+import pe.tecvote.enrolamiento.ui.screens.localidad.LocalidadState
+import pe.tecvote.enrolamiento.ui.screens.localidad.LocalidadViewModel
 
 @Composable
 fun SlideSeleccionLocalidad(
     modifier: Modifier = Modifier,
-    dni: String = "",  // ← AGREGAR ESTE PARÁMETRO
-    onContinuar: () -> Unit = {}
+    dni: String = "",
+    onContinuar: () -> Unit = {},
+    viewModel: LocalidadViewModel = viewModel()
 ) {
     // Paleta de colores
     val azulProfundo = Color(0xFF020B18)
@@ -55,6 +63,15 @@ fun SlideSeleccionLocalidad(
         animationSpec = tween(1000, easing = LinearOutSlowInEasing),
         label = "alpha"
     )
+
+    // Cargar localidad automáticamente al entrar
+    LaunchedEffect(dni) {
+        if (dni.isNotBlank()) {
+            viewModel.cargarLocalidad(dni)
+        }
+    }
+
+    val state by viewModel.state.collectAsState()
 
     Box(
         modifier = modifier
@@ -96,212 +113,289 @@ fun SlideSeleccionLocalidad(
 
             EspacioExtraGrande()
 
-            // Título principal
-            Text(
-                "SELECCIONA TU LOCALIDAD",
-                color = Color.White,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.ExtraBold,
-                textAlign = TextAlign.Center
-            )
-
-            EspacioMedio()
-
-            Text(
-                "Usaremos tu ubicación para mostrar tu\ndepartamento y localidades disponibles.",
-                color = Color.White.copy(0.7f),
-                fontSize = 13.sp,
-                textAlign = TextAlign.Center,
-                lineHeight = 20.sp
-            )
-
-            EspacioGrande()
-
-            // Mapa ilustrativo (placeholder)
-            Box(
-                modifier = Modifier
-                    .size(TamanosAdaptativos.tamanoLogoPrincipal())
-                    .background(
-                        Brush.radialGradient(
-                            listOf(
-                                cyanBrillante.copy(0.2f),
-                                Color.Transparent
-                            )
-                        ),
-                        CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("📍", fontSize = 64.sp)
-            }
-
-            EspacioExtraGrande()
-
-            // Card de permiso de ubicación
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onContinuar() },
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White.copy(0.08f)
-                )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .background(cyanBrillante.copy(0.2f), CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("📍", fontSize = 24.sp)
-                    }
-
-                    Spacer(Modifier.width(16.dp))
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            "Permitir acceso a tu ubicación",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            "Así detectaremos tu departamento actual\ny te mostraremos las localidades disponibles\npara que elijas la correcta.",
-                            color = Color.White.copy(0.6f),
-                            fontSize = 11.sp,
-                            lineHeight = 16.sp
-                        )
-                    }
-
-                    Icon(
-                        androidx.compose.material.icons.Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Siguiente",
-                        tint = cyanBrillante
+            // Contenido dinámico según estado
+            when (val currentState = state) {
+                is LocalidadState.Cargando -> {
+                    ContenidoCargando(cyanBrillante)
+                }
+                is LocalidadState.LocalDetectado -> {
+                    ContenidoLocalDetectado(
+                        state = currentState,
+                        cyanBrillante = cyanBrillante,
+                        azulProfundo = azulProfundo,
+                        onContinuar = onContinuar
                     )
                 }
-            }
-
-            EspacioExtraGrande()
-
-            // Sección: ¿Por qué usamos tu ubicación?
-            Text(
-                "¿POR QUÉ USAMOS TU UBICACIÓN?",
-                color = cyanBrillante,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-
-            EspacioMedio()
-
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ItemRazonUbicacion("🎯", "Te mostramos solo las localidades de tu departamento.", cyanBrillante)
-                ItemRazonUbicacion("🔒", "No almacenamos tu ubicación exacta ni compartimos tus datos.", Color(0xFF4CAF50))
-                ItemRazonUbicacion("🛡️", "Tu privacidad y seguridad son nuestra prioridad.", Color(0xFF9C27B0))
+                is LocalidadState.PendienteAsignacion -> {
+                    ContenidoPendiente(
+                        mensaje = currentState.mensaje,
+                        cyanBrillante = cyanBrillante
+                    )
+                }
+                is LocalidadState.Error -> {
+                    ContenidoError(
+                        mensaje = currentState.mensaje,
+                        cyanBrillante = cyanBrillante,
+                        onReintentar = { viewModel.cargarLocalidad(dni) }
+                    )
+                }
             }
 
             Spacer(Modifier.weight(1f))
-
-            // Botones de acción
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Button(
-                    onClick = { onContinuar() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = cyanBrillante
-                    )
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            "USAR MI UBICACIÓN ACTUAL",
-                            color = azulProfundo,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 14.sp
-                        )
-                        Text(
-                            "Requiere permiso de ubicación",
-                            color = azulProfundo.copy(0.7f),
-                            fontSize = 10.sp
-                        )
-                    }
-                }
-
-                OutlinedButton(
-                    onClick = { onContinuar() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    border = BorderStroke(1.dp, cyanBrillante.copy(0.5f)),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = cyanBrillante
-                    )
-                ) {
-                    Text(
-                        "SELECCIONAR MANUALMENTE",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
-                    )
-                }
-
-                EspacioMedio()
-
-                Text(
-                    "¿Tienes problemas con el permiso? Ver ayuda",
-                    color = Color.White.copy(0.4f),
-                    fontSize = 11.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { }
-                        .padding(8.dp)
-                )
-            }
-
             EspacioExtraGrande()
         }
     }
 }
 
 @Composable
-private fun ItemRazonUbicacion(icono: String, texto: String, color: Color) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+private fun ContenidoCargando(color: Color) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .size(32.dp)
-                .background(color.copy(0.15f), CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(icono, fontSize = 16.sp)
-        }
+        CircularProgressIndicator(
+            color = color,
+            modifier = Modifier.size(64.dp)
+        )
+        EspacioGrande()
+        Text(
+            "Buscando tu local de votación...",
+            color = Color.White,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
 
-        Spacer(Modifier.width(12.dp))
+@Composable
+private fun ContenidoLocalDetectado(
+    state: LocalidadState.LocalDetectado,
+    cyanBrillante: Color,
+    azulProfundo: Color,
+    onContinuar: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Título
+        Text(
+            "TU LOCAL DE VOTACIÓN",
+            color = Color.White,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.ExtraBold,
+            textAlign = TextAlign.Center
+        )
+
+        EspacioMedio()
 
         Text(
-            texto,
+            "Hemos encontrado tu local asignado",
             color = Color.White.copy(0.7f),
-            fontSize = 12.sp,
-            lineHeight = 18.sp,
-            modifier = Modifier.weight(1f)
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center
         )
+
+        EspacioGrande()
+
+        // Mapa de Google
+        val ubicacionLocal = LatLng(state.latitud, state.longitud)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(ubicacionLocal, 16f)
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(280.dp)
+                .clip(RoundedCornerShape(16.dp))
+        ) {
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPositionState,
+                uiSettings = MapUiSettings(
+                    zoomControlsEnabled = false,
+                    myLocationButtonEnabled = false,
+                    compassEnabled = false
+                )
+            ) {
+                Marker(
+                    state = MarkerState(position = ubicacionLocal),
+                    title = state.nombreLocal,
+                    snippet = state.direccion
+                )
+            }
+        }
+
+        EspacioGrande()
+
+        // Card con información del local
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White.copy(0.08f)
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.LocationOn,
+                        contentDescription = null,
+                        tint = cyanBrillante,
+                        modifier = Modifier.size(32.dp)
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        state.nombreLocal,
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                Text(
+                    state.direccion,
+                    color = Color.White.copy(0.8f),
+                    fontSize = 13.sp,
+                    lineHeight = 18.sp
+                )
+
+                if (state.distrito.isNotBlank()) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        state.distrito,
+                        color = cyanBrillante,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+        }
+
+        EspacioGrande()
+
+        // Botón continuar
+        Button(
+            onClick = onContinuar,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = RoundedCornerShape(14.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = cyanBrillante
+            )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = azulProfundo,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    "VER MI LOCALIDAD",
+                    color = azulProfundo,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 14.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ContenidoPendiente(mensaje: String, cyanBrillante: Color) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            Icons.Default.Info,
+            contentDescription = null,
+            tint = cyanBrillante,
+            modifier = Modifier.size(80.dp)
+        )
+        EspacioGrande()
+        Text(
+            "LOCAL PENDIENTE",
+            color = Color.White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+        EspacioMedio()
+        Text(
+            mensaje,
+            color = Color.White.copy(0.7f),
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp
+        )
+    }
+}
+
+@Composable
+private fun ContenidoError(
+    mensaje: String,
+    cyanBrillante: Color,
+    onReintentar: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            Icons.Default.Warning,
+            contentDescription = null,
+            tint = Color(0xFFFF5252),
+            modifier = Modifier.size(80.dp)
+        )
+        EspacioGrande()
+        Text(
+            "ERROR",
+            color = Color.White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+        EspacioMedio()
+        Text(
+            mensaje,
+            color = Color.White.copy(0.7f),
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp
+        )
+        EspacioGrande()
+        OutlinedButton(
+            onClick = onReintentar,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = cyanBrillante
+            )
+        ) {
+            Text(
+                "REINTENTAR",
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp
+            )
+        }
     }
 }

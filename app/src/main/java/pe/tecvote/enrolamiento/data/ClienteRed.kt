@@ -20,8 +20,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
-// ── Modelos de Respuesta de Datos ───────────────────────────────────────────
-
 data class RespuestaElector(
     val existe: Boolean,
     val apto: Boolean,
@@ -56,6 +54,8 @@ data class RespuestaLugarVotacion(
     val direccion: String?,
     val distrito: String?,
     val ubigeo_legal: String? = null,
+    val latitud: Double? = null,
+    val longitud: Double? = null,
     val locales_para_elegir: List<LocalItem>? = null
 )
 
@@ -88,7 +88,6 @@ data class RespuestaMiMesa(
     val aula: String?
 )
 
-// ── Modelos de Petición (Bodys) ──────────────────────────────────────────────
 
 data class BodyPreguntas(
     val dni: String,
@@ -102,15 +101,10 @@ data class BodyCambioSede(
     val local_id: String
 )
 
-// ✅ BodyGuardar: Se usa para /api/guardar-enrolamiento/ (JSON + Base64)
 data class BodyGuardar(
     val dni: String,
     @SerializedName("imageBase64") val imageBase64: String = ""
 )
-
-// ❌ BodyLogin ELIMINADO: Ya no se usa con ML Kit local (ahora usamos multipart)
-
-// ── Nuevos Modelos para Geolocalización y Mis Datos ─────────────────────
 
 data class LocalItemResponse(
     val id: String,
@@ -139,14 +133,13 @@ data class RespuestaGuardarPreferencia(
     val local: Map<String, String>?
 )
 
-// ✅ CORREGIDO: mensaje_logistica como campo del constructor
 data class RespuestaMisDatos(
     val status: String,
     val elector: Map<String, Any>,
     val mesa: Map<String, Any>?,
     val local_votacion: Map<String, Any>?,
     val local_preferido: Map<String, Any>?,
-    val mensaje_logistica: String?,  // ← Este es el campo correcto
+    val mensaje_logistica: String?,
     val qr_base64: String?,
     val qr_texto: String?,
     val timestamp: String?
@@ -157,12 +150,10 @@ data class BodyPreferenciaLocal(
     val local_id: String
 )
 
-// ── Interfaz de Red (TecvoteApi) ─────────────────────────────────────────────
-// ✅ SOLO DECLARACIONES, SIN IMPLEMENTACIÓN
 
 interface TecvoteApi {
 
-    @GET("api/v1/elector/{dni}/")  // ← Agregar /v1/
+    @GET("api/v1/elector/{dni}/")
     suspend fun buscarElector(@Path("dni") dni: String): RespuestaElector
 
     @POST("api/validar-preguntas/")
@@ -233,7 +224,7 @@ interface TecvoteApi {
 
 object ClienteRed {
 
-    private const val BASE_URL = "http://192.168.1.31:8000/"
+    private const val BASE_URL = "http://JuanCa.local:8000/"
     private const val ENABLE_DEBUG_LOGS = true
     private var appContext: Context? = null
 
@@ -302,18 +293,10 @@ object ClienteRed {
             .create(TecvoteApi::class.java)
     }
 
-    // ✅ WRAPPERS CON IMPLEMENTACIÓN (fuera de la interfaz)
 
-    /**
-     * Wrapper para login biométrico con ML Kit LOCAL (multipart, sin Base64)
-     *
-     * @param dni DNI del elector
-     * @param fotoFile Archivo de foto capturada
-     * @return Result con RespuestaBiometria (incluye token JWT)
-     */
     suspend fun loginBiometricoMLKit(dni: String, fotoFile: File): Result<RespuestaBiometria> {
         return try {
-            Log.d("TECVOTE_NET", "📤 Enviando login biométrico ML Kit para DNI: $dni")
+            Log.d("TECVOTE_NET", "Enviando login biométrico ML Kit para DNI: $dni")
 
             val requestFile = fotoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
             val multipartPart = MultipartBody.Part.createFormData("foto", fotoFile.name, requestFile)
@@ -324,18 +307,17 @@ object ClienteRed {
             if (response.valido) {
                 response.token?.let {
                     tokenSesionBearer = it
-                    Log.d("TECVOTE_NET", "✅ Token guardado: ${it.take(20)}...")
+                    Log.d("TECVOTE_NET", "Token guardado: ${it.take(20)}...")
                 }
             }
 
             Result.success(response)
         } catch (e: Exception) {
-            Log.e("TECVOTE_NET", "❌ Error en login biométrico: ${e.message}", e)
+            Log.e("TECVOTE_NET", "Error en login biométrico: ${e.message}", e)
             Result.failure(e)
         }
     }
 
-    // ✅ Wrapper para guardar preferencia (IMPLEMENTACIÓN AQUÍ, no en la interfaz)
     suspend fun guardarPreferenciaLocal(
         dni: String,
         localId: String,
