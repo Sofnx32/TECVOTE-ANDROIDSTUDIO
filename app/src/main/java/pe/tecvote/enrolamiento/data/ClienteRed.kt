@@ -200,7 +200,7 @@ interface TecvoteApi {
 
     // 🔹 Preferencia de local (SOLO DECLARACIÓN)
     @POST("api/enrolamiento/preferencia/")
-    suspend fun guardarPreferenciaLocalApi(  // ← Nombre único para evitar conflicto
+    suspend fun guardarPreferenciaLocalApi(
         @Body body: BodyPreferenciaLocal
     ): RespuestaGuardarPreferencia
 

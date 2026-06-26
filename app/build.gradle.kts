@@ -56,7 +56,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    // ── Corrutinas ────────────────────────────────────────────────────
+    // ── Corrutinas
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
     implementation(libs.androidx.tv.material)
 
@@ -69,10 +69,10 @@ dependencies {
     implementation("androidx.camera:camera-view:${camerax_version}")
     implementation("androidx.camera:camera-extensions:${camerax_version}")
 
-    // ── Biometría ─────────────────────────────────────────────────────
+    // ── Biometría
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
-    // ── Testing ───────────────────────────────────────────────────────
+    // ── Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -90,8 +90,6 @@ dependencies {
     implementation("androidx.camera:camera-camera2:${camerax_version}")
     implementation("androidx.camera:camera-lifecycle:${camerax_version}")
     implementation("androidx.camera:camera-view:${camerax_version}")
-
-
 
 
     // ── Google Maps & Location ─────────────────────────────────────────
