@@ -14,22 +14,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.launch
-import pe.tecvote.enrolamiento.data.BodyGuardar
-import pe.tecvote.enrolamiento.data.ClienteRed
+import pe.tecvote.enrolamiento.data.RespuestaGuardar
 import pe.tecvote.enrolamiento.ui.Espaciados
 import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
 
 @Composable
-fun SlideConfirmarEnviar(modifier: Modifier = Modifier, dni: String,
-    onFinalizar: () -> Unit = {}  // ← NUEVO: Callback para finalizar
+fun SlideConfirmarEnviar(
+    modifier: Modifier = Modifier,
+    dni: String,
+    enviando: Boolean = false,                // ← Controlado externamente
+    errorGuardar: String? = null,             // ← Controlado externamente
+    resultadoGuardar: RespuestaGuardar? = null, // ← Controlado externamente
+    onConfirmarEnrolamiento: () -> Unit = {},  // ← Callback para que el VM ejecute la petición
+    onFinalizar: () -> Unit = {}
 ) {
-
-    var enviando  by remember { mutableStateOf(false) }
-    var exito     by remember { mutableStateOf(false) }
-    var codigo    by remember { mutableStateOf("") }
-    var error     by remember { mutableStateOf<String?>(null) }
-    val scope     = rememberCoroutineScope()
+    // Determinamos el éxito según la respuesta que nos pase el ViewModel
+    val exito = resultadoGuardar?.exitoso == true
+    val codigoConstancia = resultadoGuardar?.codigo_constancia ?: ""
 
     SlideBase(
         modifier     = modifier,
@@ -44,7 +45,6 @@ fun SlideConfirmarEnviar(modifier: Modifier = Modifier, dni: String,
 
         AnimatedVisibility(!exito) {
             Column {
-                // Resumen de pasos completados
                 Card(
                     modifier  = Modifier.fillMaxWidth(),
                     shape     = RoundedCornerShape(16.dp),
@@ -67,7 +67,6 @@ fun SlideConfirmarEnviar(modifier: Modifier = Modifier, dni: String,
 
                 Spacer(Modifier.height(16.dp))
 
-                // Aviso legal
                 Surface(
                     shape  = RoundedCornerShape(10.dp),
                     color  = Color.White.copy(0.08f),
@@ -85,32 +84,13 @@ fun SlideConfirmarEnviar(modifier: Modifier = Modifier, dni: String,
 
                 Spacer(Modifier.height(20.dp))
 
-                if (error != null) {
-                    Text(error!!, color = Color(0xFFFF6B6B), fontSize = 13.sp, textAlign = TextAlign.Center)
+                if (errorGuardar != null) {
+                    Text(errorGuardar, color = Color(0xFFFF6B6B), fontSize = 13.sp, textAlign = TextAlign.Center)
                     Spacer(Modifier.height(12.dp))
                 }
 
                 Button(
-                    onClick  = {
-                        scope.launch {
-                            enviando = true
-                            error    = null
-                            try {
-                                val resp = ClienteRed.api.guardarEnrolamiento(BodyGuardar(dni = dni))
-                                if (resp.exitoso) {
-                                    codigo = resp.codigo_constancia
-                                    exito  = true
-                                } else {
-                                    error = "Error al guardar: ${resp.mensaje}"
-                                }
-                            } catch (e: Exception) {
-                                Log.e("TECVOTE", "Error guardar: ${e.message}")
-                                error = "Error de conexión. Intenta de nuevo."
-                            } finally {
-                                enviando = false
-                            }
-                        }
-                    },
+                    onClick  = { onConfirmarEnrolamiento() }, // ← Delegación limpia al ViewModel
                     enabled  = !enviando,
                     shape    = RoundedCornerShape(28.dp),
                     colors   = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF4527A0)),
@@ -119,12 +99,11 @@ fun SlideConfirmarEnviar(modifier: Modifier = Modifier, dni: String,
                     if (enviando)
                         CircularProgressIndicator(color = Color(0xFF4527A0), modifier = Modifier.size(24.dp))
                     else
-                        Text("🔐  Confirmar enrolamiento", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                        Text("Confirmar enrolamiento", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
                 }
             }
         }
 
-        // Pantalla de éxito con código
         AnimatedVisibility(
             visible = exito,
             enter   = fadeIn() + expandVertically()
@@ -148,7 +127,6 @@ fun SlideConfirmarEnviar(modifier: Modifier = Modifier, dni: String,
                 )
                 Spacer(Modifier.height(24.dp))
 
-                // Código de constancia
                 Card(
                     modifier  = Modifier.fillMaxWidth(),
                     shape     = RoundedCornerShape(16.dp),
@@ -161,7 +139,7 @@ fun SlideConfirmarEnviar(modifier: Modifier = Modifier, dni: String,
                         Text("Código de constancia", color = Color.Gray, fontSize = 12.sp)
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            codigo,
+                            codigoConstancia,
                             color      = Color(0xFF4527A0),
                             fontWeight = FontWeight.ExtraBold,
                             fontSize   = 28.sp,

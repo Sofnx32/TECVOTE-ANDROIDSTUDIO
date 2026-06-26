@@ -210,10 +210,10 @@ interface TecvoteApi {
     ): RespuestaMisDatos
 }
 
-
 object ClienteRed {
 
-    private const val BASE_URL = "http://JuanCa.local:8000/"
+    // 1. CORRECCIÓN: Usamos la IP numérica que Django sí resolvió en tus primeros logs
+    private const val BASE_URL = "http://192.168.1.58:8000/"
     private const val ENABLE_DEBUG_LOGS = true
     private var appContext: Context? = null
 
@@ -282,7 +282,6 @@ object ClienteRed {
             .create(TecvoteApi::class.java)
     }
 
-
     suspend fun loginBiometricoMLKit(dni: String, fotoFile: File): Result<RespuestaBiometria> {
         return try {
             Log.d("TECVOTE_NET", "Enviando login biométrico ML Kit para DNI: $dni")
@@ -303,6 +302,17 @@ object ClienteRed {
             Result.success(response)
         } catch (e: Exception) {
             Log.e("TECVOTE_NET", "Error en login biométrico: ${e.message}", e)
+            Result.failure(e)
+        }
+    }
+
+    suspend fun consultarPadrónElector(dni: String): Result<RespuestaElector> {
+        return try {
+            Log.d("TECVOTE_NET", "Consultando padrón para DNI: $dni")
+            val response = api.buscarElector(dni)
+            Result.success(response)
+        } catch (e: Exception) {
+            Log.e("TECVOTE_NET", "Error al consultar elector: ${e.message}")
             Result.failure(e)
         }
     }

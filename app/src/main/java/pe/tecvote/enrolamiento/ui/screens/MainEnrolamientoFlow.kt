@@ -88,7 +88,6 @@ fun MainEnrolamientoFlow(navController: NavHostController = rememberNavControlle
             )
         }
 
-        // ── REEMPLAZA ESTE BLOQUE EN TU MainEnrolamientoFlow ──────────────────────────
 
         composable(RutasNavegacion.INGRESO_DNI) {
             SlideIngresoDNI(
