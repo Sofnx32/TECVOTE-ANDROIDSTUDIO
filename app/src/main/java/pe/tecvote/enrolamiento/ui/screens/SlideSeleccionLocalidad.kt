@@ -33,6 +33,9 @@ import pe.tecvote.enrolamiento.ui.EspacioExtraGrande
 import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
 import pe.tecvote.enrolamiento.ui.screens.localidad.LocalidadState
 import pe.tecvote.enrolamiento.ui.screens.localidad.LocalidadViewModel
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun SlideSeleccionLocalidad(
@@ -175,11 +178,12 @@ private fun ContenidoLocalDetectado(
     azulProfundo: Color,
     onContinuar: () -> Unit
 ) {
+    val context = LocalContext.current // ◄ Necesario para lanzar Google Maps externo
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Título
         Text(
             "TU LOCAL DE VOTACIÓN",
             color = Color.White,
@@ -191,7 +195,7 @@ private fun ContenidoLocalDetectado(
         EspacioMedio()
 
         Text(
-            "Hemos encontrado tu local asignado",
+            "Ubicación del centro de sufragio",
             color = Color.White.copy(0.7f),
             fontSize = 13.sp,
             textAlign = TextAlign.Center
@@ -199,7 +203,7 @@ private fun ContenidoLocalDetectado(
 
         EspacioGrande()
 
-        // Mapa de Google
+        // Mapa de Google Nativo (Se verá azul hasta que pongas tu API Key en el Manifest)
         val ubicacionLocal = LatLng(state.latitud, state.longitud)
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(ubicacionLocal, 16f)
@@ -208,7 +212,7 @@ private fun ContenidoLocalDetectado(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(280.dp)
+                .height(240.dp)
                 .clip(RoundedCornerShape(16.dp))
         ) {
             GoogleMap(
@@ -230,88 +234,60 @@ private fun ContenidoLocalDetectado(
 
         EspacioGrande()
 
-        // Card con información del local
+        // Card informativa
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White.copy(0.08f)
-            )
+            colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.08f))
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Default.LocationOn,
-                        contentDescription = null,
-                        tint = cyanBrillante,
-                        modifier = Modifier.size(32.dp)
-                    )
+            Column(modifier = Modifier.fillMaxWidth().padding(20.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.LocationOn, contentDescription = null, tint = cyanBrillante, modifier = Modifier.size(32.dp))
                     Spacer(Modifier.width(12.dp))
-                    Text(
-                        state.nombreLocal,
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text(state.nombreLocal, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
-
                 Spacer(Modifier.height(12.dp))
-
-                Text(
-                    state.direccion,
-                    color = Color.White.copy(0.8f),
-                    fontSize = 13.sp,
-                    lineHeight = 18.sp
-                )
-
-                if (state.distrito.isNotBlank()) {
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        state.distrito,
-                        color = cyanBrillante,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
+                Text(state.direccion, color = Color.White.copy(0.8f), fontSize = 13.sp, lineHeight = 18.sp)
+                Spacer(Modifier.height(8.dp))
+                Text(state.distrito, color = cyanBrillante, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
             }
         }
 
         EspacioGrande()
 
-        // Botón continuar
+        // 🗺️ BOTÓN 1: Abrir en Aplicación Google Maps externa del celular
+        OutlinedButton(
+            onClick = {
+                // Geo URI que levanta Google Maps externo con un pin marcador en la coordenada
+                val mapaIntentUri = Uri.parse("geo:${state.latitud},${state.longitud}?q=${Uri.encode(state.nombreLocal)}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, mapaIntentUri).apply {
+                    setPackage("com.google.android.apps.maps") // Fuerza a que abra la app oficial de Google Maps
+                }
+                context.startActivity(mapIntent)
+            },
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            shape = RoundedCornerShape(14.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = cyanBrillante)
+        ) {
+            Text("CÓMO LLEGAR (ABRIR EN GOOGLE MAPS)", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // 🚀 BOTÓN 2: Continuar con el Flujo de la aplicación hacia Mis Datos
         Button(
             onClick = onContinuar,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
+            modifier = Modifier.fillMaxWidth().height(54.dp),
             shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = cyanBrillante
-            )
+            colors = ButtonDefaults.buttonColors(containerColor = cyanBrillante)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    Icons.Default.CheckCircle,
-                    contentDescription = null,
-                    tint = azulProfundo,
-                    modifier = Modifier.size(20.dp)
-                )
+                Icon(Icons.Default.CheckCircle, contentDescription = null, tint = azulProfundo, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(8.dp))
-                Text(
-                    "VER MI LOCALIDAD",
-                    color = azulProfundo,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 14.sp
-                )
+                Text("CONFIRMAR Y VER MIS DATOS", color = azulProfundo, fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
             }
         }
     }

@@ -204,7 +204,7 @@ interface TecvoteApi {
         @Body body: BodyPreferenciaLocal
     ): RespuestaGuardarPreferencia
 
-    @GET("api/elector/mis-datos/{dni}/")
+    @GET("api/v1/elector/mis-datos/{dni}/")
     suspend fun getMisDatosElector(
         @Path("dni") dni: String
     ): RespuestaMisDatos
