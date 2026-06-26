@@ -21,7 +21,7 @@ fun TecvoteNavHost(navController: NavHostController) {
         composable(route = RutasNavegacion.INGRESO_DNI) {
             SlideIngresoDNI(
                 onContinuar = { dniIngresado ->
-                    // Al verificar el DNI, avanzamos al flujo de preguntas
+
                     navController.navigate(RutasNavegacion.preguntas(dniIngresado))
                 }
             )

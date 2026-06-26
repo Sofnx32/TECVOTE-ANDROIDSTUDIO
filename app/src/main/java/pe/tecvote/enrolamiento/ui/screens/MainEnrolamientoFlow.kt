@@ -88,11 +88,14 @@ fun MainEnrolamientoFlow(navController: NavHostController = rememberNavControlle
             )
         }
 
+        // ── REEMPLAZA ESTE BLOQUE EN TU MainEnrolamientoFlow ──────────────────────────
+
         composable(RutasNavegacion.INGRESO_DNI) {
             SlideIngresoDNI(
                 onContinuar = { dniIngresado ->
                     dniActual = dniIngresado
-                    navController.navigate(RutasNavegacion.misDatos(dniIngresado)) {
+
+                    navController.navigate(RutasNavegacion.preguntas(dniIngresado)) {
                         popUpTo(RutasNavegacion.INGRESO_DNI) { inclusive = false }
                     }
                 }
