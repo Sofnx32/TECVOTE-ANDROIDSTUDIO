@@ -133,17 +133,7 @@ data class RespuestaGuardarPreferencia(
     val local: Map<String, String>?
 )
 
-data class RespuestaMisDatos(
-    val status: String,
-    val elector: Map<String, Any>,
-    val mesa: Map<String, Any>?,
-    val local_votacion: Map<String, Any>?,
-    val local_preferido: Map<String, Any>?,
-    val mensaje_logistica: String?,
-    val qr_base64: String?,
-    val qr_texto: String?,
-    val timestamp: String?
-)
+
 
 data class BodyPreferenciaLocal(
     val dni: String,
@@ -177,6 +167,8 @@ interface TecvoteApi {
         @Part("dni") dni: RequestBody,
         @Part foto: MultipartBody.Part
     ): RespuestaBiometria
+
+
 
     @Multipart
     @POST("api/biometric-validate/")
@@ -212,15 +204,12 @@ interface TecvoteApi {
         @Body body: BodyPreferenciaLocal
     ): RespuestaGuardarPreferencia
 
-    // 🔹 Mis Datos
     @GET("api/elector/mis-datos/{dni}/")
     suspend fun getMisDatosElector(
-        @Path("dni") dni: String,
-        @Header("Authorization") token: String? = null
+        @Path("dni") dni: String
     ): RespuestaMisDatos
 }
 
-// ── Singleton de Red ─────────────────────────────────────────────────────────
 
 object ClienteRed {
 

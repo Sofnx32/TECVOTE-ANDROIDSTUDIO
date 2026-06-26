@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import pe.tecvote.enrolamiento.data.ClienteRed
-import pe.tecvote.enrolamiento.data.RespuestaMisDatos
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.content.Intent
@@ -35,7 +34,7 @@ fun MisDatosScreen(
     val context = LocalContext.current
 
     var cargando by remember { mutableStateOf(true) }
-    var datos by remember { mutableStateOf<RespuestaMisDatos?>(null) }
+    var datos by remember { mutableStateOf<`RespuestaMisDatos.kt`?>(null) }
     var mensajeError by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(dni) {

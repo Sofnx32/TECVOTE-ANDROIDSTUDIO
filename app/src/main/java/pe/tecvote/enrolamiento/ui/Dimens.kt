@@ -5,15 +5,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/**
- * Sistema de espaciado consistente para toda la aplicación.
- *
- * CONCEPTO ACADÉMICO:
- * - En lugar de usar valores "mágicos" (8.dp, 16.dp, etc.) dispersos en el código,
- *   centralizamos todos los espaciados en un solo lugar.
- * - Esto se llama "Design Tokens" o "Sistema de Diseño".
- * - Facilita el mantenimiento y la consistencia visual.
- */
+
 object Espaciados {
     val xs = 4.dp    // Espaciado muy pequeño (entre iconos y texto)
     val sm = 8.dp    // Espaciado pequeño (entre elementos relacionados)
@@ -23,51 +15,28 @@ object Espaciados {
     val xxl = 48.dp  // Espaciado enorme (separación de secciones grandes)
 }
 
-/**
- * Sistema de tamaños responsivos para elementos visuales.
- *
- * CONCEPTO ACADÉMICO:
- * - Las pantallas Android tienen diferentes tamaños y densidades.
- * - Usamos "LocalConfiguration" para obtener el tamaño real de la pantalla.
- * - Calculamos tamaños proporcionales (porcentajes) en lugar de fijos.
- */
+
 object TamanosAdaptativos {
 
-    /**
-     * Obtiene el ancho de la pantalla en dp.
-     * Ejemplo: En un celular de 1080px con densidad 3.0 = 360dp
-     */
+
     @Composable
     fun anchoPantalla(): Dp {
         return LocalConfiguration.current.screenWidthDp.dp
     }
 
-    /**
-     * Obtiene el alto de la pantalla en dp.
-     * Ejemplo: En un celular de 2400px con densidad 3.0 = 800dp
-     */
+
     @Composable
     fun altoPantalla(): Dp {
         return LocalConfiguration.current.screenHeightDp.dp
     }
 
-    /**
-     * Calcula un tamaño proporcional al ancho de la pantalla.
-     *
-     * @param porcentaje Porcentaje del ancho (0.0 a 1.0)
-     * Ejemplo: 0.5 = 50% del ancho de la pantalla
-     */
+
     @Composable
     fun anchoProporcional(porcentaje: Double): Dp {
         return (anchoPantalla().value * porcentaje).dp
     }
 
-    /**
-     * Calcula un tamaño proporcional al alto de la pantalla.
-     *
-     * @param porcentaje Porcentaje del alto (0.0 a 1.0)
-     * Ejemplo: 0.3 = 30% del alto de la pantalla
-     */
+
     @Composable
     fun altoProporcional(porcentaje: Double): Dp {
         return (altoPantalla().value * porcentaje).dp
