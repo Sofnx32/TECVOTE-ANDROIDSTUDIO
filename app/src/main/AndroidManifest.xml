@@ -9,10 +9,6 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyB7tibkSitvBQeh8xcCWB73Ii4mz_PTrHM" />
-
     <application
         android:name=".TecvoteApplication"
         android:usesCleartextTraffic="true"
@@ -24,6 +20,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TECVOTE">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB7tibkSitvBQeh8xcCWB73Ii4mz_PTrHM" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
