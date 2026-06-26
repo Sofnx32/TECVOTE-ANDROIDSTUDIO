@@ -56,8 +56,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    // ── Corrutinas
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    // ── Corrutinas    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
     implementation(libs.androidx.tv.material)
 
     // ── CameraX (Actualizado a 1.4.1 para soporte estricto de 16 KB) ──
