@@ -21,14 +21,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pe.tecvote.enrolamiento.data.RespuestaMisDatos // Asegura la importación de tu modelo de red
+import pe.tecvote.enrolamiento.data.RespuestaElector
 import pe.tecvote.enrolamiento.ui.*
 
 @Composable
 fun SlideGestionEnrolamiento(
     modifier: Modifier = Modifier,
     dni: String = "",
-    datosElector: pe.tecvote.enrolamiento.data.RespuestaElector? = null,
+    datosElector: RespuestaElector? = null,
     onContinuar: () -> Unit = {},
     onCancelar: () -> Unit = {}
 ) {
@@ -55,6 +55,33 @@ fun SlideGestionEnrolamiento(
         label = "alpha"
     )
 
+    // 🔹 INDICADOR DE CARGA SI NO HAY DATOS
+    if (datosElector == null) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(degradeFondo),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(
+                    color = cyanBrillante,
+                    strokeWidth = 3.dp
+                )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    "Cargando información del ciudadano...",
+                    color = Color.White.copy(0.7f),
+                    fontSize = 14.sp
+                )
+            }
+        }
+        return // Salir temprano si no hay datos
+    }
+
+    // 🔹 UI PRINCIPAL CUANDO HAY DATOS
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -126,11 +153,12 @@ fun SlideGestionEnrolamiento(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
 
+                // ✅ AHORA USA LOS DATOS REALES DEL ELECTOR
                 CardInformacionCiudadano(
                     cyanBrillante = cyanBrillante,
                     dni = dni,
-                    nombreCompleto = datosElector?.nombre ?: "Cargando...",
-                    ubigeo = datosElector?.ubigeo_legal ?: "------"
+                    nombreCompleto = datosElector.nombre ?: "Sin nombre",
+                    ubigeo = datosElector.ubigeo_legal ?: "------"
                 )
 
                 CardDatosEnrolados(cyanBrillante, verdeExito)

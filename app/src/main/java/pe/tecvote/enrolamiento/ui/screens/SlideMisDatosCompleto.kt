@@ -4,13 +4,9 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -25,13 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import pe.tecvote.enrolamiento.data.RespuestaMisDatos
 import pe.tecvote.enrolamiento.data.ElectorData
 import pe.tecvote.enrolamiento.data.MesaData
 import pe.tecvote.enrolamiento.data.LocalVotacionData
 import pe.tecvote.enrolamiento.data.MiembroMesaData
-import pe.tecvote.enrolamiento.util.ConversionUtil
 import pe.tecvote.enrolamiento.ui.*
 
 @Composable
@@ -40,7 +34,6 @@ fun SlideMisDatosCompleto(
     datos: RespuestaMisDatos,
     onDescargarConstancia: (String?) -> Unit = {}
 ) {
-    // Paleta de colores institucionales de alta seguridad
     val azulProfundo = Color(0xFF020B18)
     val azulOscuro = Color(0xFF041529)
     val azulMedio = Color(0xFF0A2547)
@@ -57,7 +50,6 @@ fun SlideMisDatosCompleto(
     )
 
     var visible by remember { mutableStateOf(false) }
-    var mostrarDialogoQR by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) { visible = true }
 
@@ -66,8 +58,6 @@ fun SlideMisDatosCompleto(
         animationSpec = tween(600, easing = LinearOutSlowInEasing),
         label = "fade_in"
     )
-
-    var tabSeleccionado by remember { mutableStateOf(1) }
 
     Box(
         modifier = modifier
@@ -81,8 +71,8 @@ fun SlideMisDatosCompleto(
                 .padding(horizontal = TamanosAdaptativos.paddingHorizontalPantalla())
                 .alpha(alpha)
         ) {
-            // Cabecera Oficial del Organismo Electoral
             EspacioMedio()
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +98,6 @@ fun SlideMisDatosCompleto(
 
             EspacioGrande()
 
-            // Panel de Identificación y Estado de Enrolamiento Biométrico
             datos.elector?.let { elector ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -150,7 +139,6 @@ fun SlideMisDatosCompleto(
 
             EspacioGrande()
 
-            // Contenedor Principal de Datos
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -165,20 +153,11 @@ fun SlideMisDatosCompleto(
 
             EspacioGrande()
 
-            // Panel de Acciones Críticas
+            // 🔹 SOLO BOTÓN DE DESCARGAR (QR ELIMINADO)
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Button(
-                    onClick = { mostrarDialogoQR = true },
-                    modifier = Modifier.fillMaxWidth().height(52.dp),
-                    shape = RoundedCornerShape(6.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = cyanBrillante)
-                ) {
-                    Text("MOSTRAR CREDENCIAL DIGITAL (QR)", color = azulProfundo, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                }
-
                 OutlinedButton(
                     onClick = { onDescargarConstancia(datos.codigoConstancia) },
                     modifier = Modifier.fillMaxWidth().height(52.dp),
@@ -191,63 +170,6 @@ fun SlideMisDatosCompleto(
             }
 
             EspacioMedio()
-            BottomNavegacion(tabSeleccionado = tabSeleccionado, onTabSeleccionado = { tabSeleccionado = it })
-        }
-    }
-
-    // Modal de Seguridad para Despliegue de Código QR
-    if (mostrarDialogoQR) {
-        Dialog(onDismissRequest = { mostrarDialogoQR = false }) {
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = azulOscuro,
-                border = BorderStroke(1.dp, Color.White.copy(0.1f)),
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("CREDENCIAL OFICIAL DE VERIFICACIÓN", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Spacer(Modifier.height(4.dp))
-                    Text("Código: ${datos.codigoConstancia ?: "N/A"}", color = Color.White.copy(0.5f), fontSize = 11.sp)
-
-                    Spacer(Modifier.height(20.dp))
-
-                    val bitmapQR = remember(datos.qrBase64) {
-                        ConversionUtil.decodificarBase64AImageBitmap(datos.qrBase64)
-                    }
-
-                    if (bitmapQR != null) {
-                        Image(
-                            bitmap = bitmapQR,
-                            contentDescription = "Código QR del Elector",
-                            modifier = Modifier
-                                .size(220.dp)
-                                .background(Color.White)
-                                .padding(8.dp)
-                        )
-                    } else {
-                        Box(
-                            modifier = Modifier.size(220.dp).background(Color.White.copy(0.05f)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Error al procesar firma digital QR", color = Color.Red, fontSize = 12.sp)
-                        }
-                    }
-
-                    Spacer(Modifier.height(20.dp))
-
-                    Button(
-                        onClick = { mostrarDialogoQR = false },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(0.1f)),
-                        shape = RoundedCornerShape(4.dp)
-                    ) {
-                        Text("CERRAR", color = Color.White, fontSize = 12.sp)
-                    }
-                }
-            }
         }
     }
 }
@@ -331,33 +253,5 @@ private fun FilaDatoPersonal(label: String, valor: String) {
     ) {
         Text(label, color = Color.White.copy(0.5f), fontSize = 11.sp)
         Text(valor, color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 11.sp, textAlign = TextAlign.End)
-    }
-}
-
-@Composable
-private fun BottomNavegacion(tabSeleccionado: Int, onTabSeleccionado: (Int) -> Unit) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
-        color = Color.White.copy(0.06f)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val opciones = listOf("Inicio", "Mis datos", "Información", "Ayuda")
-            opciones.forEachIndexed { index, label ->
-                Text(
-                    text = label,
-                    color = if (tabSeleccionado == index) Color(0xFF00C8FF) else Color.White.copy(0.4f),
-                    fontSize = 12.sp,
-                    fontWeight = if (tabSeleccionado == index) FontWeight.Bold else FontWeight.Normal,
-                    modifier = Modifier
-                        .clickable { onTabSeleccionado(index) }
-                        .padding(8.dp)
-                )
-            }
-        }
     }
 }

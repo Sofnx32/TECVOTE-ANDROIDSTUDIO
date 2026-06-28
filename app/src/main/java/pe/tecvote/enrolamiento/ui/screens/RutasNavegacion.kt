@@ -19,4 +19,4 @@ object RutasNavegacion {
     fun seleccionLocalidad(dni: String) = "seleccion_localidad/$dni"  // ← NUEVO
     fun gestionEnrolamiento(dni: String) = "gestion_enrolamiento/$dni"
     fun misDatos(dni: String) = "mis_datos/$dni"
-}   
+}

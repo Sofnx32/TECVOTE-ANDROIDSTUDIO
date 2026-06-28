@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation("androidx.compose.foundation:foundation:1.7.0")
     implementation("androidx.compose.material:material-icons-extended:1.7.0")
+    implementation("androidx.compose.ui:ui-viewbinding:1.4.0")
+    implementation("com.google.accompanist:accompanist-webview:0.30.1")
 
     // ── Red (Retrofit & OkHttp) ───────────────────────────────────────
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

@@ -143,8 +143,8 @@ data class BodyPreferenciaLocal(
 
 interface TecvoteApi {
 
-    @GET("api/v1/elector/{dni}/")
-    suspend fun buscarElector(@Path("dni") dni: String): RespuestaElector
+    @GET("api/v1/elector/{dni_buscado}/")
+    suspend fun buscarElector(@Path("dni_buscado") dni: String): RespuestaElector
 
     @POST("api/validar-preguntas/")
     suspend fun validarPreguntas(@Body body: BodyPreguntas): RespuestaPreguntas
@@ -208,12 +208,13 @@ interface TecvoteApi {
     suspend fun getMisDatosElector(
         @Path("dni") dni: String
     ): RespuestaMisDatos
+
 }
 
 object ClienteRed {
 
     // 1. CORRECCIÓN: Usamos la IP numérica que Django sí resolvió en tus primeros logs
-    private const val BASE_URL = "http://192.168.1.58:8000/"
+    private const val BASE_URL = "http://192.168.1.89:8000/"
     private const val ENABLE_DEBUG_LOGS = true
     private var appContext: Context? = null
 
