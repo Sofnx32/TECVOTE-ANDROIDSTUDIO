@@ -45,7 +45,7 @@ import pe.tecvote.enrolamiento.viewmodels.EnrolamientoFlowViewModelFactory
 sealed class MisDatosUiState {
     data object Cargando : MisDatosUiState()
     data class Exito(val datos: RespuestaMisDatos) : MisDatosUiState()
-    data class Error(val mensaje: String) : MisDatosUiState()
+    data class Error(val mensajeResId: Int) : MisDatosUiState()
 }
 
 class MisDatosViewModel : ViewModel() {
@@ -55,24 +55,15 @@ class MisDatosViewModel : ViewModel() {
     fun consultarServidor(dni: String) {
         viewModelScope.launch {
             _state.value = MisDatosUiState.Cargando
-            Log.d("TECVOTE_NET", "Iniciando consulta HTTP de padrón para DNI: $dni")
             try {
                 val response = ClienteRed.api.getMisDatosElector(dni = dni)
-                Log.d("TECVOTE_NET", "Respuesta recibida del servidor central. Status: ${response.status}")
                 if (response.status == "success") {
-                    Log.d("TECVOTE_NET", "Mapeo exitoso. Datos de elector vinculados: ${response.elector?.nombreCompleto}")
                     _state.value = MisDatosUiState.Exito(response)
                 } else {
-                    Log.w("TECVOTE_NET", "Servidor Django denegó la solicitud: ${response.mensajeLogistica}")
-                    _state.value = MisDatosUiState.Error(
-                        response.mensajeLogistica ?: "Error en el padrón electoral."
-                    )
+                    _state.value = MisDatosUiState.Error(R.string.error_sincronizacion)
                 }
             } catch (e: Exception) {
-                Log.e("TECVOTE_NET", "Excepción crítica en la capa de red al consultar DNI $dni", e)
-                _state.value = MisDatosUiState.Error(
-                    "Fallo de conexión institucional: ${e.localizedMessage}"
-                )
+                _state.value = MisDatosUiState.Error(R.string.sin_conexion_tecvote)
             }
         }
     }
@@ -146,7 +137,6 @@ fun MainEnrolamientoFlow(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
                     ),
-                    // CORRECCIÓN AQUÍ: Esto empuja el menú abajo de la barra de notificaciones del celular
                     windowInsets = TopAppBarDefaults.windowInsets
                 )
             }
@@ -250,7 +240,7 @@ fun MainEnrolamientoFlow(
                 startDestination = RutasNavegacion.BIENVENIDA,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = innerPadding.calculateTopPadding()) // Consigue que el navhost empiece exactamente abajo de la TopAppBar corregida
+                    .padding(top = innerPadding.calculateTopPadding())
             ) {
                 composable(RutasNavegacion.BIENVENIDA) {
                     SlideBienvenida(
@@ -374,13 +364,13 @@ fun MainEnrolamientoFlow(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.error_sincronizacion),
+                                        text = stringResource(R.string.error),
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.error
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = currentState.mensaje,
+                                        text = stringResource(currentState.mensajeResId),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.bodyMedium

@@ -17,6 +17,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -73,7 +75,7 @@ fun SlideGestionEnrolamiento(
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    stringResource(R.string.cargando_informacion),
+                    text = stringResource(R.string.cargando_informacion),
                     color = Color.White.copy(0.7f),
                     fontSize = 14.sp
                 )
@@ -109,19 +111,19 @@ fun SlideGestionEnrolamiento(
                         .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("ONPE", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(text = "ONPE", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text(stringResource(R.string.oficina_nacional), color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    Text(stringResource(R.string.procesos_electorales), color = Color.White.copy(0.8f), fontSize = 10.sp)
+                    Text(text = stringResource(R.string.oficina_nacional), color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.procesos_electorales), color = Color.White.copy(0.8f), fontSize = 10.sp)
                 }
             }
 
             EspacioGrande()
 
             Text(
-                stringResource(R.string.gestion_enrolamiento),
+                text = stringResource(R.string.gestion_enrolamiento),
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -132,7 +134,7 @@ fun SlideGestionEnrolamiento(
             EspacioPequeno()
 
             Text(
-                stringResource(R.string.verifique_informacion),
+                text = stringResource(R.string.verifique_informacion),
                 color = Color.White.copy(0.7f),
                 fontSize = 13.sp,
                 textAlign = TextAlign.Center,
@@ -176,7 +178,7 @@ fun SlideGestionEnrolamiento(
                     colors = ButtonDefaults.buttonColors(containerColor = cyanBrillante)
                 ) {
                     Text(
-                        stringResource(R.string.guardar_enrolamiento),
+                        text = stringResource(R.string.guardar_enrolamiento),
                         color = azulProfundo,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 14.sp
@@ -188,7 +190,7 @@ fun SlideGestionEnrolamiento(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        stringResource(R.string.cancelar),
+                        text = stringResource(R.string.cancelar),
                         color = cyanBrillante.copy(0.8f),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
@@ -202,11 +204,17 @@ fun SlideGestionEnrolamiento(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("❓", fontSize = 12.sp)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_ayuda_pregunta),
+                        contentDescription = null,
+                        tint = Color.White.copy(0.4f),
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(text = stringResource(R.string.problemas_guardar), color = Color.White.copy(0.4f), fontSize = 11.sp)
                     Spacer(Modifier.width(4.dp))
-                    Text(stringResource(R.string.problemas_guardar), color = Color.White.copy(0.4f), fontSize = 11.sp)
                     Text(
-                        stringResource(R.string.ver_ayuda),
+                        text = stringResource(R.string.ver_ayuda),
                         color = cyanBrillante,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Medium,
@@ -233,7 +241,7 @@ private fun CardInformacionCiudadano(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                stringResource(R.string.informacion_ciudadano),
+                text = stringResource(R.string.informacion_ciudadano),
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp
@@ -247,11 +255,16 @@ private fun CardInformacionCiudadano(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(64.dp)
-                        .background(cyanBrillante.copy(0.2f), CircleShape),
+                        .size(54.dp)
+                        .background(cyanBrillante.copy(0.15f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("👤", fontSize = 32.sp)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_usuario_avatar),
+                        contentDescription = null,
+                        tint = cyanBrillante,
+                        modifier = Modifier.size(26.dp)
+                    )
                 }
 
                 Spacer(Modifier.width(16.dp))
@@ -262,12 +275,12 @@ private fun CardInformacionCiudadano(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Column {
-                            Text(stringResource(R.string.dni), color = Color.White.copy(0.5f), fontSize = 9.sp)
-                            Text(dni, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                            Text(text = stringResource(R.string.dni), color = Color.White.copy(0.5f), fontSize = 9.sp)
+                            Text(text = dni, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                         }
                         Column {
-                            Text(stringResource(R.string.apellidos_nombres), color = Color.White.copy(0.5f), fontSize = 9.sp)
-                            Text(nombreCompleto.uppercase(), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                            Text(text = stringResource(R.string.apellidos_nombres), color = Color.White.copy(0.5f), fontSize = 9.sp)
+                            Text(text = nombreCompleto.uppercase(), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     }
 
@@ -278,8 +291,8 @@ private fun CardInformacionCiudadano(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Column {
-                            Text(stringResource(R.string.ubigeo_legal), color = Color.White.copy(0.5f), fontSize = 9.sp)
-                            Text(ubigeo, color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)
+                            Text(text = stringResource(R.string.ubigeo_legal), color = Color.White.copy(0.5f), fontSize = 9.sp)
+                            Text(text = ubigeo, color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)
                         }
                     }
                 }
@@ -316,11 +329,19 @@ private fun StepperItem(paso: Int, estado: Int, label: String, sublabel: String 
                 .border(if (estado >= 0) 2.dp else 1.dp, if (estado == 1) verdeExito else if (estado == 0) cyanBrillante else Color.White.copy(0.3f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            if (estado == 1) Text("✓", color = verdeExito, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            else Text("$paso", color = if (estado == 0) cyanBrillante else Color.White.copy(0.5f), fontSize = if (estado == 0) 18.sp else 16.sp, fontWeight = FontWeight.Bold)
+            if (estado == 1) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_check_simple),
+                    contentDescription = null,
+                    tint = verdeExito,
+                    modifier = Modifier.size(18.dp)
+                )
+            } else {
+                Text(text = "$paso", color = if (estado == 0) cyanBrillante else Color.White.copy(0.5f), fontSize = if (estado == 0) 18.sp else 16.sp, fontWeight = FontWeight.Bold)
+            }
         }
         Spacer(Modifier.height(8.dp))
-        Text(label, color = if (estado == 1) verdeExito else if (estado == 0) cyanBrillante else Color.White.copy(0.7f), fontSize = 11.sp, fontWeight = if (esActivo) FontWeight.Bold else FontWeight.Medium, textAlign = TextAlign.Center)
+        Text(text = label, color = if (estado == 1) verdeExito else if (estado == 0) cyanBrillante else Color.White.copy(0.7f), fontSize = 11.sp, fontWeight = if (esActivo) FontWeight.Bold else FontWeight.Medium, textAlign = TextAlign.Center)
     }
 }
 
@@ -328,29 +349,39 @@ private fun StepperItem(paso: Int, estado: Int, label: String, sublabel: String 
 private fun CardDatosEnrolados(cyanBrillante: Color, verdeExito: Color) {
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.05f))) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(stringResource(R.string.datos_enrolados), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text(text = stringResource(R.string.datos_enrolados), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
             EspacioMedio()
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                FilaDatoEnrolado("📷", stringResource(R.string.rostro_biometrico), stringResource(R.string.enrolado), verdeExito)
-                FilaDatoEnrolado("☁️", stringResource(R.string.firma_digital), stringResource(R.string.vinculada), verdeExito)
+                FilaDatoEnrolado(painterResource(id = R.drawable.ic_camara), stringResource(R.string.rostro_biometrico), stringResource(R.string.enrolado), verdeExito)
+                FilaDatoEnrolado(painterResource(id = R.drawable.ic_nube_firma), stringResource(R.string.firma_digital), stringResource(R.string.vinculada), verdeExito)
             }
         }
     }
 }
 
 @Composable
-private fun FilaDatoEnrolado(icono: String, label: String, estado: String, colorExito: Color) {
+private fun FilaDatoEnrolado(icono: Painter, label: String, estado: String, colorExito: Color) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(icono, fontSize = 20.sp)
+            Icon(
+                painter = icono,
+                contentDescription = null,
+                tint = Color.White.copy(0.8f),
+                modifier = Modifier.size(20.dp)
+            )
             Spacer(Modifier.width(12.dp))
-            Text(label, color = Color.White.copy(0.8f), fontSize = 13.sp)
+            Text(text = label, color = Color.White.copy(0.8f), fontSize = 13.sp)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(estado, color = colorExito, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+            Text(text = estado, color = colorExito, fontSize = 12.sp, fontWeight = FontWeight.Medium)
             Spacer(Modifier.width(8.dp))
             Box(modifier = Modifier.size(20.dp).background(colorExito.copy(0.2f), CircleShape), contentAlignment = Alignment.Center) {
-                Text("✓", color = colorExito, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_check_simple),
+                    contentDescription = null,
+                    tint = colorExito,
+                    modifier = Modifier.size(10.dp)
+                )
             }
         }
     }
@@ -360,16 +391,21 @@ private fun FilaDatoEnrolado(icono: String, label: String, estado: String, color
 private fun CardSincronizacion(cyanBrillante: Color) {
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.05f))) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.size(48.dp).background(cyanBrillante.copy(0.15f), CircleShape), contentAlignment = Alignment.Center) {
-                Text("☁️", fontSize = 24.sp)
+            Box(modifier = Modifier.size(44.dp).background(cyanBrillante.copy(0.15f), CircleShape), contentAlignment = Alignment.Center) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_nube_firma),
+                    contentDescription = null,
+                    tint = cyanBrillante,
+                    modifier = Modifier.size(22.dp)
+                )
             }
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(stringResource(R.string.sincronizacion), color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)
-                Text(stringResource(R.string.datos_guardaran), color = Color.White.copy(0.5f), fontSize = 10.sp)
+                Text(text = stringResource(R.string.sincronizacion), color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)
+                Text(text = stringResource(R.string.datos_guardaran), color = Color.White.copy(0.5f), fontSize = 10.sp)
             }
             Surface(shape = RoundedCornerShape(8.dp), color = cyanBrillante.copy(0.2f)) {
-                Text(stringResource(R.string.listo), color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+                Text(text = stringResource(R.string.listo), color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
             }
         }
     }

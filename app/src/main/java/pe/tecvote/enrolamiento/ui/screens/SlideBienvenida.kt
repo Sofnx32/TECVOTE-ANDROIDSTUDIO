@@ -77,7 +77,7 @@ fun SlideBienvenida(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logotecvote),
-                    contentDescription = "Logo TecVote",
+                    contentDescription = stringResource(R.string.logo_tecvote),
                     modifier = Modifier
                         .size(185.dp)
                         .scale(logoScale)
@@ -95,7 +95,7 @@ fun SlideBienvenida(
             )
 
             Text(
-                text = "TECVOTE",
+                text = stringResource(R.string.tecvote),
                 color = Color.White,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -103,7 +103,7 @@ fun SlideBienvenida(
             )
 
             Text(
-                text = "SU VOTO SEGURO Y DIGITAL",
+                text = stringResource(R.string.su_voto_seguro),
                 color = cyanBrillante,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
@@ -131,7 +131,7 @@ fun SlideBienvenida(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "COMENZAR",
+                        text = stringResource(R.string.comenzar),
                         color = Color.White,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraBold

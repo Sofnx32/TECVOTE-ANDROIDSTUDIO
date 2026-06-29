@@ -1,7 +1,7 @@
 package pe.tecvote.enrolamiento.ui.screens
 
 import android.app.Activity
-import android.content.Context
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,7 +29,6 @@ import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.ui.EspacioGrande
 import pe.tecvote.enrolamiento.ui.EspacioMedio
 import pe.tecvote.enrolamiento.viewmodels.SettingsViewModel
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +39,7 @@ fun SlideConfiguracion(
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
+
     val settingsViewModel: SettingsViewModel = viewModel()
 
     LaunchedEffect(Unit) {
@@ -75,13 +75,18 @@ fun SlideConfiguracion(
                 title = {
                     Text(
                         stringResource(R.string.configuracion),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 20.sp,
+                        letterSpacing = 0.5.sp
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.volver), tint = Color.White)
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.volver),
+                            tint = Color.White
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -99,9 +104,18 @@ fun SlideConfiguracion(
                 .background(degradeFondo)
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             EspacioMedio()
+
+            Text(
+                text = "PREFERENCIAS GENERALES",
+                color = cyanBrillante.copy(alpha = 0.8f),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+            )
 
             ConfiguracionItem(
                 icono = Icons.Default.Language,
@@ -123,23 +137,22 @@ fun SlideConfiguracion(
                 valorActual = "${(fontSize * 100).toInt()}%"
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                text = "SISTEMA Y SEGURIDAD",
+                color = cyanBrillante.copy(alpha = 0.8f),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+            )
 
             ConfiguracionItem(
                 icono = Icons.Default.Accessibility,
                 titulo = stringResource(R.string.accesibilidad),
                 descripcion = stringResource(R.string.desc_accesibilidad),
                 onClick = { showAccessibilityDialog = true },
-                cyanBrillante = cyanBrillante
-            )
-
-            Spacer(Modifier.height(12.dp))
-
-            ConfiguracionItem(
-                icono = Icons.Default.Info,
-                titulo = stringResource(R.string.acerca_de),
-                descripcion = "Versión 2.0.1 - ONPE 2026",
-                onClick = { showAboutDialog = true },
                 cyanBrillante = cyanBrillante
             )
 
@@ -153,36 +166,62 @@ fun SlideConfiguracion(
                 cyanBrillante = cyanBrillante
             )
 
+            Spacer(Modifier.height(12.dp))
+
+            ConfiguracionItem(
+                icono = Icons.Default.Info,
+                titulo = stringResource(R.string.acerca_de),
+                descripcion = "Versión 2.0.1 - ONPE 2026",
+                onClick = { showAboutDialog = true },
+                cyanBrillante = cyanBrillante
+            )
+
             EspacioGrande()
 
             OutlinedButton(
                 onClick = { showConfirmLogoutDialog = true },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(8.dp),
+                    .height(54.dp),
+                shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = Color.Red
+                    contentColor = Color(0xFFFF4D4D)
                 ),
-                border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(
+                border = BorderStroke(
+                    width = 1.dp,
                     brush = Brush.horizontalGradient(
-                        colors = listOf(Color.Red, Color.Red.copy(0.6f))
+                        colors = listOf(Color(0xFFFF4D4D).copy(alpha = 0.7f), Color(0xFFFF4D4D).copy(alpha = 0.3f))
                     )
                 )
             ) {
-                Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
-                Text(stringResource(R.string.cerrar_sesion), fontWeight = FontWeight.Bold)
+                Icon(
+                    Icons.AutoMirrored.Filled.Logout,
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = 8.dp),
+                    tint = Color(0xFFFF4D4D)
+                )
+                Text(
+                    stringResource(R.string.cerrar_sesion),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    letterSpacing = 0.5.sp
+                )
             }
 
             EspacioGrande()
         }
     }
 
-    // 🔹 DIÁLOGO DE IDIOMA - AHORA FUNCIONAL
+    val radioColors = RadioButtonDefaults.colors(
+        selectedColor = cyanBrillante,
+        unselectedColor = Color.White.copy(alpha = 0.4f)
+    )
+
     if (showLanguageDialog) {
         AlertDialog(
             onDismissRequest = { showLanguageDialog = false },
-            title = { Text(stringResource(R.string.seleccionar_idioma), fontWeight = FontWeight.Bold) },
+            shape = RoundedCornerShape(24.dp),
+            title = { Text(stringResource(R.string.seleccionar_idioma), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
                 Column {
                     listOf("es" to "Español", "en" to "English", "qu" to "Runa Simi (Quechua)").forEach { (code, name) ->
@@ -190,25 +229,11 @@ fun SlideConfiguracion(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    // 🔹 CAMBIAR IDIOMA Y RECREAR ACTIVIDAD
                                     settingsViewModel.setLanguage(code)
                                     showLanguageDialog = false
-
-                                    // 🔹 FORZAR CAMBIO DE IDIOMA
-                                    val locale = when (code) {
-                                        "en" -> Locale("en")
-                                        "qu" -> Locale("qu")
-                                        else -> Locale("es")
-                                    }
-                                    Locale.setDefault(locale)
-                                    val config = context.resources.configuration
-                                    config.setLocale(locale)
-                                    context.resources.updateConfiguration(config, context.resources.displayMetrics)
-
-                                    // 🔹 RECREAR ACTIVIDAD PARA APLICAR CAMBIOS
                                     activity?.recreate()
                                 }
-                                .padding(12.dp),
+                                .padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
@@ -216,29 +241,19 @@ fun SlideConfiguracion(
                                 onClick = {
                                     settingsViewModel.setLanguage(code)
                                     showLanguageDialog = false
-
-                                    val locale = when (code) {
-                                        "en" -> Locale("en")
-                                        "qu" -> Locale("qu")
-                                        else -> Locale("es")
-                                    }
-                                    Locale.setDefault(locale)
-                                    val config = context.resources.configuration
-                                    config.setLocale(locale)
-                                    context.resources.updateConfiguration(config, context.resources.displayMetrics)
-
                                     activity?.recreate()
-                                }
+                                },
+                                colors = radioColors
                             )
-                            Spacer(Modifier.width(8.dp))
-                            Text(name, color = Color.White)
+                            Spacer(Modifier.width(12.dp))
+                            Text(name, color = Color.White, fontSize = 15.sp)
                         }
                     }
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showLanguageDialog = false }) {
-                    Text(stringResource(R.string.cerrar), color = cyanBrillante)
+                    Text(stringResource(R.string.cerrar), color = cyanBrillante, fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = Color(0xFF041529),
@@ -247,11 +262,11 @@ fun SlideConfiguracion(
         )
     }
 
-    // 🔹 DIÁLOGO DE TAMAÑO DE LETRA
     if (showFontSizeDialog) {
         AlertDialog(
             onDismissRequest = { showFontSizeDialog = false },
-            title = { Text(stringResource(R.string.tamano_letra), fontWeight = FontWeight.Bold) },
+            shape = RoundedCornerShape(24.dp),
+            title = { Text(stringResource(R.string.tamano_letra), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
                 Column {
                     listOf(
@@ -268,7 +283,7 @@ fun SlideConfiguracion(
                                     showFontSizeDialog = false
                                     activity?.recreate()
                                 }
-                                .padding(12.dp),
+                                .padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
@@ -277,17 +292,18 @@ fun SlideConfiguracion(
                                     settingsViewModel.setFontSize(size)
                                     showFontSizeDialog = false
                                     activity?.recreate()
-                                }
+                                },
+                                colors = radioColors
                             )
-                            Spacer(Modifier.width(8.dp))
-                            Text(label, color = Color.White)
+                            Spacer(Modifier.width(12.dp))
+                            Text(label, color = Color.White, fontSize = 15.sp)
                         }
                     }
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showFontSizeDialog = false }) {
-                    Text(stringResource(R.string.cerrar), color = cyanBrillante)
+                    Text(stringResource(R.string.cerrar), color = cyanBrillante, fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = Color(0xFF041529),
@@ -296,24 +312,24 @@ fun SlideConfiguracion(
         )
     }
 
-    // 🔹 DIÁLOGO ACERCA DE
     if (showAboutDialog) {
         AlertDialog(
             onDismissRequest = { showAboutDialog = false },
-            title = { Text("TecVote", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
+            shape = RoundedCornerShape(24.dp),
+            title = { Text("TecVote", fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = cyanBrillante) },
             text = {
-                Column {
-                    Text(stringResource(R.string.desc_sistema), fontSize = 14.sp)
-                    Spacer(Modifier.height(8.dp))
-                    Text("Versión: 2.0.1", fontSize = 12.sp)
-                    Text("© 2026 ONPE", fontSize = 12.sp)
-                    Spacer(Modifier.height(12.dp))
-                    Text("Desarrollado por la Oficina Nacional de Procesos Electorales", fontSize = 11.sp)
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(stringResource(R.string.desc_sistema), fontSize = 14.sp, lineHeight = 20.sp, color = Color.White.copy(alpha = 0.85f))
+                    Spacer(Modifier.height(6.dp))
+                    Text("Versión: 2.0.1", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                    Text("© 2026 ONPE", fontSize = 13.sp, color = Color.White.copy(alpha = 0.6f))
+                    HorizontalDivider(color = Color.White.copy(alpha = 0.1f), modifier = Modifier.padding(vertical = 6.dp))
+                    Text("Desarrollado por la Oficina Nacional de Procesos Electorales", fontSize = 12.sp, color = cyanBrillante.copy(alpha = 0.7f), lineHeight = 16.sp)
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showAboutDialog = false }) {
-                    Text(stringResource(R.string.cerrar), color = cyanBrillante)
+                    Text(stringResource(R.string.cerrar), color = cyanBrillante, fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = Color(0xFF041529),
@@ -322,19 +338,19 @@ fun SlideConfiguracion(
         )
     }
 
-    // 🔹 DIÁLOGO DE ACCESIBILIDAD
     if (showAccessibilityDialog) {
         AlertDialog(
             onDismissRequest = { showAccessibilityDialog = false },
-            title = { Text(stringResource(R.string.accesibilidad), fontWeight = FontWeight.Bold) },
+            shape = RoundedCornerShape(24.dp),
+            title = { Text(stringResource(R.string.accesibilidad), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
                 Column {
-                    Text(stringResource(R.string.desc_accesibilidad_completo), fontSize = 13.sp)
+                    Text(stringResource(R.string.desc_accesibilidad_completo), fontSize = 14.sp, lineHeight = 20.sp, color = Color.White.copy(alpha = 0.85f))
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showAccessibilityDialog = false }) {
-                    Text(stringResource(R.string.cerrar), color = cyanBrillante)
+                    Text(stringResource(R.string.cerrar), color = cyanBrillante, fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = Color(0xFF041529),
@@ -343,19 +359,19 @@ fun SlideConfiguracion(
         )
     }
 
-    // 🔹 DIÁLOGO DE PRIVACIDAD
     if (showPrivacyDialog) {
         AlertDialog(
             onDismissRequest = { showPrivacyDialog = false },
-            title = { Text(stringResource(R.string.privacidad), fontWeight = FontWeight.Bold) },
+            shape = RoundedCornerShape(24.dp),
+            title = { Text(stringResource(R.string.privacidad), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
                 Column {
-                    Text(stringResource(R.string.desc_privacidad_completo), fontSize = 13.sp)
+                    Text(stringResource(R.string.desc_privacidad_completo), fontSize = 14.sp, lineHeight = 20.sp, color = Color.White.copy(alpha = 0.85f))
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showPrivacyDialog = false }) {
-                    Text(stringResource(R.string.cerrar), color = cyanBrillante)
+                    Text(stringResource(R.string.cerrar), color = cyanBrillante, fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = Color(0xFF041529),
@@ -364,17 +380,17 @@ fun SlideConfiguracion(
         )
     }
 
-    // 🔹 DIÁLOGO DE CONFIRMACIÓN DE CIERRE DE SESIÓN
     if (showConfirmLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showConfirmLogoutDialog = false },
-            title = { Text(stringResource(R.string.confirmar_cierre), fontWeight = FontWeight.Bold) },
+            shape = RoundedCornerShape(24.dp),
+            title = { Text(stringResource(R.string.confirmar_cierre), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
-                Text(stringResource(R.string.mensaje_cierre), fontSize = 14.sp)
+                Text(stringResource(R.string.mensaje_cierre), fontSize = 14.sp, color = Color.White.copy(alpha = 0.85f))
             },
             dismissButton = {
                 TextButton(onClick = { showConfirmLogoutDialog = false }) {
-                    Text(stringResource(R.string.cancelar), color = Color.White)
+                    Text(stringResource(R.string.cancelar), color = Color.White.copy(alpha = 0.6f))
                 }
             },
             confirmButton = {
@@ -382,7 +398,7 @@ fun SlideConfiguracion(
                     showConfirmLogoutDialog = false
                     onLogout()
                 }) {
-                    Text(stringResource(R.string.cerrar_sesion), color = Color.Red)
+                    Text(stringResource(R.string.cerrar_sesion), color = Color(0xFFFF4D4D), fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = Color(0xFF041529),
@@ -399,42 +415,51 @@ private fun ConfiguracionItem(
     descripcion: String,
     onClick: () -> Unit,
     cyanBrillante: Color,
-    valorActual: String? = null,
-    switchValue: Boolean? = null
+    valorActual: String? = null
 ) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
-        color = Color.White.copy(0.05f)
+        shape = RoundedCornerShape(16.dp),
+        color = Color.White.copy(0.04f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.06f))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 18.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = icono,
-                contentDescription = titulo,
-                tint = cyanBrillante,
-                modifier = Modifier.size(28.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(cyanBrillante.copy(alpha = 0.1f), RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icono,
+                    contentDescription = titulo,
+                    tint = cyanBrillante,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
 
-            Spacer(Modifier.width(16.dp))
+            Spacer(Modifier.width(14.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = titulo,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     color = Color.White
                 )
+                Spacer(Modifier.height(2.dp))
                 Text(
                     text = descripcion,
                     fontSize = 12.sp,
-                    color = Color.White.copy(0.6f)
+                    color = Color.White.copy(0.55f),
+                    lineHeight = 16.sp
                 )
             }
 
@@ -442,16 +467,17 @@ private fun ConfiguracionItem(
                 Text(
                     text = valorActual,
                     color = cyanBrillante,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 13.sp,
+                    modifier = Modifier.padding(horizontal = 4.dp)
                 )
             }
 
-            Spacer(Modifier.width(8.dp))
             Icon(
                 Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = Color.White.copy(0.4f)
+                tint = Color.White.copy(0.3f),
+                modifier = Modifier.size(20.dp)
             )
         }
     }

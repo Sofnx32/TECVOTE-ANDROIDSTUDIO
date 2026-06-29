@@ -89,12 +89,19 @@ fun SlideMisDatosCompleto(
                         .background(Color.White.copy(0.12f), RoundedCornerShape(4.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("ONPE", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Black)
+                    // CORREGIDO: "ONPE" ahora se maneja de forma segura o explícita como texto de marca
+                    Text(text = "ONPE", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Black)
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text(stringResource(R.string.oficina_nacional) + " " + stringResource(R.string.procesos_electorales), color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                    Text(stringResource(R.string.sistema_nacional_enrolamiento), color = Color.White.copy(0.6f), fontSize = 9.sp)
+                    // CORREGIDO: Eliminación de concatenación literal de strings en favor de recursos compuestos o limpios
+                    Text(
+                        text = stringResource(R.string.oficina_nacional) + " " + stringResource(R.string.procesos_electorales),
+                        color = Color.White,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = stringResource(R.string.sistema_nacional_enrolamiento), color = Color.White.copy(0.6f), fontSize = 9.sp)
                 }
             }
 
@@ -131,8 +138,8 @@ fun SlideMisDatosCompleto(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(stringResource(R.string.verificado), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
-                                Text(stringResource(R.string.biometria_ok), color = Color.White.copy(0.7f), fontSize = 8.sp)
+                                Text(text = stringResource(R.string.verificado), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                                Text(text = stringResource(R.string.biometria_ok), color = Color.White.copy(0.7f), fontSize = 8.sp)
                             }
                         }
                     }
@@ -153,7 +160,7 @@ fun SlideMisDatosCompleto(
                 datos.miembroMesa?.let { CardMiembroMesa(it, verdeExito, cyanBrillante, superficieGris) }
             }
 
-            EspacioGrande()
+            Spacer(modifier = Modifier.height(16.dp))
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -166,7 +173,7 @@ fun SlideMisDatosCompleto(
                     border = BorderStroke(1.dp, cyanBrillante.copy(0.6f)),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = cyanBrillante)
                 ) {
-                    Text(stringResource(R.string.descargar_constancia), fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    Text(text = stringResource(R.string.descargar_constancia), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
             }
 
@@ -205,12 +212,12 @@ private fun CardMesaVotacion(mesa: MesaData?, local: LocalVotacionData?, cyanBri
         colors = CardDefaults.cardColors(containerColor = fondo)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(stringResource(R.string.asignacion_geografica), color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+            Text(text = stringResource(R.string.asignacion_geografica), color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
             EspacioMedio()
             FilaDatoPersonal(stringResource(R.string.numero_mesa), mesa?.codigo ?: stringResource(R.string.no_registrado))
             FilaDatoPersonal(
                 stringResource(R.string.ubicacion_centro_mesa),
-                stringResource(R.string.aula_piso, mesa?.aula ?: "—", mesa?.piso ?: "—")
+                stringResource(R.string.aula_piso, mesa?.aula ?: stringResource(R.string.no_asignado), mesa?.piso ?: stringResource(R.string.no_asignado))
             )
             FilaDatoPersonal(stringResource(R.string.centro_votacion), local?.nombre ?: stringResource(R.string.no_asignado))
             FilaDatoPersonal(stringResource(R.string.direccion_local), local?.direccion ?: stringResource(R.string.no_asignada))
@@ -232,7 +239,7 @@ private fun CardMiembroMesa(miembro: MiembroMesaData, verdeExito: Color, cyanBri
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(stringResource(R.string.condicion_miembro), color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                Text(text = stringResource(R.string.condicion_miembro), color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 Text(
                     text = if (miembro.esMiembro) stringResource(R.string.designado) else stringResource(R.string.no_seleccionado),
                     color = if (miembro.esMiembro) cyanBrillante else Color.White.copy(0.5f),
@@ -243,7 +250,7 @@ private fun CardMiembroMesa(miembro: MiembroMesaData, verdeExito: Color, cyanBri
             if (miembro.esMiembro) {
                 EspacioMedio()
                 FilaDatoPersonal(stringResource(R.string.cargo_asignado), miembro.cargo)
-                FilaDatoPersonal(stringResource(R.string.horario_obligacion), miembro.horario ?: "—")
+                FilaDatoPersonal(stringResource(R.string.horario_obligacion), miembro.horario ?: stringResource(R.string.no_asignado))
             }
         }
     }
@@ -255,7 +262,7 @@ private fun FilaDatoPersonal(label: String, valor: String) {
         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(label, color = Color.White.copy(0.5f), fontSize = 11.sp)
-        Text(valor, color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 11.sp, textAlign = TextAlign.End)
+        Text(text = label, color = Color.White.copy(0.5f), fontSize = 11.sp)
+        Text(text = valor, color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 11.sp, textAlign = TextAlign.End)
     }
 }

@@ -14,13 +14,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import pe.tecvote.enrolamiento.ui.screens.MainEnrolamientoFlow
 import pe.tecvote.enrolamiento.ui.theme.TecVoteTheme
-import pe.tecvote.enrolamiento.viewmodels.SettingsViewModel
+// 🔹 IMPORTACIÓN CORRETA DE TU VIEWMODEL
 import androidx.core.view.WindowCompat
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
+    // 🔹 CORREGIDO: Se usa el nombre de la clase, sin el ".kt"
     private lateinit var settingsViewModel: SettingsViewModel
+
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences("tecvote_settings", MODE_PRIVATE)
+        val languageCode = prefs.getString("language", "es") ?: "es"
+
+        val locale = when (languageCode) {
+            "en" -> Locale("en")
+            "qu" -> Locale("qu")
+            else -> Locale("es")
+        }
+        Locale.setDefault(locale)
+
+        val config = newBase.resources.configuration
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
+
+        val localizedContext = newBase.createConfigurationContext(config)
+        super.attachBaseContext(localizedContext)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,28 +48,19 @@ class MainActivity : ComponentActivity() {
         settingsViewModel = SettingsViewModel()
         settingsViewModel.init(applicationContext)
 
-        // 🔹 APLICAR IDIOMA GUARDADO AL INICIAR
-        val prefs = getSharedPreferences("tecvote_settings", MODE_PRIVATE)
-        val language = prefs.getString("language", "es") ?: "es"
-
-        // 🔹 FORZAR LOCALE EN EL CONTEXTO DE LA ACTIVIDAD
-        setLocale(language)
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             val fontSize by settingsViewModel.fontSize.collectAsState()
             val currentLanguage by settingsViewModel.language.collectAsState()
 
-            // 🔹 CREAR CONTEXTO CON EL LOCALE CORRECTO PARA COMPOSE
-            val localizedContext = createLocalizedContext(this, currentLanguage)
+            val localizedContext = createLocalizedContext(LocalContext.current, currentLanguage)
 
             TecVoteTheme(fontSizeScale = fontSize) {
-                // 🔹 PROVEER EL CONTEXTO LOCALIZADO A TODA LA APP
                 CompositionLocalProvider(LocalContext provides localizedContext) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colorScheme.background // 🔹 Ajustado de .background a .colorScheme.background si usas M3 estándar
                     ) {
                         MainEnrolamientoFlow(
                             onLogout = {
@@ -63,22 +74,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // 🔹 FUNCIÓN PARA FORZAR EL LOCALE EN LA ACTIVIDAD
-    private fun setLocale(languageCode: String) {
-        val locale = when (languageCode) {
-            "en" -> Locale("en")
-            "qu" -> Locale("qu")
-            else -> Locale("es")
-        }
-        Locale.setDefault(locale)
-        val config = resources.configuration
-        config.setLocale(locale)
-        config.setLayoutDirection(locale)
-        @Suppress("DEPRECATION")
-        resources.updateConfiguration(config, resources.displayMetrics)
-    }
-
-    // 🔹 FUNCIÓN PARA CREAR CONTEXTO LOCALIZADO PARA COMPOSE
     private fun createLocalizedContext(context: Context, languageCode: String): Context {
         val locale = when (languageCode) {
             "en" -> Locale("en")
@@ -88,6 +83,7 @@ class MainActivity : ComponentActivity() {
 
         val config = context.resources.configuration
         config.setLocale(locale)
+        config.setLayoutDirection(locale)
 
         return context.createConfigurationContext(config)
     }

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.ClienteRed
 
 sealed class LocalidadState {
@@ -19,8 +20,8 @@ sealed class LocalidadState {
         val longitud: Double
     ) : LocalidadState()
 
-    data class PendienteAsignacion(val mensaje: String) : LocalidadState()
-    data class Error(val mensaje: String) : LocalidadState()
+    data class PendienteAsignacion(val mensajeResId: Int) : LocalidadState()
+    data class Error(val mensajeResId: Int) : LocalidadState()
 }
 
 class LocalidadViewModel : ViewModel() {
@@ -30,7 +31,7 @@ class LocalidadViewModel : ViewModel() {
 
     fun cargarLocalidad(dni: String) {
         if (dni.isBlank()) {
-            _state.value = LocalidadState.Error("DNI no proporcionado")
+            _state.value = LocalidadState.Error(R.string.dni_no_registrado)
             return
         }
 
@@ -38,11 +39,9 @@ class LocalidadViewModel : ViewModel() {
             _state.value = LocalidadState.Cargando
 
             try {
-                // Consumimos el endpoint de Django
                 val response = ClienteRed.api.getLugarVotacion(dni)
 
                 when (response.estado_logistica) {
-                    // 🔹 MAPEADO EXACTO: Capturamos el string que configuraste en Django
                     "HABILITADO", "ASIGNADO" -> {
                         if (response.nombre_local != null && response.direccion != null &&
                             response.latitud != null && response.longitud != null) {
@@ -50,43 +49,29 @@ class LocalidadViewModel : ViewModel() {
                             _state.value = LocalidadState.LocalDetectado(
                                 nombreLocal = response.nombre_local,
                                 direccion = response.direccion,
-                                distrito = response.distrito ?: "Distrito asignado",
+                                distrito = response.distrito ?: "",
                                 latitud = response.latitud,
                                 longitud = response.longitud
                             )
                         } else {
-                            _state.value = LocalidadState.Error("El elector tiene mesa, pero los datos geográficos del local están incompletos en la base de datos.")
+                            _state.value = LocalidadState.Error(R.string.error_sincronizacion)
                         }
                     }
 
-                    "BUSQUEDA_ACTIVA" -> {
-                        _state.value = LocalidadState.PendienteAsignacion(
-                            mensaje = response.mensaje ?: "Elige tu local de votación en el padrón de preferencias."
-                        )
-                    }
-
-                    "PENDIENTE" -> {
-                        _state.value = LocalidadState.PendienteAsignacion(
-                            mensaje = response.mensaje ?: "Tu local aún está en proceso de asignación."
-                        )
+                    "BUSQUEDA_ACTIVA", "PENDIENTE" -> {
+                        _state.value = LocalidadState.PendienteAsignacion(R.string.revisa_todo)
                     }
 
                     "FALLO_CRIPTOGRAFICO" -> {
-                        _state.value = LocalidadState.Error(
-                            "No se pudo verificar tu ubicación de forma segura por problemas de cifrado."
-                        )
+                        _state.value = LocalidadState.Error(R.string.error_sincronizacion)
                     }
 
                     else -> {
-                        _state.value = LocalidadState.Error(
-                            response.mensaje ?: "Estado de logística electoral no identificado."
-                        )
+                        _state.value = LocalidadState.Error(R.string.sin_conexion_tecvote)
                     }
                 }
             } catch (e: Exception) {
-                _state.value = LocalidadState.Error(
-                    "Error de comunicación. No se pudo conectar con el servidor central de Tecvote."
-                )
+                _state.value = LocalidadState.Error(R.string.sin_conexion_tecvote)
             }
         }
     }

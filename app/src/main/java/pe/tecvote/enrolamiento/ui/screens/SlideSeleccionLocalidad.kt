@@ -135,14 +135,10 @@ fun SlideSeleccionLocalidad(
                     )
                 }
                 is LocalidadState.PendienteAsignacion -> {
-                    ContenidoPendiente(
-                        mensaje = currentState.mensaje,
-                        cyanBrillante = cyanBrillante
-                    )
+                    ContenidoPendiente(cyanBrillante = cyanBrillante)
                 }
                 is LocalidadState.Error -> {
                     ContenidoError(
-                        mensaje = currentState.mensaje,
                         cyanBrillante = cyanBrillante,
                         onReintentar = { viewModel.cargarLocalidad(dni) }
                     )
@@ -303,7 +299,7 @@ private fun ContenidoLocalDetectado(
 }
 
 @Composable
-private fun ContenidoPendiente(mensaje: String, cyanBrillante: Color) {
+private fun ContenidoPendiente(cyanBrillante: Color) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -324,7 +320,7 @@ private fun ContenidoPendiente(mensaje: String, cyanBrillante: Color) {
         )
         EspacioMedio()
         Text(
-            mensaje,
+            stringResource(R.string.revisa_todo),
             color = Color.White.copy(0.7f),
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
@@ -335,7 +331,6 @@ private fun ContenidoPendiente(mensaje: String, cyanBrillante: Color) {
 
 @Composable
 private fun ContenidoError(
-    mensaje: String,
     cyanBrillante: Color,
     onReintentar: () -> Unit
 ) {
@@ -359,7 +354,7 @@ private fun ContenidoError(
         )
         EspacioMedio()
         Text(
-            mensaje,
+            stringResource(R.string.sin_conexion_tecvote),
             color = Color.White.copy(0.7f),
             fontSize = 14.sp,
             textAlign = TextAlign.Center,

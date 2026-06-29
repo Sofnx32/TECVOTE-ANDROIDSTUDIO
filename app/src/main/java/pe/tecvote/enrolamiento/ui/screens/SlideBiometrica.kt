@@ -432,7 +432,7 @@ fun SlideBiometrica(
                                                         fotoOptimizada.delete()
                                                     }
                                                 } catch (e: Exception) {
-                                                    mensajeError = "Fallo de conexión: No se pudo enlazar con el servidor central de Tecvote."
+                                                    mensajeError = context.getString(R.string.error_conexion_servidor)
                                                     Log.e("TECVOTE", "Fallo al procesar login biométrico", e)
                                                 } finally {
                                                     enviando = false
@@ -448,7 +448,7 @@ fun SlideBiometrica(
                                     }
                                 )
                             } else if (estadoCara != EstadoCara.CARA_OK) {
-                                mensajeError = "Por favor, encuadre bien su rostro antes de capturar."
+                                mensajeError = context.getString(R.string.error_encuadre_rostro)
                             }
                         }
                     },

@@ -123,6 +123,8 @@ fun SlidePreguntas(
         label = "aro"
     )
 
+    val context = androidx.compose.ui.platform.LocalContext.current
+
     val formularioValido = nombrePadre.isNotBlank() && nombreMadre.isNotBlank() &&
             Regex("""\d{2}/\d{2}/\d{4}""").matches(fechaNacimiento.text)
 
@@ -418,12 +420,12 @@ fun SlidePreguntas(
                                             if (intentos >= 3) {
                                                 bloqueado = true
                                             } else {
-                                                error = "Datos incorrectos. Verifica tu información e intenta de nuevo."
+                                                error = context.getString(R.string.datos_incorrectos)
                                             }
                                         }
                                     } catch (e: Exception) {
                                         Log.e("TECVOTE_NET", "Error en Fase 1.5 Cuestionario: ${e.message}", e)
-                                        error = "Sin conexión con el servidor central ONPE."
+                                        error = context.getString(R.string.sin_conexion_servidor)
                                     } finally {
                                         validando = false
                                     }

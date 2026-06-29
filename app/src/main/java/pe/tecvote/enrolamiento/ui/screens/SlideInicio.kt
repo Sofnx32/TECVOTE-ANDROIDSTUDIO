@@ -53,10 +53,9 @@ fun SlideInicio(
 
             Spacer(Modifier.height(32.dp))
 
-            // ==================== LOGO PRINCIPAL ====================
             Image(
                 painter = painterResource(id = R.drawable.logotecvote),
-                contentDescription = "Logo TecVote",
+                contentDescription = stringResource(R.string.tecvote),
                 modifier = Modifier
                     .size(138.dp)
                     .padding(bottom = 16.dp)
@@ -64,7 +63,6 @@ fun SlideInicio(
 
             Spacer(Modifier.height(12.dp))
 
-            // Título principal
             Text(
                 text = stringResource(R.string.tecvote),
                 color = Color.White,
@@ -95,7 +93,6 @@ fun SlideInicio(
 
             Spacer(Modifier.height(64.dp))
 
-            // ==================== BOTONES ====================
             Button(
                 onClick = onIniciarEnrolamiento,
                 modifier = Modifier
@@ -105,7 +102,7 @@ fun SlideInicio(
                 colors = ButtonDefaults.buttonColors(containerColor = cyanBrillante)
             ) {
                 Text(
-                    stringResource(R.string.iniciar_enrolamiento),
+                    text = stringResource(R.string.iniciar_enrolamiento),
                     color = azulProfundo,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -124,7 +121,7 @@ fun SlideInicio(
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = cyanBrillante)
             ) {
                 Text(
-                    stringResource(R.string.ver_mis_datos),
+                    text = stringResource(R.string.ver_mis_datos),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp
                 )
@@ -132,7 +129,6 @@ fun SlideInicio(
 
             Spacer(Modifier.height(52.dp))
 
-            // Versión
             Text(
                 text = stringResource(R.string.version_onpe),
                 color = Color.White.copy(0.35f),

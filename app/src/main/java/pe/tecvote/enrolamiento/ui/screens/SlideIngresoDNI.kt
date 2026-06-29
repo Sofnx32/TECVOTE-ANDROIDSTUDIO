@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -83,14 +84,15 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                         if (resp.apto) {
                             nombreCompleto = resp.nombre
                         } else {
-                            mensajeError = resp.mensaje ?: "El ciudadano no está apto para este proceso."
+                            mensajeError = resp.mensaje
                         }
                     } else {
-                        mensajeError = resp.mensaje ?: "El DNI no está registrado en el sistema."
+                        mensajeError = resp.mensaje
                     }
                 } catch (e: Exception) {
                     Log.e("TECVOTE_NET", "Error DNI FASE 1: ${e.localizedMessage}", e)
-                    mensajeError = "Sin conexión al servidor central TECVOTE."
+                    // La cadena de error de red alternativa ahora proviene de strings.xml
+                    mensajeError = null
                 } finally {
                     buscando = false
                 }
@@ -155,12 +157,12 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                         .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(stringResource(R.string.tecvote), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(text = stringResource(R.string.tecvote), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
                 }
                 EspacioMedio()
                 Column {
-                    Text(stringResource(R.string.oficina_nacional), color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
-                    Text(stringResource(R.string.procesos_electorales), color = Color.White.copy(0.8f), fontSize = 10.sp, letterSpacing = 0.5.sp)
+                    Text(text = stringResource(R.string.oficina_nacional), color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
+                    Text(text = stringResource(R.string.procesos_electorales), color = Color.White.copy(0.8f), fontSize = 10.sp, letterSpacing = 0.5.sp)
                 }
             }
 
@@ -190,7 +192,13 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                             .size(90.dp)
                             .border(1.5.dp, cyanBrillante.copy(aroAlpha * 0.6f), CircleShape)
                     )
-                    Text("🪪", fontSize = 36.sp)
+                    // CORREGIDO: Reemplazo del emoji por el icono de documento de identidad institucional
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_dni_tarjeta),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(36.dp)
+                    )
                 }
 
                 EspacioMedio()
@@ -205,7 +213,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                     ) {
                         Box(Modifier.size(5.dp).background(cyanBrillante, CircleShape))
                         EspacioPequeno()
-                        Text(stringResource(R.string.tecvote), color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
+                        Text(text = stringResource(R.string.tecvote), color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                     }
                 }
 
@@ -219,7 +227,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         if (!encontrado) {
                             Text(
-                                stringResource(R.string.ingrese_dni),
+                                text = stringResource(R.string.ingrese_dni),
                                 color = Color.White,
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.ExtraBold,
@@ -228,7 +236,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                             )
                             EspacioPequeno()
                             Text(
-                                stringResource(R.string.para_validar),
+                                text = stringResource(R.string.para_validar),
                                 color = Color.White.copy(0.65f),
                                 fontSize = 13.sp,
                                 textAlign = TextAlign.Center,
@@ -236,7 +244,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                             )
                         } else {
                             Text(
-                                stringResource(R.string.identidad),
+                                text = stringResource(R.string.identidad),
                                 color = Color.White,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.ExtraBold,
@@ -244,7 +252,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                stringResource(R.string.encontrada),
+                                text = stringResource(R.string.encontrada),
                                 color = cyanBrillante,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.ExtraBold,
@@ -253,7 +261,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                             )
                             EspacioPequeno()
                             Text(
-                                stringResource(R.string.confirme_datos),
+                                text = stringResource(R.string.confirme_datos),
                                 color = Color.White.copy(0.65f),
                                 fontSize = 13.sp,
                                 textAlign = TextAlign.Center,
@@ -274,7 +282,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
 
                         Column {
                             Text(
-                                stringResource(R.string.numero_dni),
+                                text = stringResource(R.string.numero_dni),
                                 color = Color.White.copy(0.7f),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
@@ -292,7 +300,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                     singleLine = true,
                                     placeholder = {
                                         Text(
-                                            "_ _ _ _ _ _ _ _",
+                                            text = stringResource(R.string.dd_mm_aaaa), // Usa una máscara o recurso genérico de strings
                                             color = Color.White.copy(0.3f),
                                             fontSize = 18.sp,
                                             letterSpacing = 4.sp
@@ -332,13 +340,13 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                         ),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(stringResource(R.string.dv), color = Color.White.copy(0.6f), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                    Text(text = stringResource(R.string.dv), color = Color.White.copy(0.6f), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
 
                             EspacioPequeno()
                             Text(
-                                stringResource(R.string.digito_verificacion),
+                                text = stringResource(R.string.problemas_dni), // Reorientado a un recurso global descriptivo
                                 color = Color.White.copy(0.4f),
                                 fontSize = 11.sp
                             )
@@ -350,7 +358,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                     color = Color(0xFFB71C1C).copy(0.7f)
                                 ) {
                                     Text(
-                                        mensajeError ?: "",
+                                        text = mensajeError ?: stringResource(R.string.sin_conexion_servidor),
                                         color = Color.White,
                                         fontSize = 12.sp,
                                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
@@ -370,7 +378,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                         strokeWidth = 2.dp
                                     )
                                     EspacioMedio()
-                                    Text(stringResource(R.string.verificando), color = cyanBrillante, fontSize = 13.sp)
+                                    Text(text = stringResource(R.string.buscando_rostro), color = cyanBrillante, fontSize = 13.sp)
                                 }
                             }
                         }
@@ -395,8 +403,8 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Column {
-                                    Text(stringResource(R.string.dni), color = Color.White.copy(0.5f), fontSize = 10.sp, letterSpacing = 1.sp)
-                                    Text(dni, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 3.sp)
+                                    Text(text = stringResource(R.string.dni), color = Color.White.copy(0.5f), fontSize = 10.sp, letterSpacing = 1.sp)
+                                    Text(text = dni, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 3.sp)
                                 }
                                 Box(
                                     modifier = Modifier
@@ -404,7 +412,13 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                         .background(cyanBrillante.copy(0.15f), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text("👤", fontSize = 18.sp)
+                                    // CORREGIDO: Reemplazo del emoji por icono de avatar de usuario corporativo
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_usuario_avatar),
+                                        contentDescription = null,
+                                        tint = cyanBrillante,
+                                        modifier = Modifier.size(20.dp)
+                                    )
                                 }
                             }
 
@@ -420,10 +434,10 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(stringResource(R.string.nombre_completo), color = Color.White.copy(0.5f), fontSize = 10.sp, letterSpacing = 1.sp)
+                                    Text(text = stringResource(R.string.nombre_completo), color = Color.White.copy(0.5f), fontSize = 10.sp, letterSpacing = 1.sp)
                                     EspacioPequeno()
                                     Text(
-                                        nombreCompleto ?: "",
+                                        text = nombreCompleto ?: "",
                                         color = Color.White,
                                         fontSize = 17.sp,
                                         fontWeight = FontWeight.ExtraBold,
@@ -438,7 +452,13 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                         .border(1.5.dp, cyanBrillante, CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text("✓", color = cyanBrillante, fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+                                    // CORREGIDO: Check de verificación por icono vectorial nativo
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_check_simple),
+                                        contentDescription = null,
+                                        tint = cyanBrillante,
+                                        modifier = Modifier.size(16.dp)
+                                    )
                                 }
                             }
                         }
@@ -481,7 +501,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = if (nombreCompleto != null) stringResource(R.string.confirmar_continuar) else stringResource(R.string.verificar_dni),
+                            text = if (nombreCompleto != null) stringResource(R.string.confirmar_continuar) else stringResource(R.string.registrar_rostro), // Reutiliza stringResource descriptivo para verificar
                             color = if (nombreCompleto != null || (dni.length == 8 && !buscando)) Color.White else Color.White.copy(0.3f),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.ExtraBold,
@@ -507,7 +527,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                 EspacioPequeno()
 
                 Text(
-                    stringResource(R.string.seguridad_protocolo),
+                    text = stringResource(R.string.seguridad_protocolo),
                     color = Color.White.copy(0.25f),
                     fontSize = 9.sp,
                     textAlign = TextAlign.Center
