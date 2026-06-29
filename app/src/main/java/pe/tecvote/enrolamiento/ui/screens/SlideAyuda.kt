@@ -35,15 +35,8 @@ fun SlideAyuda(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(degradeFondo)
-            // 🔹 PADDING MANUAL para header transparente y bottom bar
-            .padding(
-                top = 60.dp,
-                bottom = 80.dp,
-                start = 0.dp,
-                end = 0.dp
-            )
     ) {
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(16.dp))
 
         Column(
             modifier = Modifier.padding(horizontal = 24.dp)

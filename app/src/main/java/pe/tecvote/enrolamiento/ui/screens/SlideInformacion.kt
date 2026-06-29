@@ -39,15 +39,13 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
             .background(degradeFondo)
             .systemBarsPadding()
             .verticalScroll(rememberScrollState())
-            .padding(24.dp),
+            .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(24.dp))
-
         Text(
-            stringResource(R.string.info_sistema),
+            text = stringResource(R.string.info_sistema),
             color = Color.White,
-            fontSize = 22.sp,
+            fontSize = 26.sp,
             fontWeight = FontWeight.ExtraBold,
             textAlign = TextAlign.Center
         )
@@ -55,16 +53,17 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(8.dp))
 
         Text(
-            stringResource(R.string.info_subtitulo),
-            color = Color.White.copy(0.6f),
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center
+            text = stringResource(R.string.info_subtitulo),
+            color = Color.White.copy(0.65f),
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp
         )
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(40.dp))
 
+        // Cards de información (sin emojis)
         InformacionCard(
-            icono = "📱",
             titulo = stringResource(R.string.info_version),
             contenido = "TecVote v2.0.1",
             cyanBrillante = cyanBrillante
@@ -73,7 +72,6 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(12.dp))
 
         InformacionCard(
-            icono = "🏛️",
             titulo = stringResource(R.string.info_desarrollado),
             contenido = stringResource(R.string.info_desarrollado_contenido),
             cyanBrillante = cyanBrillante
@@ -82,7 +80,6 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(12.dp))
 
         InformacionCard(
-            icono = "📅",
             titulo = stringResource(R.string.info_anio),
             contenido = "2026",
             cyanBrillante = cyanBrillante
@@ -91,7 +88,6 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(12.dp))
 
         InformacionCard(
-            icono = "🎯",
             titulo = stringResource(R.string.info_proposito),
             contenido = stringResource(R.string.info_proposito_contenido),
             cyanBrillante = cyanBrillante
@@ -100,7 +96,6 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(12.dp))
 
         InformacionCard(
-            icono = "🔒",
             titulo = stringResource(R.string.info_seguridad),
             contenido = stringResource(R.string.info_seguridad_contenido),
             cyanBrillante = cyanBrillante
@@ -109,7 +104,6 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(12.dp))
 
         InformacionCard(
-            icono = "📜",
             titulo = stringResource(R.string.info_marco_legal),
             contenido = stringResource(R.string.info_marco_legal_contenido),
             cyanBrillante = cyanBrillante
@@ -118,65 +112,55 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(12.dp))
 
         InformacionCard(
-            icono = "🌐",
             titulo = stringResource(R.string.info_cobertura),
             contenido = stringResource(R.string.info_cobertura_contenido),
             cyanBrillante = cyanBrillante
         )
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(48.dp))
 
         Text(
-            stringResource(R.string.info_copyright),
+            text = stringResource(R.string.info_copyright),
             color = Color.White.copy(0.4f),
-            fontSize = 11.sp,
+            fontSize = 12.sp,
             textAlign = TextAlign.Center,
-            lineHeight = 16.sp
+            lineHeight = 18.sp
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(32.dp))
     }
 }
 
 @Composable
 private fun InformacionCard(
-    icono: String,
     titulo: String,
     contenido: String,
     cyanBrillante: Color
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.05f))
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.08f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.Top
+                .padding(20.dp)
         ) {
             Text(
-                icono,
-                fontSize = 28.sp,
-                modifier = Modifier.padding(end = 12.dp)
+                text = titulo,
+                color = cyanBrillante,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
             )
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    titulo,
-                    color = cyanBrillante,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    contenido,
-                    color = Color.White.copy(0.85f),
-                    fontSize = 13.sp,
-                    lineHeight = 18.sp
-                )
-            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = contenido,
+                color = Color.White.copy(0.9f),
+                fontSize = 14.sp,
+                lineHeight = 20.sp
+            )
         }
     }
 }

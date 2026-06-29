@@ -2,6 +2,7 @@ package pe.tecvote.enrolamiento.ui.screens
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Help
@@ -13,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,9 +58,7 @@ class MisDatosViewModel : ViewModel() {
             Log.d("TECVOTE_NET", "Iniciando consulta HTTP de padrón para DNI: $dni")
             try {
                 val response = ClienteRed.api.getMisDatosElector(dni = dni)
-
                 Log.d("TECVOTE_NET", "Respuesta recibida del servidor central. Status: ${response.status}")
-
                 if (response.status == "success") {
                     Log.d("TECVOTE_NET", "Mapeo exitoso. Datos de elector vinculados: ${response.elector?.nombreCompleto}")
                     _state.value = MisDatosUiState.Exito(response)
@@ -77,7 +77,6 @@ class MisDatosViewModel : ViewModel() {
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,13 +115,25 @@ fun MainEnrolamientoFlow(
         navController.popBackStack()
     }
 
-    // 🔹 SCAFFOLD CON HEADER PEQUEÑO Y TRANSPARENTE
+    val azulMuyOscuroStart = Color(0xFF041120)
+    val azulProfundoEnd = Color(0xFF020B18)
+
+    val degradeFondoGlobal = Brush.verticalGradient(
+        colors = listOf(
+            azulMuyOscuroStart,
+            azulProfundoEnd
+        )
+    )
+
     Scaffold(
-        // 🔹 HEADER TRANSPARENTE - SOLO MENÚ HAMBURGUESA
+        modifier = Modifier
+            .fillMaxSize()
+            .background(degradeFondoGlobal),
+        containerColor = Color.Transparent,
         topBar = {
             if (mostrarBottomBar && !showSettingsMenu) {
                 TopAppBar(
-                    title = { },  // 🔹 SIN TEXTO
+                    title = { },
                     actions = {
                         IconButton(onClick = { showSettingsMenu = true }) {
                             Icon(
@@ -132,11 +143,11 @@ fun MainEnrolamientoFlow(
                             )
                         }
                     },
-                    // 🔹 TRANSPARENTE Y SIN ESPACIO DEL SISTEMA
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
                     ),
-                    windowInsets = WindowInsets(0, 0, 0, 0)  // 🔹 ESTO FALTABA
+                    // CORRECCIÓN AQUÍ: Esto empuja el menú abajo de la barra de notificaciones del celular
+                    windowInsets = TopAppBarDefaults.windowInsets
                 )
             }
         },
@@ -237,14 +248,19 @@ fun MainEnrolamientoFlow(
             NavHost(
                 navController = navController,
                 startDestination = RutasNavegacion.BIENVENIDA,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = innerPadding.calculateTopPadding()) // Consigue que el navhost empiece exactamente abajo de la TopAppBar corregida
             ) {
                 composable(RutasNavegacion.BIENVENIDA) {
-                        SlideBienvenida(
-                            onContinuar = {
-                                navController.navigate(RutasNavegacion.INGRESO_DNI)
-                            }
-                        )
+                    SlideBienvenida(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = innerPadding.calculateBottomPadding()),
+                        onContinuar = {
+                            navController.navigate(RutasNavegacion.INGRESO_DNI)
+                        }
+                    )
                 }
 
                 composable(RutasNavegacion.INGRESO_DNI) {
@@ -331,42 +347,44 @@ fun MainEnrolamientoFlow(
                         }
                     }
 
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            when (val currentState = state) {
-                                is MisDatosUiState.Cargando -> {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.align(Alignment.Center),
-                                        color = MaterialTheme.colorScheme.primary
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = innerPadding.calculateBottomPadding())
+                    ) {
+                        when (val currentState = state) {
+                            is MisDatosUiState.Cargando -> {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.align(Alignment.Center),
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            is MisDatosUiState.Exito -> {
+                                SlideMisDatosCompleto(
+                                    datos = currentState.datos,
+                                    onDescargarConstancia = {}
+                                )
+                            }
+                            is MisDatosUiState.Error -> {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(24.dp),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.error_sincronizacion),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.error
                                     )
-                                }
-                                is MisDatosUiState.Exito -> {
-                                    SlideMisDatosCompleto(
-                                        datos = currentState.datos,
-                                        onDescargarConstancia = {}
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = currentState.mensaje,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.bodyMedium
                                     )
-                                }
-                                is MisDatosUiState.Error -> {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(24.dp),
-                                        verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.error_sincronizacion),
-                                            style = MaterialTheme.typography.titleMedium,
-                                            color = MaterialTheme.colorScheme.error
-                                        )
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Text(
-                                            text = currentState.mensaje,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            textAlign = TextAlign.Center,
-                                            style = MaterialTheme.typography.bodyMedium
-                                        )
-                                    }
                                 }
                             }
                         }
@@ -374,11 +392,19 @@ fun MainEnrolamientoFlow(
                 }
 
                 composable("informacion") {
-                        SlideInformacion()
+                    SlideInformacion(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = innerPadding.calculateBottomPadding())
+                    )
                 }
 
                 composable("ayuda") {
-                        SlideAyuda()
+                    SlideAyuda(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = innerPadding.calculateBottomPadding())
+                    )
                 }
             }
         }

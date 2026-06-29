@@ -1,8 +1,8 @@
 package pe.tecvote.enrolamiento.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +32,7 @@ fun SlideInicio(
     val degradeFondo = Brush.verticalGradient(
         colorStops = arrayOf(
             0.0f to azulMedio,
-            0.4f to azulOscuro,
+            0.35f to azulOscuro,
             1.0f to azulProfundo
         )
     )
@@ -45,62 +46,70 @@ fun SlideInicio(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Spacer(Modifier.height(40.dp))
-
-            Box(
-                modifier = Modifier
-                    .size(140.dp)
-                    .background(cyanBrillante.copy(0.15f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("🗳️", fontSize = 72.sp)
-            }
 
             Spacer(Modifier.height(32.dp))
 
+            // ==================== LOGO PRINCIPAL ====================
+            Image(
+                painter = painterResource(id = R.drawable.logotecvote),
+                contentDescription = "Logo TecVote",
+                modifier = Modifier
+                    .size(138.dp)
+                    .padding(bottom = 16.dp)
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            // Título principal
             Text(
-                stringResource(R.string.tecvote),
+                text = stringResource(R.string.tecvote),
                 color = Color.White,
-                fontSize = 32.sp,
+                fontSize = 36.sp,
                 fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 2.sp
+                letterSpacing = 1.5.sp
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
 
             Text(
-                stringResource(R.string.sistema_enrolamiento),
-                color = Color.White.copy(0.7f),
-                fontSize = 14.sp,
+                text = stringResource(R.string.sistema_enrolamiento),
+                color = Color.White.copy(0.75f),
+                fontSize = 15.sp,
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp
+            )
+
+            Spacer(Modifier.height(4.dp))
+
+            Text(
+                text = stringResource(R.string.onpe_nombre),
+                color = cyanBrillante.copy(0.85f),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
 
-            Text(
-                stringResource(R.string.onpe_nombre),
-                color = cyanBrillante.copy(0.8f),
-                fontSize = 12.sp,
-                textAlign = TextAlign.Center
-            )
+            Spacer(Modifier.height(64.dp))
 
-            Spacer(Modifier.height(48.dp))
-
+            // ==================== BOTONES ====================
             Button(
                 onClick = onIniciarEnrolamiento,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp),
-                shape = RoundedCornerShape(14.dp),
+                    .height(62.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = cyanBrillante)
             ) {
                 Text(
                     stringResource(R.string.iniciar_enrolamiento),
                     color = azulProfundo,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 15.sp
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    letterSpacing = 0.5.sp
                 )
             }
 
@@ -110,31 +119,24 @@ fun SlideInicio(
                 onClick = onVerMisDatos,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = cyanBrillante
-                ),
-                border = ButtonDefaults.outlinedButtonBorder.copy(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(cyanBrillante, cyanBrillante.copy(0.6f))
-                    )
-                )
+                    .height(62.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = cyanBrillante)
             ) {
                 Text(
                     stringResource(R.string.ver_mis_datos),
-                    color = cyanBrillante,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp
                 )
             }
 
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(52.dp))
 
+            // Versión
             Text(
-                stringResource(R.string.version_onpe),
-                color = Color.White.copy(0.3f),
-                fontSize = 11.sp,
+                text = stringResource(R.string.version_onpe),
+                color = Color.White.copy(0.35f),
+                fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )
         }
