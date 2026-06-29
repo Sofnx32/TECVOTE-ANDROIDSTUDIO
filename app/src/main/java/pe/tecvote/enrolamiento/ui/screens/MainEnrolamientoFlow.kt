@@ -7,12 +7,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.ClienteRed
 import pe.tecvote.enrolamiento.data.RespuestaMisDatos
 import androidx.navigation.NavHostController
@@ -74,18 +78,20 @@ class MisDatosViewModel : ViewModel() {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainEnrolamientoFlow(navController: NavHostController = rememberNavController()) {
-
+fun MainEnrolamientoFlow(
+    navController: NavHostController = rememberNavController(),
+    onLogout: () -> Unit = {}
+) {
     val flowViewModel: EnrolamientoFlowViewModel = viewModel(
         factory = EnrolamientoFlowViewModelFactory()
     )
 
     val dniActual by flowViewModel.dniActual.collectAsState()
     val electorActual by flowViewModel.electorActual.collectAsState()
-
-    var tokenObtenido by remember { mutableStateOf<String?>(null) }
+    var showSettingsMenu by remember { mutableStateOf(false) }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -110,17 +116,40 @@ fun MainEnrolamientoFlow(navController: NavHostController = rememberNavControlle
         navController.popBackStack()
     }
 
+    // 🔹 SCAFFOLD CON HEADER PEQUEÑO Y TRANSPARENTE
     Scaffold(
+        // 🔹 HEADER TRANSPARENTE - SOLO MENÚ HAMBURGUESA
+        topBar = {
+            if (mostrarBottomBar && !showSettingsMenu) {
+                TopAppBar(
+                    title = { },  // 🔹 SIN TEXTO
+                    actions = {
+                        IconButton(onClick = { showSettingsMenu = true }) {
+                            Icon(
+                                Icons.Default.Menu,
+                                contentDescription = stringResource(R.string.configuracion),
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    // 🔹 TRANSPARENTE Y SIN ESPACIO DEL SISTEMA
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent
+                    ),
+                    windowInsets = WindowInsets(0, 0, 0, 0)  // 🔹 ESTO FALTABA
+                )
+            }
+        },
         bottomBar = {
-            if (mostrarBottomBar) {
+            if (mostrarBottomBar && !showSettingsMenu) {
                 NavigationBar(
                     containerColor = Color(0xFF020B18),
                     contentColor = Color.White,
                     tonalElevation = 12.dp
                 ) {
                     NavigationBarItem(
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
-                        label = { Text("Inicio", fontSize = 10.sp) },
+                        icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.inicio)) },
+                        label = { Text(stringResource(R.string.inicio), fontSize = 10.sp) },
                         selected = pantallaSeleccionada == "inicio",
                         onClick = {
                             navController.navigate(RutasNavegacion.BIENVENIDA) {
@@ -137,8 +166,8 @@ fun MainEnrolamientoFlow(navController: NavHostController = rememberNavControlle
                     )
 
                     NavigationBarItem(
-                        icon = { Icon(Icons.Default.Person, contentDescription = "Mis datos") },
-                        label = { Text("Mis datos", fontSize = 10.sp) },
+                        icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.mis_datos)) },
+                        label = { Text(stringResource(R.string.mis_datos), fontSize = 10.sp) },
                         selected = pantallaSeleccionada == "misdatos",
                         onClick = {
                             if (dniActual.isNotEmpty()) {
@@ -160,8 +189,8 @@ fun MainEnrolamientoFlow(navController: NavHostController = rememberNavControlle
                     )
 
                     NavigationBarItem(
-                        icon = { Icon(Icons.Default.Info, contentDescription = "Información") },
-                        label = { Text("Información", fontSize = 10.sp) },
+                        icon = { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.informacion)) },
+                        label = { Text(stringResource(R.string.informacion), fontSize = 10.sp) },
                         selected = pantallaSeleccionada == "informacion",
                         onClick = {
                             navController.navigate("informacion") {
@@ -178,8 +207,8 @@ fun MainEnrolamientoFlow(navController: NavHostController = rememberNavControlle
                     )
 
                     NavigationBarItem(
-                        icon = { Icon(Icons.Default.Help, contentDescription = "Ayuda") },
-                        label = { Text("Ayuda", fontSize = 10.sp) },
+                        icon = { Icon(Icons.Default.Help, contentDescription = stringResource(R.string.ayuda)) },
+                        label = { Text(stringResource(R.string.ayuda), fontSize = 10.sp) },
                         selected = pantallaSeleccionada == "ayuda",
                         onClick = {
                             navController.navigate("ayuda") {
@@ -199,177 +228,159 @@ fun MainEnrolamientoFlow(navController: NavHostController = rememberNavControlle
         }
     ) { innerPadding ->
 
-        NavHost(
-            navController = navController,
-            startDestination = RutasNavegacion.BIENVENIDA,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // 🔹 INICIO - Dashboard principal
-            composable(RutasNavegacion.BIENVENIDA) {
-                Column(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
-                    SlideInicio(
-                        onIniciarEnrolamiento = {
-                            navController.navigate(RutasNavegacion.INGRESO_DNI)
-                        },
-                        onVerMisDatos = {
-                            if (dniActual.isNotEmpty()) {
-                                navController.navigate(RutasNavegacion.misDatos(dniActual))
+        if (showSettingsMenu) {
+            SlideConfiguracion(
+                onNavigateBack = { showSettingsMenu = false },
+                onLogout = onLogout
+            )
+        } else {
+            NavHost(
+                navController = navController,
+                startDestination = RutasNavegacion.BIENVENIDA,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                composable(RutasNavegacion.BIENVENIDA) {
+                        SlideBienvenida(
+                            onContinuar = {
+                                navController.navigate(RutasNavegacion.INGRESO_DNI)
+                            }
+                        )
+                }
+
+                composable(RutasNavegacion.INGRESO_DNI) {
+                    SlideIngresoDNI(
+                        onContinuar = { dniIngresado ->
+                            flowViewModel.setDni(dniIngresado)
+                            navController.navigate(RutasNavegacion.preguntas(dniIngresado)) {
+                                popUpTo(RutasNavegacion.INGRESO_DNI) { inclusive = false }
                             }
                         }
                     )
                 }
-            }
 
-            // 🔹 Flujo de enrolamiento (SIN bottom bar)
-            composable(RutasNavegacion.INGRESO_DNI) {
-                SlideIngresoDNI(
-                    onContinuar = { dniIngresado ->
-                        flowViewModel.setDni(dniIngresado)
-                        navController.navigate(RutasNavegacion.preguntas(dniIngresado)) {
-                            popUpTo(RutasNavegacion.INGRESO_DNI) { inclusive = false }
+                composable(
+                    route = RutasNavegacion.PREGUNTAS,
+                    arguments = listOf(navArgument("dni") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val dni = backStackEntry.arguments?.getString("dni") ?: ""
+                    SlidePreguntas(
+                        dni = dni,
+                        onContinuar = {
+                            navController.navigate(RutasNavegacion.biometrica(dni))
                         }
-                    }
-                )
-            }
-
-            composable(
-                route = RutasNavegacion.PREGUNTAS,
-                arguments = listOf(navArgument("dni") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val dni = backStackEntry.arguments?.getString("dni") ?: ""
-                SlidePreguntas(
-                    dni = dni,
-                    onContinuar = {
-                        navController.navigate(RutasNavegacion.biometrica(dni))
-                    }
-                )
-            }
-
-            composable(
-                route = RutasNavegacion.BIOMETRICA,
-                arguments = listOf(navArgument("dni") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val dni = backStackEntry.arguments?.getString("dni") ?: ""
-                SlideBiometrica(
-                    dni = dni,
-                    onContinuar = { token ->
-                        if (token != null) {
-                            tokenObtenido = token
-                        }
-                        navController.navigate(RutasNavegacion.seleccionLocalidad(dni))
-                    }
-                )
-            }
-
-            composable(
-                route = RutasNavegacion.SELECCION_LOCALIDAD,
-                arguments = listOf(navArgument("dni") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val dni = backStackEntry.arguments?.getString("dni") ?: ""
-                SlideSeleccionLocalidad(
-                    dni = dni,
-                    onContinuar = {
-                        flowViewModel.consultarElector(dni)
-                        navController.navigate(RutasNavegacion.gestionEnrolamiento(dni))
-                    }
-                )
-            }
-
-            composable(
-                route = RutasNavegacion.GESTION_ENROLAMIENTO,
-                arguments = listOf(navArgument("dni") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val dni = backStackEntry.arguments?.getString("dni") ?: ""
-
-                SlideGestionEnrolamiento(
-                    dni = dni,
-                    datosElector = electorActual,
-                    onContinuar = {
-                        navController.navigate(RutasNavegacion.misDatos(dni))
-                    },
-                    onCancelar = {
-                        navController.popBackStack()
-                    }
-                )
-            }
-
-            // 🔹 MIS DATOS - Credencial electoral
-            composable(
-                route = RutasNavegacion.MIS_DATOS,
-                arguments = listOf(navArgument("dni") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val dni = backStackEntry.arguments?.getString("dni") ?: ""
-
-                val datosViewModel: MisDatosViewModel = viewModel()
-                val state by datosViewModel.state.collectAsState()
-
-                LaunchedEffect(dni) {
-                    if (dni.isNotEmpty()) {
-                        datosViewModel.consultarServidor(dni)
-                    }
+                    )
                 }
 
-                Column(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        when (val currentState = state) {
-                            is MisDatosUiState.Cargando -> {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.align(Alignment.Center),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
+                composable(
+                    route = RutasNavegacion.BIOMETRICA,
+                    arguments = listOf(navArgument("dni") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val dni = backStackEntry.arguments?.getString("dni") ?: ""
+                    SlideBiometrica(
+                        dni = dni,
+                        onContinuar = { token ->
+                            if (token != null) {
+                                navController.navigate(RutasNavegacion.seleccionLocalidad(dni))
                             }
+                        }
+                    )
+                }
 
-                            is MisDatosUiState.Exito -> {
-                                SlideMisDatosCompleto(
-                                    datos = currentState.datos,
-                                    onDescargarConstancia = {
-                                        // Pendiente implementar
+                composable(
+                    route = RutasNavegacion.SELECCION_LOCALIDAD,
+                    arguments = listOf(navArgument("dni") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val dni = backStackEntry.arguments?.getString("dni") ?: ""
+                    SlideSeleccionLocalidad(
+                        dni = dni,
+                        onContinuar = {
+                            flowViewModel.consultarElector(dni)
+                            navController.navigate(RutasNavegacion.gestionEnrolamiento(dni))
+                        }
+                    )
+                }
+
+                composable(
+                    route = RutasNavegacion.GESTION_ENROLAMIENTO,
+                    arguments = listOf(navArgument("dni") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val dni = backStackEntry.arguments?.getString("dni") ?: ""
+                    SlideGestionEnrolamiento(
+                        dni = dni,
+                        datosElector = electorActual,
+                        onContinuar = {
+                            navController.navigate(RutasNavegacion.misDatos(dni))
+                        },
+                        onCancelar = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+
+                composable(
+                    route = RutasNavegacion.MIS_DATOS,
+                    arguments = listOf(navArgument("dni") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val dni = backStackEntry.arguments?.getString("dni") ?: ""
+                    val datosViewModel: MisDatosViewModel = viewModel()
+                    val state by datosViewModel.state.collectAsState()
+
+                    LaunchedEffect(dni) {
+                        if (dni.isNotEmpty()) {
+                            datosViewModel.consultarServidor(dni)
+                        }
+                    }
+
+                    Column(modifier = Modifier.padding(innerPadding)) {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            when (val currentState = state) {
+                                is MisDatosUiState.Cargando -> {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.align(Alignment.Center),
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                                is MisDatosUiState.Exito -> {
+                                    SlideMisDatosCompleto(
+                                        datos = currentState.datos,
+                                        onDescargarConstancia = {}
+                                    )
+                                }
+                                is MisDatosUiState.Error -> {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(24.dp),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.error_sincronizacion),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = currentState.mensaje,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )
                                     }
-                                )
-                            }
-
-                            is MisDatosUiState.Error -> {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(24.dp),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(
-                                        text = "ERROR DE SINCRONIZACIÓN",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = MaterialTheme.colorScheme.error
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = currentState.mensaje,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            // 🔹 INFORMACIÓN
-            composable("informacion") {
-                Column(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
-                    SlideInformacion()
+                composable("informacion") {
+                        SlideInformacion()
+                }
+
+                composable("ayuda") {
+                        SlideAyuda()
                 }
             }
-
-            // 🔹 AYUDA
-            composable("ayuda") {
-                Column(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
-                    SlideAyuda()
-                }
-            }
-
-
         }
     }
 }

@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import pe.tecvote.enrolamiento.R
 
 @Composable
 fun SlideAyuda(modifier: Modifier = Modifier) {
@@ -33,15 +35,21 @@ fun SlideAyuda(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(degradeFondo)
-            .systemBarsPadding()
+            // 🔹 PADDING MANUAL para header transparente y bottom bar
+            .padding(
+                top = 60.dp,
+                bottom = 80.dp,
+                start = 0.dp,
+                end = 0.dp
+            )
     ) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
 
         Column(
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
             Text(
-                "AYUDA Y SOPORTE",
+                stringResource(R.string.ayuda_soporte),
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.ExtraBold
@@ -50,7 +58,7 @@ fun SlideAyuda(modifier: Modifier = Modifier) {
             Spacer(Modifier.height(8.dp))
 
             Text(
-                "Portal oficial de la ONPE",
+                stringResource(R.string.portal_oficial),
                 color = cyanBrillante,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium
@@ -59,7 +67,6 @@ fun SlideAyuda(modifier: Modifier = Modifier) {
 
         Spacer(Modifier.height(16.dp))
 
-        // 🔹 WEBVIEW A PANTALLA COMPLETA (sin bordes redondeados)
         AndroidView(
             factory = { context ->
                 WebView(context).apply {

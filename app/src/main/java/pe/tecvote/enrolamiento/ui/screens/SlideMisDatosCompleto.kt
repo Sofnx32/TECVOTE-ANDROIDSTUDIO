@@ -17,10 +17,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.RespuestaMisDatos
 import pe.tecvote.enrolamiento.data.ElectorData
 import pe.tecvote.enrolamiento.data.MesaData
@@ -91,8 +93,8 @@ fun SlideMisDatosCompleto(
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text("OFICINA NACIONAL DE PROCESOS ELECTORALES", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                    Text("SISTEMA NACIONAL DE ENROLAMIENTO TECNOLÓGICO", color = Color.White.copy(0.6f), fontSize = 9.sp)
+                    Text(stringResource(R.string.oficina_nacional) + " " + stringResource(R.string.procesos_electorales), color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.sistema_nacional_enrolamiento), color = Color.White.copy(0.6f), fontSize = 9.sp)
                 }
             }
 
@@ -111,7 +113,7 @@ fun SlideMisDatosCompleto(
                             fontSize = 18.sp
                         )
                         Text(
-                            text = "Documento Nacional de Identidad: ${elector.dni}",
+                            text = stringResource(R.string.documento_identidad, elector.dni),
                             color = Color.White.copy(0.6f),
                             fontSize = 12.sp
                         )
@@ -129,8 +131,8 @@ fun SlideMisDatosCompleto(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("VERIFICADO", color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
-                                Text("BIOMETRÍA OK", color = Color.White.copy(0.7f), fontSize = 8.sp)
+                                Text(stringResource(R.string.verificado), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                                Text(stringResource(R.string.biometria_ok), color = Color.White.copy(0.7f), fontSize = 8.sp)
                             }
                         }
                     }
@@ -153,7 +155,6 @@ fun SlideMisDatosCompleto(
 
             EspacioGrande()
 
-            // 🔹 SOLO BOTÓN DE DESCARGAR (QR ELIMINADO)
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -165,7 +166,7 @@ fun SlideMisDatosCompleto(
                     border = BorderStroke(1.dp, cyanBrillante.copy(0.6f)),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = cyanBrillante)
                 ) {
-                    Text("DESCARGAR CONSTANCIA DE SUFRAGIO", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    Text(stringResource(R.string.descargar_constancia), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
             }
 
@@ -183,15 +184,15 @@ private fun CardMisDatos(elector: ElectorData, cyanBrillante: Color, verdeExito:
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "DATOS FILIATORIOS DEL ELECTOR",
+                text = stringResource(R.string.datos_filiatorios),
                 color = cyanBrillante,
                 fontWeight = FontWeight.Bold,
                 fontSize = 12.sp
             )
             EspacioMedio()
-            FilaDatoPersonal("Apellidos y Nombres", elector.nombreCompleto)
-            FilaDatoPersonal("Documento de Identidad", elector.dni)
-            FilaDatoPersonal("Condición de Enrolamiento", elector.estadoEnrolamiento)
+            FilaDatoPersonal(stringResource(R.string.apellidos_nombres), elector.nombreCompleto)
+            FilaDatoPersonal(stringResource(R.string.dni), elector.dni)
+            FilaDatoPersonal(stringResource(R.string.condicion_enrolamiento), elector.estadoEnrolamiento)
         }
     }
 }
@@ -204,13 +205,16 @@ private fun CardMesaVotacion(mesa: MesaData?, local: LocalVotacionData?, cyanBri
         colors = CardDefaults.cardColors(containerColor = fondo)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("ASIGNACIÓN GEOGRÁFICA Y LOGÍSTICA DE SUFRAGIO", color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+            Text(stringResource(R.string.asignacion_geografica), color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
             EspacioMedio()
-            FilaDatoPersonal("Número de Mesa", mesa?.codigo ?: "NO REGISTRADO")
-            FilaDatoPersonal("Ubicación en Centro", "Aula: ${mesa?.aula ?: "—"} / Piso: ${mesa?.piso ?: "—"}")
-            FilaDatoPersonal("Centro de Votación", local?.nombre ?: "NO ASIGNADO")
-            FilaDatoPersonal("Dirección del Local", local?.direccion ?: "NO ASIGNADA")
-            FilaDatoPersonal("Ubigeo Geográfico", local?.ubigeo ?: "N/A")
+            FilaDatoPersonal(stringResource(R.string.numero_mesa), mesa?.codigo ?: stringResource(R.string.no_registrado))
+            FilaDatoPersonal(
+                stringResource(R.string.ubicacion_centro_mesa),
+                stringResource(R.string.aula_piso, mesa?.aula ?: "—", mesa?.piso ?: "—")
+            )
+            FilaDatoPersonal(stringResource(R.string.centro_votacion), local?.nombre ?: stringResource(R.string.no_asignado))
+            FilaDatoPersonal(stringResource(R.string.direccion_local), local?.direccion ?: stringResource(R.string.no_asignada))
+            FilaDatoPersonal(stringResource(R.string.ubigeo_geografico), local?.ubigeo ?: stringResource(R.string.na))
         }
     }
 }
@@ -228,9 +232,9 @@ private fun CardMiembroMesa(miembro: MiembroMesaData, verdeExito: Color, cyanBri
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("CONDICIÓN DE MIEMBRO DE MESA", color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                Text(stringResource(R.string.condicion_miembro), color = cyanBrillante, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 Text(
-                    text = if (miembro.esMiembro) "DESIGNADO" else "NO SELECCIONADO",
+                    text = if (miembro.esMiembro) stringResource(R.string.designado) else stringResource(R.string.no_seleccionado),
                     color = if (miembro.esMiembro) cyanBrillante else Color.White.copy(0.5f),
                     fontWeight = FontWeight.Bold,
                     fontSize = 11.sp
@@ -238,8 +242,8 @@ private fun CardMiembroMesa(miembro: MiembroMesaData, verdeExito: Color, cyanBri
             }
             if (miembro.esMiembro) {
                 EspacioMedio()
-                FilaDatoPersonal("Cargo Asignado", miembro.cargo)
-                FilaDatoPersonal("Horario de Obligación", miembro.horario ?: "—")
+                FilaDatoPersonal(stringResource(R.string.cargo_asignado), miembro.cargo)
+                FilaDatoPersonal(stringResource(R.string.horario_obligacion), miembro.horario ?: "—")
             }
         }
     }

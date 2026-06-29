@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,12 +33,11 @@ import pe.tecvote.enrolamiento.ui.EspacioExtraGrande
 import pe.tecvote.enrolamiento.ui.EspacioEnorme
 import pe.tecvote.enrolamiento.ui.EspacioHorizontalPequeno
 import pe.tecvote.enrolamiento.ui.EspacioHorizontalMedio
-import pe.tecvote.enrolamiento.ui.theme.TECVOTETheme
+import pe.tecvote.enrolamiento.ui.theme.TecVoteTheme
 
 @Composable
 fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {}) {
 
-    // ── Colores exactos del diseño ONPE ──────────────────────────────
     val azulProfundo  = Color(0xFF020B18)
     val azulOscuro    = Color(0xFF041529)
     val azulMedio     = Color(0xFF0A2547)
@@ -52,7 +52,6 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
         )
     )
 
-    // ── Animación de entrada ─────────────────────────────────────────
     var visible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { visible = true }
 
@@ -67,10 +66,8 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
         label         = "slideY"
     )
 
-    // ── Animaciones infinitas ────────────────────────────────────────
     val inf = rememberInfiniteTransition(label = "inf")
 
-    // Pulso del logo
     val logoScale by inf.animateFloat(
         initialValue  = 1f,
         targetValue   = 1.04f,
@@ -78,7 +75,6 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
         label         = "logo"
     )
 
-    // Brillo del aro cyan
     val aroAlpha by inf.animateFloat(
         initialValue  = 0.5f,
         targetValue   = 1f,
@@ -86,7 +82,6 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
         label         = "aro"
     )
 
-    // Pulso del botón
     val botonScale by inf.animateFloat(
         initialValue  = 1f,
         targetValue   = 1.02f,
@@ -94,14 +89,12 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
         label         = "boton"
     )
 
-    // ── Layout principal ─────────────────────────────────────────────
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(degradeFondo)
     ) {
 
-        // Círculos decorativos de fondo (efecto tech)
         Box(
             modifier = Modifier
                 .size(400.dp)
@@ -132,7 +125,6 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                 )
         )
 
-        // Contenido
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -144,7 +136,6 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            // ── HEADER: Logo ONPE ────────────────────────────────────
             Spacer(Modifier.height(8.dp))
             Row(
                 modifier          = Modifier
@@ -154,26 +145,25 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                     .padding(horizontal = 16.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Placeholder logo ONPE — reemplaza con tu drawable si tienes
                 Box(
                     modifier          = Modifier
                         .size(44.dp)
                         .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
                     contentAlignment  = Alignment.Center
                 ) {
-                    Text("TECVOTE", color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(stringResource(R.string.tecvote), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
-                        "OFICINA NACIONAL DE",
+                        stringResource(R.string.oficina_nacional),
                         color      = Color.White,
                         fontSize   = 10.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
                     Text(
-                        "PROCESOS ELECTORALES",
+                        stringResource(R.string.procesos_electorales),
                         color      = Color.White.copy(0.8f),
                         fontSize   = 10.sp,
                         letterSpacing = 0.5.sp
@@ -181,16 +171,13 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                 }
             }
 
-            // ── CENTRO: Logo TECVOTE ─────────────────────────────────
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Aro cyan + logo con efecto glow
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier         = Modifier.size(220.dp)
                 ) {
-                    // Glow exterior
                     Box(
                         modifier = Modifier.size(TamanosAdaptativos.tamanoLogoPrincipal() * 0.95f)
                             .scale(logoScale)
@@ -204,7 +191,6 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                                 shape = CircleShape
                             )
                     )
-                    // Aro punteado cyan
                     Box(
                         modifier = Modifier
                             .size(190.dp)
@@ -218,10 +204,9 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                                 )
                             )
                     )
-                    // Logo principal
                     Image(
                         painter            = painterResource(id = R.drawable.logotecvote),
-                        contentDescription = "Logo TECVOTE",
+                        contentDescription = stringResource(R.string.logo_tecvote),
                         modifier           = Modifier
                             .size(200.dp)
                             .scale(logoScale)
@@ -230,13 +215,10 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
 
                 Spacer(Modifier.height(20.dp))
 
-
-
                 Spacer(Modifier.height(28.dp))
 
-                // Título principal
                 Text(
-                    text          = "BIENVENIDOS A",
+                    text          = stringResource(R.string.bienvenidos_a),
                     color         = Color.White.copy(0.7f),
                     fontSize      = 14.sp,
                     fontWeight    = FontWeight.Medium,
@@ -244,7 +226,7 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                     textAlign     = TextAlign.Center
                 )
                 Text(
-                    text          = "TECVOTE",
+                    text          = stringResource(R.string.tecvote),
                     color         = Color.White,
                     fontSize      = 42.sp,
                     fontWeight    = FontWeight.ExtraBold,
@@ -252,7 +234,7 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                     textAlign     = TextAlign.Center
                 )
                 Text(
-                    text          = "SU VOTO SEGURO Y DIGITAL",
+                    text          = stringResource(R.string.su_voto_seguro),
                     color         = cyanBrillante,
                     fontSize      = 13.sp,
                     fontWeight    = FontWeight.Bold,
@@ -262,7 +244,6 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
 
                 Spacer(Modifier.height(20.dp))
 
-                // Línea divisora con degradé cyan
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
@@ -278,11 +259,9 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
 
             }
 
-            // ── BOTTOM: Botón + footer ───────────────────────────────
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Botón COMENZAR con degradé cyan
                 Button(
                     onClick  = onContinuar,
                     shape    = RoundedCornerShape(50.dp),
@@ -308,7 +287,7 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
                         contentAlignment  = Alignment.Center
                     ) {
                         Text(
-                            text          = "COMENZAR",
+                            text          = stringResource(R.string.comenzar),
                             color         = Color.White,
                             fontSize      = 17.sp,
                             fontWeight    = FontWeight.ExtraBold,
@@ -319,11 +298,8 @@ fun SlideBienvenida(modifier: Modifier = Modifier, onContinuar: () -> Unit = {})
 
                 Spacer(Modifier.height(16.dp))
 
-
-
                 Spacer(Modifier.height(12.dp))
 
-                // Puntos indicadores
                 PuntosIndicadores(total = 6, actual = 0)
 
                 Spacer(Modifier.height(16.dp))

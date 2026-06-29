@@ -3,7 +3,6 @@ package pe.tecvote.enrolamiento.ui.screens
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -18,7 +17,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.ui.EspacioMedio
 import pe.tecvote.enrolamiento.ui.EspacioGrande
 import pe.tecvote.enrolamiento.ui.EspacioExtraGrande
@@ -44,7 +44,6 @@ fun SlideSeleccionLocalidad(
     onContinuar: () -> Unit = {},
     viewModel: LocalidadViewModel = viewModel()
 ) {
-    // Paleta de colores
     val azulProfundo = Color(0xFF020B18)
     val azulOscuro = Color(0xFF041529)
     val azulMedio = Color(0xFF0A2547)
@@ -67,7 +66,6 @@ fun SlideSeleccionLocalidad(
         label = "alpha"
     )
 
-    // Cargar localidad automáticamente al entrar
     LaunchedEffect(dni) {
         if (dni.isNotBlank()) {
             viewModel.cargarLocalidad(dni)
@@ -89,7 +87,6 @@ fun SlideSeleccionLocalidad(
                 .alpha(alpha),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header ONPE
             EspacioExtraGrande()
             Row(
                 modifier = Modifier
@@ -109,14 +106,22 @@ fun SlideSeleccionLocalidad(
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text("OFICINA NACIONAL DE", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    Text("PROCESOS ELECTORALES", color = Color.White.copy(0.8f), fontSize = 10.sp)
+                    Text(
+                        stringResource(R.string.oficina_nacional),
+                        color = Color.White,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(R.string.procesos_electorales),
+                        color = Color.White.copy(0.8f),
+                        fontSize = 10.sp
+                    )
                 }
             }
 
             EspacioExtraGrande()
 
-            // Contenido dinámico según estado
             when (val currentState = state) {
                 is LocalidadState.Cargando -> {
                     ContenidoCargando(cyanBrillante)
@@ -163,7 +168,7 @@ private fun ContenidoCargando(color: Color) {
         )
         EspacioGrande()
         Text(
-            "Buscando tu local de votación...",
+            stringResource(R.string.buscando_local),
             color = Color.White,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
@@ -178,14 +183,14 @@ private fun ContenidoLocalDetectado(
     azulProfundo: Color,
     onContinuar: () -> Unit
 ) {
-    val context = LocalContext.current // ◄ Necesario para lanzar Google Maps externo
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "TU LOCAL DE VOTACIÓN",
+            stringResource(R.string.tu_local_votacion),
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.ExtraBold,
@@ -195,7 +200,7 @@ private fun ContenidoLocalDetectado(
         EspacioMedio()
 
         Text(
-            "Ubicación del centro de sufragio",
+            stringResource(R.string.ubicacion_centro),
             color = Color.White.copy(0.7f),
             fontSize = 13.sp,
             textAlign = TextAlign.Center
@@ -203,7 +208,6 @@ private fun ContenidoLocalDetectado(
 
         EspacioGrande()
 
-        // Mapa de Google Nativo (Se verá azul hasta que pongas tu API Key en el Manifest)
         val ubicacionLocal = LatLng(state.latitud, state.longitud)
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(ubicacionLocal, 16f)
@@ -234,7 +238,6 @@ private fun ContenidoLocalDetectado(
 
         EspacioGrande()
 
-        // Card informativa
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -255,13 +258,11 @@ private fun ContenidoLocalDetectado(
 
         EspacioGrande()
 
-        // 🗺️ BOTÓN 1: Abrir en Aplicación Google Maps externa del celular
         OutlinedButton(
             onClick = {
-                // Geo URI que levanta Google Maps externo con un pin marcador en la coordenada
                 val mapaIntentUri = Uri.parse("geo:${state.latitud},${state.longitud}?q=${Uri.encode(state.nombreLocal)}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, mapaIntentUri).apply {
-                    setPackage("com.google.android.apps.maps") // Fuerza a que abra la app oficial de Google Maps
+                    setPackage("com.google.android.apps.maps")
                 }
                 context.startActivity(mapIntent)
             },
@@ -269,12 +270,15 @@ private fun ContenidoLocalDetectado(
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = cyanBrillante)
         ) {
-            Text("CÓMO LLEGAR (ABRIR EN GOOGLE MAPS)", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text(
+                stringResource(R.string.como_llegar),
+                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp
+            )
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // 🚀 BOTÓN 2: Continuar con el Flujo de la aplicación hacia Mis Datos
         Button(
             onClick = onContinuar,
             modifier = Modifier.fillMaxWidth().height(54.dp),
@@ -287,7 +291,12 @@ private fun ContenidoLocalDetectado(
             ) {
                 Icon(Icons.Default.CheckCircle, contentDescription = null, tint = azulProfundo, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(8.dp))
-                Text("CONFIRMAR Y VER MIS DATOS", color = azulProfundo, fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
+                Text(
+                    stringResource(R.string.confirmar_ver_datos),
+                    color = azulProfundo,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 14.sp
+                )
             }
         }
     }
@@ -308,7 +317,7 @@ private fun ContenidoPendiente(mensaje: String, cyanBrillante: Color) {
         )
         EspacioGrande()
         Text(
-            "LOCAL PENDIENTE",
+            stringResource(R.string.local_pendiente),
             color = Color.White,
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold
@@ -343,7 +352,7 @@ private fun ContenidoError(
         )
         EspacioGrande()
         Text(
-            "ERROR",
+            stringResource(R.string.error),
             color = Color.White,
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold
@@ -368,7 +377,7 @@ private fun ContenidoError(
             )
         ) {
             Text(
-                "REINTENTAR",
+                stringResource(R.string.reintentar),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp
             )

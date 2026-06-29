@@ -214,7 +214,7 @@ interface TecvoteApi {
 object ClienteRed {
 
     // 1. CORRECCIÓN: Usamos la IP numérica que Django sí resolvió en tus primeros logs
-    private const val BASE_URL = "http://192.168.1.89:8000/"
+    private const val BASE_URL = "http://192.168.133.191:8000/"
     private const val ENABLE_DEBUG_LOGS = true
     private var appContext: Context? = null
 

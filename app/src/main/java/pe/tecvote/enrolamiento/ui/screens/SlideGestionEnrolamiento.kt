@@ -17,10 +17,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.RespuestaElector
 import pe.tecvote.enrolamiento.ui.*
 
@@ -55,7 +57,6 @@ fun SlideGestionEnrolamiento(
         label = "alpha"
     )
 
-    // 🔹 INDICADOR DE CARGA SI NO HAY DATOS
     if (datosElector == null) {
         Box(
             modifier = modifier
@@ -72,16 +73,15 @@ fun SlideGestionEnrolamiento(
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "Cargando información del ciudadano...",
+                    stringResource(R.string.cargando_informacion),
                     color = Color.White.copy(0.7f),
                     fontSize = 14.sp
                 )
             }
         }
-        return // Salir temprano si no hay datos
+        return
     }
 
-    // 🔹 UI PRINCIPAL CUANDO HAY DATOS
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -94,7 +94,6 @@ fun SlideGestionEnrolamiento(
                 .padding(horizontal = TamanosAdaptativos.paddingHorizontalPantalla())
                 .alpha(alpha)
         ) {
-            // Header institucional ONPE
             EspacioMedio()
             Row(
                 modifier = Modifier
@@ -114,15 +113,15 @@ fun SlideGestionEnrolamiento(
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text("OFICINA NACIONAL DE", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    Text("PROCESOS ELECTORALES", color = Color.White.copy(0.8f), fontSize = 10.sp)
+                    Text(stringResource(R.string.oficina_nacional), color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.procesos_electorales), color = Color.White.copy(0.8f), fontSize = 10.sp)
                 }
             }
 
             EspacioGrande()
 
             Text(
-                "GESTIÓN DE ENROLAMIENTO",
+                stringResource(R.string.gestion_enrolamiento),
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -133,7 +132,7 @@ fun SlideGestionEnrolamiento(
             EspacioPequeno()
 
             Text(
-                "Verifique la información y guarde el enrolamiento\ndel ciudadano.",
+                stringResource(R.string.verifique_informacion),
                 color = Color.White.copy(0.7f),
                 fontSize = 13.sp,
                 textAlign = TextAlign.Center,
@@ -145,19 +144,16 @@ fun SlideGestionEnrolamiento(
             StepperEnrolamiento(pasoActual = 2)
             EspacioGrande()
 
-            // Contenido dinámico scrollable
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
-                // ✅ AHORA USA LOS DATOS REALES DEL ELECTOR
                 CardInformacionCiudadano(
                     cyanBrillante = cyanBrillante,
                     dni = dni,
-                    nombreCompleto = datosElector.nombre ?: "Sin nombre",
+                    nombreCompleto = datosElector.nombre ?: stringResource(R.string.sin_nombre),
                     ubigeo = datosElector.ubigeo_legal ?: "------"
                 )
 
@@ -167,7 +163,6 @@ fun SlideGestionEnrolamiento(
 
             EspacioGrande()
 
-            // Panel de control de acciones
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -181,7 +176,7 @@ fun SlideGestionEnrolamiento(
                     colors = ButtonDefaults.buttonColors(containerColor = cyanBrillante)
                 ) {
                     Text(
-                        "💾 GUARDAR ENROLAMIENTO",
+                        stringResource(R.string.guardar_enrolamiento),
                         color = azulProfundo,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 14.sp
@@ -193,7 +188,7 @@ fun SlideGestionEnrolamiento(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        "CANCELAR",
+                        stringResource(R.string.cancelar),
                         color = cyanBrillante.copy(0.8f),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
@@ -209,9 +204,9 @@ fun SlideGestionEnrolamiento(
                 ) {
                     Text("❓", fontSize = 12.sp)
                     Spacer(Modifier.width(4.dp))
-                    Text("¿Tienes problemas al guardar?", color = Color.White.copy(0.4f), fontSize = 11.sp)
+                    Text(stringResource(R.string.problemas_guardar), color = Color.White.copy(0.4f), fontSize = 11.sp)
                     Text(
-                        " Ver ayuda",
+                        stringResource(R.string.ver_ayuda),
                         color = cyanBrillante,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Medium,
@@ -238,7 +233,7 @@ private fun CardInformacionCiudadano(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                "INFORMACIÓN DEL CIUDADANO",
+                stringResource(R.string.informacion_ciudadano),
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp
@@ -267,11 +262,11 @@ private fun CardInformacionCiudadano(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Column {
-                            Text("DNI", color = Color.White.copy(0.5f), fontSize = 9.sp)
+                            Text(stringResource(R.string.dni), color = Color.White.copy(0.5f), fontSize = 9.sp)
                             Text(dni, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                         }
                         Column {
-                            Text("Apellidos y Nombres", color = Color.White.copy(0.5f), fontSize = 9.sp)
+                            Text(stringResource(R.string.apellidos_nombres), color = Color.White.copy(0.5f), fontSize = 9.sp)
                             Text(nombreCompleto.uppercase(), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     }
@@ -283,7 +278,7 @@ private fun CardInformacionCiudadano(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Column {
-                            Text("Ubigeo Legal", color = Color.White.copy(0.5f), fontSize = 9.sp)
+                            Text(stringResource(R.string.ubigeo_legal), color = Color.White.copy(0.5f), fontSize = 9.sp)
                             Text(ubigeo, color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)
                         }
                     }
@@ -293,7 +288,6 @@ private fun CardInformacionCiudadano(
     }
 }
 
-// ── MANTENEMOS COMPOSABLES DE SOPORTE INTERNO (UI PURA sin cambios lógicos) ──
 @Composable
 private fun StepperEnrolamiento(pasoActual: Int) {
     Row(
@@ -301,11 +295,11 @@ private fun StepperEnrolamiento(pasoActual: Int) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        StepperItem(paso = 1, estado = if (pasoActual > 1) 1 else if (pasoActual == 1) 0 else -1, label = "Verificación", sublabel = "Completada")
+        StepperItem(paso = 1, estado = if (pasoActual > 1) 1 else if (pasoActual == 1) 0 else -1, label = stringResource(R.string.verificacion), sublabel = stringResource(R.string.completada))
         Spacer(modifier = Modifier.width(8.dp))
-        StepperItem(paso = 2, estado = if (pasoActual > 2) 1 else if (pasoActual == 2) 0 else -1, label = "Guardar", sublabel = "Enrolamiento", esActivo = true)
+        StepperItem(paso = 2, estado = if (pasoActual > 2) 1 else if (pasoActual == 2) 0 else -1, label = stringResource(R.string.guardar), sublabel = stringResource(R.string.enrolamiento), esActivo = true)
         Spacer(modifier = Modifier.width(8.dp))
-        StepperItem(paso = 3, estado = if (pasoActual > 3) 1 else if (pasoActual == 3) 0 else -1, label = "Confirmación", sublabel = "Pendiente")
+        StepperItem(paso = 3, estado = if (pasoActual > 3) 1 else if (pasoActual == 3) 0 else -1, label = stringResource(R.string.confirmacion), sublabel = stringResource(R.string.pendiente))
     }
 }
 
@@ -334,11 +328,11 @@ private fun StepperItem(paso: Int, estado: Int, label: String, sublabel: String 
 private fun CardDatosEnrolados(cyanBrillante: Color, verdeExito: Color) {
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.05f))) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("DATOS ENROLADOS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text(stringResource(R.string.datos_enrolados), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
             EspacioMedio()
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                FilaDatoEnrolado("📷", "Rostro Biométrico", "Enrolado", verdeExito)
-                FilaDatoEnrolado("☁️", "Firma Digital", "Vinculada", verdeExito)
+                FilaDatoEnrolado("📷", stringResource(R.string.rostro_biometrico), stringResource(R.string.enrolado), verdeExito)
+                FilaDatoEnrolado("☁️", stringResource(R.string.firma_digital), stringResource(R.string.vinculada), verdeExito)
             }
         }
     }
@@ -371,11 +365,11 @@ private fun CardSincronizacion(cyanBrillante: Color) {
             }
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text("Sincronización del dispositivo", color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)
-                Text("Los datos se guardarán localmente para transmisión inmediata.", color = Color.White.copy(0.5f), fontSize = 10.sp)
+                Text(stringResource(R.string.sincronizacion), color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)
+                Text(stringResource(R.string.datos_guardaran), color = Color.White.copy(0.5f), fontSize = 10.sp)
             }
             Surface(shape = RoundedCornerShape(8.dp), color = cyanBrillante.copy(0.2f)) {
-                Text("Listo", color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+                Text(stringResource(R.string.listo), color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
             }
         }
     }

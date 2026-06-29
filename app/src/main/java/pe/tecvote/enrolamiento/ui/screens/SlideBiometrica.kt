@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,13 +41,8 @@ import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.ClienteRed
 import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
 import java.io.File
@@ -231,12 +227,12 @@ fun SlideBiometrica(
                         .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("TEC", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(stringResource(R.string.tecvote), color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text("SISTEMA DE ENROLAMIENTO", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
-                    Text("TECVOTE DIGITAL", color = cyanBrillante, fontSize = 10.sp, fontWeight = FontWeight.SemiBold, letterSpacing = 0.5.sp)
+                    Text(stringResource(R.string.sistema_enrolamiento_tec), color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
+                    Text(stringResource(R.string.tecvote_digital), color = cyanBrillante, fontSize = 10.sp, fontWeight = FontWeight.SemiBold, letterSpacing = 0.5.sp)
                 }
             }
 
@@ -259,10 +255,10 @@ fun SlideBiometrica(
                             Text("✅", fontSize = 44.sp)
                         }
                         Spacer(Modifier.height(20.dp))
-                        Text("VERIFICACIÓN", color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp, textAlign = TextAlign.Center)
-                        Text("COMPLETADA", color = Color(0xFF4CAF50), fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp, textAlign = TextAlign.Center)
+                        Text(stringResource(R.string.verificacion_biometrica), color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp, textAlign = TextAlign.Center)
+                        Text(stringResource(R.string.verificacion_completada), color = Color(0xFF4CAF50), fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp, textAlign = TextAlign.Center)
                         Spacer(Modifier.height(8.dp))
-                        Text("Tu identidad biométrica ha sido\nverificada exitosamente.", color = Color.White.copy(0.6f), fontSize = 13.sp, textAlign = TextAlign.Center, lineHeight = 20.sp)
+                        Text(stringResource(R.string.identidad_verificada), color = Color.White.copy(0.6f), fontSize = 13.sp, textAlign = TextAlign.Center, lineHeight = 20.sp)
                         Spacer(Modifier.height(24.dp))
                         Box(
                             modifier = Modifier
@@ -278,7 +274,7 @@ fun SlideBiometrica(
                                     contentAlignment = Alignment.Center
                                 ) { Text("🛡️", fontSize = 16.sp) }
                                 Spacer(Modifier.width(12.dp))
-                                Text("Identidad confirmada y credenciales de usuario emitidas por la pasarela Tecvote.", color = Color.White.copy(0.8f), fontSize = 12.sp, lineHeight = 18.sp)
+                                Text(stringResource(R.string.identidad_confirmada), color = Color.White.copy(0.8f), fontSize = 12.sp, lineHeight = 18.sp)
                             }
                         }
                     }
@@ -290,10 +286,10 @@ fun SlideBiometrica(
                             Text("📷", fontSize = 36.sp)
                         }
                         Spacer(Modifier.height(18.dp))
-                        Text("VERIFICACIÓN", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp)
-                        Text("BIOMÉTRICA", color = cyanBrillante, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp)
+                        Text(stringResource(R.string.verificacion_biometrica), color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp)
+                        Text(stringResource(R.string.registro_biometrico), color = cyanBrillante, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp)
                         Spacer(Modifier.height(8.dp))
-                        Text("Necesitamos acceso a tu cámara\npara verificar tu identidad.", color = Color.White.copy(0.6f), fontSize = 13.sp, textAlign = TextAlign.Center, lineHeight = 20.sp)
+                        Text(stringResource(R.string.acceso_camara), color = Color.White.copy(0.6f), fontSize = 13.sp, textAlign = TextAlign.Center, lineHeight = 20.sp)
                     }
 
                     else -> {
@@ -301,14 +297,13 @@ fun SlideBiometrica(
                             Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Box(Modifier.size(5.dp).background(cyanBrillante, CircleShape))
                                 Spacer(Modifier.width(6.dp))
-                                Text("TECVOTE", color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
+                                Text(stringResource(R.string.tecvote), color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                             }
                         }
                         Spacer(Modifier.height(14.dp))
-                        Text("REGISTRO", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp, textAlign = TextAlign.Center)
-                        Text("BIOMÉTRICO", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp, textAlign = TextAlign.Center)
+                        Text(stringResource(R.string.registro_biometrico), color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp, textAlign = TextAlign.Center)
                         Spacer(Modifier.height(6.dp))
-                        Text("Por favor, mire de frente al lente para\nindexar su cuenta en el sistema.", color = Color.White.copy(0.6f), fontSize = 13.sp, textAlign = TextAlign.Center, lineHeight = 20.sp)
+                        Text(stringResource(R.string.mire_frente), color = Color.White.copy(0.6f), fontSize = 13.sp, textAlign = TextAlign.Center, lineHeight = 20.sp)
                         Spacer(Modifier.height(16.dp))
 
                         Row(
@@ -320,9 +315,9 @@ fun SlideBiometrica(
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 text = when (estadoCara) {
-                                    EstadoCara.BUSCANDO -> "Buscando rostro..."
-                                    EstadoCara.CARA_OK -> "Rostro detectado — listo para registrar"
-                                    EstadoCara.MUCHAS_CARAS -> "Solo debe haber un rostro"
+                                    EstadoCara.BUSCANDO -> stringResource(R.string.buscando_rostro)
+                                    EstadoCara.CARA_OK -> stringResource(R.string.rostro_detectado)
+                                    EstadoCara.MUCHAS_CARAS -> stringResource(R.string.solo_un_rostro)
                                     else -> ""
                                 },
                                 color = colorAro, fontSize = 12.sp, fontWeight = FontWeight.Medium
@@ -364,9 +359,9 @@ fun SlideBiometrica(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            InstruccionItem("👁️", "MIRE FIJAMENTE\nA LA CÁMARA")
-                            InstruccionItem("🎯", "CENTRAR\nEL ROSTRO")
-                            InstruccionItem("💡", "ASEGURE BUENA\nILUMINACIÓN")
+                            InstruccionItem("👁️", stringResource(R.string.mire_fijamente))
+                            InstruccionItem("🎯", stringResource(R.string.centrar_rostro))
+                            InstruccionItem("💡", stringResource(R.string.buena_iluminacion))
                         }
 
                         AnimatedVisibility(visible = mensajeError != null, enter = fadeIn(), exit = fadeOut()) {
@@ -395,7 +390,6 @@ fun SlideBiometrica(
                                 enviando = true
                                 mensajeError = null
 
-                                // Purga preventiva de tokens heredados para evitar interferencia en el enrolamiento
                                 ClienteRed.tokenSesionBearer = null
 
                                 val archivoTemporal = File(context.cacheDir, "temp_face_$dni.jpg")
@@ -408,42 +402,32 @@ fun SlideBiometrica(
                                         override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                                             scope.launch {
                                                 try {
-                                                    // 1. Reducción y compresión local de la foto capturada por la tablet
                                                     val fotoOptimizada = comprimirImagenOptimizado(context, archivoTemporal, dni)
 
-                                                    // 🔹 LOGS PARA DEBUG
                                                     Log.d("TECVOTE_BIO", "📸 Foto capturada - DNI: $dni")
                                                     Log.d("TECVOTE_BIO", "📤 Enviando validación ML Kit (multipart)...")
 
-                                                    // 2. ✅ ML KIT LOCAL: Enviar foto como archivo (multipart, sin Base64)
                                                     val response = ClienteRed.loginBiometricoMLKit(
                                                         dni = dni,
                                                         fotoFile = fotoOptimizada
                                                     ).getOrNull() ?: throw Exception("Fallo en llamada de red")
 
-                                                    // 4. Procesar la respuesta con base en la estructura de Django
                                                     if (response.valido) {
                                                         Log.d("TECVOTE_BIO", "✅ Login exitoso - Token: ${response.token?.take(20)}...")
 
-                                                        // Si el backend entrega un token de sesión seguro, se inyecta de inmediato
                                                         if (response.token != null) {
                                                             ClienteRed.tokenSesionBearer = response.token
                                                         }
                                                         fotoValidada = true
                                                         estadoCara = EstadoCara.LISTO
 
-                                                        // 🔹 CAMBIO: Llamar a onContinuar pasando el token
                                                         onContinuar(response.token)
-
-                                                        // 🔹 LOG PARA DEBUG - ÉXITO
 
                                                     } else {
                                                         Log.e("TECVOTE_BIO", "❌ Error en validación ML Kit: ${response.mensaje}")
-
                                                         mensajeError = response.mensaje ?: "La validación biométrica falló"
                                                     }
 
-                                                    // 5. Purga preventiva del almacenamiento de caché de la tablet
                                                     if (fotoOptimizada.exists() && fotoOptimizada != archivoTemporal) {
                                                         fotoOptimizada.delete()
                                                     }
@@ -484,7 +468,7 @@ fun SlideBiometrica(
                         CircularProgressIndicator(color = azulProfundo, modifier = Modifier.size(24.dp), strokeWidth = 2.5.dp)
                     } else {
                         Text(
-                            text = if (fotoValidada) "FINALIZAR REGISTRO" else "REGISTRAR ROSTRO",
+                            text = if (fotoValidada) stringResource(R.string.finalizar_registro) else stringResource(R.string.registrar_rostro),
                             color = azulProfundo,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.ExtraBold,

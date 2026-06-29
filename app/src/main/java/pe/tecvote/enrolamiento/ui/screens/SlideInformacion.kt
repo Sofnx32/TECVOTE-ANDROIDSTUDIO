@@ -11,10 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pe.tecvote.enrolamiento.R
 
 @Composable
 fun SlideInformacion(modifier: Modifier = Modifier) {
@@ -43,7 +45,7 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(24.dp))
 
         Text(
-            "INFORMACIÓN DEL SISTEMA",
+            stringResource(R.string.info_sistema),
             color = Color.White,
             fontSize = 22.sp,
             fontWeight = FontWeight.ExtraBold,
@@ -53,7 +55,7 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(8.dp))
 
         Text(
-            "Detalles técnicos y legales de TecVote",
+            stringResource(R.string.info_subtitulo),
             color = Color.White.copy(0.6f),
             fontSize = 12.sp,
             textAlign = TextAlign.Center
@@ -63,7 +65,7 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
 
         InformacionCard(
             icono = "📱",
-            titulo = "Versión",
+            titulo = stringResource(R.string.info_version),
             contenido = "TecVote v2.0.1",
             cyanBrillante = cyanBrillante
         )
@@ -72,8 +74,8 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
 
         InformacionCard(
             icono = "🏛️",
-            titulo = "Desarrollado por",
-            contenido = "Equipo TecVote - Oficina Nacional de Procesos Electorales (ONPE)",
+            titulo = stringResource(R.string.info_desarrollado),
+            contenido = stringResource(R.string.info_desarrollado_contenido),
             cyanBrillante = cyanBrillante
         )
 
@@ -81,7 +83,7 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
 
         InformacionCard(
             icono = "📅",
-            titulo = "Año",
+            titulo = stringResource(R.string.info_anio),
             contenido = "2026",
             cyanBrillante = cyanBrillante
         )
@@ -90,8 +92,8 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
 
         InformacionCard(
             icono = "🎯",
-            titulo = "Propósito",
-            contenido = "Sistema Nacional de Enrolamiento Tecnológico para procesos electorales peruanos",
+            titulo = stringResource(R.string.info_proposito),
+            contenido = stringResource(R.string.info_proposito_contenido),
             cyanBrillante = cyanBrillante
         )
 
@@ -99,8 +101,8 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
 
         InformacionCard(
             icono = "🔒",
-            titulo = "Seguridad",
-            contenido = "Encriptación biométrica con AWS Rekognition y validación de identidad RENIEC",
+            titulo = stringResource(R.string.info_seguridad),
+            contenido = stringResource(R.string.info_seguridad_contenido),
             cyanBrillante = cyanBrillante
         )
 
@@ -108,8 +110,8 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
 
         InformacionCard(
             icono = "📜",
-            titulo = "Marco Legal",
-            contenido = "Ley N° 26859 - Ley Orgánica de Elecciones",
+            titulo = stringResource(R.string.info_marco_legal),
+            contenido = stringResource(R.string.info_marco_legal_contenido),
             cyanBrillante = cyanBrillante
         )
 
@@ -117,15 +119,15 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
 
         InformacionCard(
             icono = "🌐",
-            titulo = "Cobertura",
-            contenido = "Todo el territorio nacional - 24 departamentos",
+            titulo = stringResource(R.string.info_cobertura),
+            contenido = stringResource(R.string.info_cobertura_contenido),
             cyanBrillante = cyanBrillante
         )
 
         Spacer(Modifier.height(32.dp))
 
         Text(
-            "© 2026 Oficina Nacional de Procesos Electorales\nTodos los derechos reservados",
+            stringResource(R.string.info_copyright),
             color = Color.White.copy(0.4f),
             fontSize = 11.sp,
             textAlign = TextAlign.Center,

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- CONFIGURACIÓN -->
+    <string name="configuracion">Churanakuy</string>
+    <string name="volver">Tikray</string>
+    <string name="idioma">Rimay</string>
+    <string name="tema">Achkiy</string>
+    <string name="modo_oscuro">Tutayay</string>
+    <string name="modo_claro">Punchay</string>
+    <string name="tamano_letra">Letra Hatun</string>
+    <string name="tamano_actual">Hatun: </string>
+    <string name="accesibilidad">Yanapakuy</string>
+    <string name="desc_accesibilidad">Contraste, pantalla qhawaq</string>
+    <string name="acerca_de">TecVote-manta</string>
+    <string name="privacidad">Waqlay</string>
+    <string name="desc_privacidad">Data waqlay kamachikuy</string>
+    <string name="cerrar_sesion">LLIKITA WIÑAY</string>
+    <string name="seleccionar_idioma">Rimay Akllay</string>
+    <string name="cerrar">Wiñay</string>
+    <string name="cancelar">Sayachiy</string>
+    <string name="confirmar_cierre">¿Llikita Wiñay?</string>
+    <string name="mensaje_cierre">¿Allintachu llikita wiñayta munanki? Musuqta qallariy tiyan.</string>
+    <string name="desc_sistema">Llapan-paq TecVote</string>
+    <string name="desc_accesibilidad_completo">• Letra hatun\n• Hatun contraste\n• TalkBack</string>
+    <string name="desc_privacidad_completo">• Encriptación\n• Data waqlay\n• Seguro</string>
+
+    <!-- SLIDE INICIO -->
+    <string name="tecvote">TECVOTE</string>
+    <string name="app_name">TecVote</string>
+    <string name="sistema_enrolamiento">Llapan Enrollamiento Sistema</string>
+    <string name="onpe_nombre">ONPE - Llapan Akllana Kamachiq</string>
+    <string name="iniciar_enrolamiento">🆕 QALLARIY ENROLLAMIENTO</string>
+    <string name="ver_mis_datos">📋 QAWARIY DATOS NIYTA</string>
+    <string name="version_onpe">Versión 2.0.1 | ONPE 2026</string>
+
+    <!-- SlideBienvenida -->
+    <string name="logo_tecvote">TECVOTE Logo</string>
+    <string name="bienvenidos_a">ALLIN PACHAYKUY</string>
+    <string name="su_voto_seguro">VOTO NIYKI SEGURO HINASPA DIGITAL</string>
+    <string name="comenzar">QALLARIY</string>
+
+    <!-- SlideConfirmarEnviar -->
+    <string name="confirmar_enviar">Confirmay hinaspa apachiy</string>
+    <string name="revisa_todo">Tukuyta qaway manaraq tukuchachkaptin.</string>
+    <string name="resumen_enrolamiento">Enrolamiento resumen</string>
+    <string name="identidad_verificada_dni">DNI nisqawan identidad verificasqa</string>
+    <string name="preguntas_seguridad_correctas">Seguridad tapuykuna allin</string>
+    <string name="biometria_facial_validada">Uya biometría validasqa</string>
+    <string name="datos_electorales_revisados">Electoral datos qawasqa</string>
+    <string name="declaracion_jurada">Confirmaspaqa, willakuykuna allin kasqanta declaranki, juramento declaracionniyuq.</string>
+    <string name="confirmar_enrolamiento">Enrolamiento confirmay</string>
+    <string name="enrolamiento_completado">¡Enrolamiento tukusqa!</string>
+    <string name="registro_procesado">Registro niyki allintam procesasqa karqan.</string>
+    <string name="codigo_constancia">Constancia código</string>
+    <string name="guarda_codigo">Kay código waqlay. Enrolamiento niyki manta tapuykunata ruwaptiyki necesitanki.</string>
+    <string name="volver_inicio">🏠 QALLARIYMAN KUTIQ</string>
+    <!-- BOTTOM NAVIGATION -->
+    <string name="inicio">Qallariy</string>
+    <string name="mis_datos">Datoykuna</string>
+    <string name="informacion">Willakuy</string>
+    <string name="ayuda">Yanapakuy</string>
+
+    <!-- SLIDE INFORMACIÓN -->
+    <string name="info_sistema">SISTEMA MANTA WILLAKUY</string>
+    <string name="info_subtitulo">TecVotepa técnico legal willakuykunin</string>
+    <string name="info_version">Versión</string>
+    <string name="info_desarrollado">Rurasqa</string>
+    <string name="info_desarrollado_contenido">TecVote Equipo - ONPE</string>
+    <string name="info_anio">Wata</string>
+    <string name="info_proposito">Imapaq</string>
+    <string name="info_proposito_contenido">Llapan-paq Tecnológico Enrollamiento Sistema Perú akllanakunapaq</string>
+    <string name="info_seguridad">Waqlay</string>
+    <string name="info_seguridad_contenido">Biometric encriptación AWS Rekognition RENIEC validación</string>
+    <string name="info_marco_legal">Ley Marco</string>
+    <string name="info_marco_legal_contenido">Ley N° 26859 - Akllana Ley Orgánica</string>
+    <string name="info_cobertura">Cobertura</string>
+    <string name="info_cobertura_contenido">Llapan territorio nacional - 24 departamentos</string>
+    <string name="info_copyright">© 2026 ONPE\nLlapan derechos reservados</string>
+
+    <!-- SLIDE AYUDA -->
+    <string name="ayuda_soporte">YANAPAKUY HINASPA SOPORTE</string>
+    <string name="portal_oficial">ONPEpa oficial portalnin</string>
+
+    <!-- SLIDE INGRESO DNI -->
+    <string name="ingrese_dni">DNI NIYTA CHURAY</string>
+    <string name="para_validar">Identidad niyki validanapaq votacion plataforma yaykunapaq, DNI niyki yupayta churay.</string>
+    <string name="numero_dni">DNI YUPAY</string>
+    <string name="digito_verificacion">Verificación digito DNI niyki tukuy pipin.</string>
+    <string name="verificar_dni">DNI VALIDAY</string>
+    <string name="verificando">Validaspa…</string>
+    <string name="identidad">IDENTIDAD</string>
+    <string name="encontrada">TARISQA</string>
+    <string name="confirme_datos">Datos niyki allin kasqanta confirmay continuaykipaq.</string>
+    <string name="confirmar_continuar">CONFIRMAY CONTINUAY</string>
+    <string name="no_son_datos">¿Kayqa manam datos niykichu? [Llikita Wiñay]</string>
+    <string name="problemas_dni">¿DNI niyki problema? Soporte niyman rimay.</string>
+    <string name="seguridad_protocolo">© 2026 TECVOTE  |  Seguridad Protocolo Avanzado nisqawan verificasqa</string>
+    <string name="dni">DNI</string>
+    <string name="dv">D.V.</string>
+    <string name="nombre_completo">SUTI HUKLLACHASQA</string>
+    <string name="oficina_nacional">LLAPAN OFICINA</string>
+    <string name="procesos_electorales">AKLLANA PROCESOKUNA</string>
+    <string name="sistema_enrolamiento_tec">ENROLLAMIENTO SISTEMA</string>
+    <string name="tecvote_digital">TECVOTE DIGITAL</string>
+
+    <!-- SLIDE PREGUNTAS -->
+    <string name="confirmacion_datos">DATOS PERSONALES CONFIRMACION</string>
+    <string name="seguridad_verifique">Seguridad niykiqpaq, kay datos adicionales nisqakunata verificay.</string>
+    <string name="nombre_padre">TAYTA SUTI</string>
+    <string name="ingrese_primer_nombre">Ñawpaq sutita churay</string>
+    <string name="nombre_madre">MAMA SUTI</string>
+    <string name="fecha_nacimiento">PAQARISQA PUNCHAY</string>
+    <string name="dd_mm_aaaa">DD / MM / WATA</string>
+    <string name="intentos">Intentokuna</string>
+    <string name="datos_incorrectos">Datos manam allinchu. Informacion niyki cheqay hinaspa musuqmanta ruway.</string>
+    <string name="sesion_bloqueada">SESION WIÑASQA</string>
+    <string name="multiple_intentos">Achka intentos incorrectos tarisqa. Soporte electoral niyman rimay.</string>
+    <string name="sin_conexion_servidor">ONPE servidor centralwan mana conexión kanchu.</string>
+
+    <!-- SLIDE BIOMÉTRICA -->
+    <string name="registro_biometrico">BIOMETRICO REGISTRO</string>
+    <string name="mire_frente">Sistema nisqapi cuenta niyki indexanapaq, lente nisqaman ñawpaqman qaway.</string>
+    <string name="buscando_rostro">Rostro maskhasqa…</string>
+    <string name="rostro_detectado">Rostro tarisqa — registraypaq listo</string>
+    <string name="solo_un_rostro">Huk rostrolla kanman</string>
+    <string name="mire_fijamente">CAMARA NIYMAN ALLINTA QAWAY</string>
+    <string name="centrar_rostro">ROSTRO CHAWPIPI CHURAY</string>
+    <string name="buena_iluminacion">ALLIN K\'ANCHAYTA ASEGURAY</string>
+    <string name="finalizar_registro">REGISTRO TUKUCHIY</string>
+    <string name="registrar_rostro">ROSTRO REGISTRAY</string>
+    <string name="verificacion_biometrica">VERIFICACION BIOMETRICA</string>
+    <string name="acceso_camara">Identidad niyki verificanapaq camara niykiyman yaykuyta munanchik.</string>
+    <string name="verificacion_completada">VERIFICACION COMPLETADA</string>
+    <string name="identidad_verificada">Identidad biométrica niyki allintam verificasqa karqan.</string>
+    <string name="identidad_confirmada">Identidad confirmada hinaspa usuario credencialkuna Tecvote gateway nisqawan qosqa.</string>
+    <string name="encuadre_bien">Ama qunqaychu rostro niykita allinta churayta manaraq capturanaykipaq.</string>
+    <string name="fallo_conexion">Conexión fallo: Tecvote servidor centralwan mana t\'inkikuyta atirqanchikchu.</string>
+    <string name="fallo_captura">Mana foto hap\'iyta atirqanchikchu: %1$s</string>
+
+    <!-- SLIDE SELECCIÓN LOCALIDAD -->
+    <string name="tu_local_votacion">VOTACION LOCAL NIYKI</string>
+    <string name="ubicacion_centro">Sufragio centro nisqapa ubicacionnin</string>
+    <string name="buscando_local">Votacion local niyki maskhasqa…</string>
+    <string name="local_pendiente">LOCAL PENDIENTE</string>
+    <string name="error">ERROR</string>
+    <string name="reintentar">MUSUQMANTA RUWAY</string>
+    <string name="como_llegar">IMAYNA CHAYANA (GOOGLE MAPS PI KICHAY)</string>
+    <string name="confirmar_ver_datos">CONFIRMAY HINASPA DATOS NIYIY QAWAY</string>
+
+    <!-- SLIDE GESTIÓN ENROLAMIENTO -->
+    <string name="gestion_enrolamiento">ENROLAMIENTO GESTION</string>
+    <string name="verifique_informacion">Informacion cheqay hinaspa ciudadano enrolamiento nisqanta waqlay.</string>
+    <string name="verificacion">Verificacion</string>
+    <string name="completada">Completada</string>
+    <string name="guardar">Waqlay</string>
+    <string name="enrolamiento">Enrolamiento</string>
+    <string name="confirmacion">Confirmacion</string>
+    <string name="pendiente">Pendiente</string>
+    <string name="informacion_ciudadano">CIUDADANO INFORMACION</string>
+    <string name="apellidos_nombres">Apellidos hinaspa Sutikuna</string>
+    <string name="ubigeo_legal">Geografico Ubigeo</string>
+    <string name="datos_enrolados">ENROLADOS DATOS</string>
+    <string name="rostro_biometrico">Rostro Biométrico</string>
+    <string name="enrolado">Enrolado</string>
+    <string name="firma_digital">Firma Digital</string>
+    <string name="vinculada">Vinculada</string>
+    <string name="sincronizacion">Dispositivo sincronización</string>
+    <string name="datos_guardaran">Datos nisqakuna localmente waqlasqa kanqaku inmediato transmisión nisqapaq.</string>
+    <string name="listo">Listo</string>
+    <string name="guardar_enrolamiento">💾 ENROLAMIENTO WAQLAY</string>
+    <string name="problemas_guardar">¿Waqlaypi problema kachkan?</string>
+    <string name="ver_ayuda"> Yanapakuy qaway</string>
+    <string name="cargando_informacion">Ciudadano informacion cargahasqa…</string>
+    <string name="sin_nombre">Mana sutiyuq</string>
+
+    <!-- SLIDE MIS DATOS -->
+    <string name="documento_identidad">Documento Nacional de Identidad: %1$s</string>
+    <string name="verificado">VERIFICADO</string>
+    <string name="biometria_ok">BIOMETRIA OK</string>
+    <string name="datos_filiatorios">ELECTOR FILIATORIOS DATOS</string>
+    <string name="condicion_enrolamiento">Enrolamiento Condicion</string>
+    <string name="asignacion_geografica">SUFRAGIO GEOGRAFICA HINASPA LOGISTICA ASIGNACION</string>
+    <string name="numero_mesa">Mesa Yupay</string>
+    <string name="ubicacion_centro_mesa">Centro nisqapi Ubicacion</string>
+    <string name="aula_piso">Aula: %1$s / Piso: %2$s</string>
+    <string name="centro_votacion">Votacion Centro</string>
+    <string name="direccion_local">Local Direccion</string>
+    <string name="ubigeo_geografico">Geografico Ubigeo</string>
+    <string name="condicion_miembro">MESA MIEMBRO CONDICION</string>
+    <string name="designado">DESIGNADO</string>
+    <string name="no_seleccionado">MANA AKLLASQA</string>
+    <string name="cargo_asignado">Asignado Cargo</string>
+    <string name="horario_obligacion">Obligacion Horario</string>
+    <string name="descargar_constancia">SUFRAGIO CONSTANCIA DESCARGAY</string>
+    <string name="no_registrado">MANA REGISTRADO</string>
+    <string name="no_asignado">MANA ASIGNADO</string>
+    <string name="no_asignada">MANA ASIGNADA</string>
+    <string name="na">N/A</string>
+    <string name="sistema_nacional_enrolamiento">LLAPAN-PAQ TECNOLÓGICO ENROLLAMIENTO SISTEMA</string>
+
+    <!-- ERRORES GENERALES -->
+    <string name="error_sincronizacion">SINCRONIZACIÓN ERROR</string>
+    <string name="fallo_conexion_institucional">Institucional conexión fallo: %1$s</string>
+    <string name="sin_conexion_tecvote">TECVOTE servidor centralwan mana conexión kanchu.</string>
+    <string name="ciudadano_no_apto">Ciudadano kay procesopaq mana aptochu.</string>
+    <string name="dni_no_registrado">DNI sistema nisqapi mana registrasqachu.</string>
+</resources>

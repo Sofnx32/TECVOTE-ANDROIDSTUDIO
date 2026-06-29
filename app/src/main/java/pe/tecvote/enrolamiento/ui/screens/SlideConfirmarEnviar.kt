@@ -10,10 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.RespuestaGuardar
 import pe.tecvote.enrolamiento.ui.Espaciados
 import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
@@ -22,13 +24,12 @@ import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
 fun SlideConfirmarEnviar(
     modifier: Modifier = Modifier,
     dni: String,
-    enviando: Boolean = false,                // ← Controlado externamente
-    errorGuardar: String? = null,             // ← Controlado externamente
-    resultadoGuardar: RespuestaGuardar? = null, // ← Controlado externamente
-    onConfirmarEnrolamiento: () -> Unit = {},  // ← Callback para que el VM ejecute la petición
+    enviando: Boolean = false,
+    errorGuardar: String? = null,
+    resultadoGuardar: RespuestaGuardar? = null,
+    onConfirmarEnrolamiento: () -> Unit = {},
     onFinalizar: () -> Unit = {}
 ) {
-    // Determinamos el éxito según la respuesta que nos pase el ViewModel
     val exito = resultadoGuardar?.exitoso == true
     val codigoConstancia = resultadoGuardar?.codigo_constancia ?: ""
 
@@ -36,8 +37,8 @@ fun SlideConfirmarEnviar(
         modifier     = modifier,
         fondo        = Brush.verticalGradient(listOf(Color(0xFF4527A0), Color(0xFF1A0050))),
         emoji        = "✅",
-        titulo       = "Confirmar y enviar",
-        subtitulo    = "Revisa todo antes de finalizar.",
+        titulo       = stringResource(R.string.confirmar_enviar),
+        subtitulo    = stringResource(R.string.revisa_todo),
         numeroPagina = 6,
         totalPaginas = 6
     ) {
@@ -50,18 +51,18 @@ fun SlideConfirmarEnviar(
                     shape     = RoundedCornerShape(16.dp),
                     colors    = CardDefaults.cardColors(containerColor = Color.White.copy(0.12f))
                 ) {
-                    Column(Modifier.padding(Espaciados.lg) ) {
+                    Column(Modifier.padding(Espaciados.lg)) {
                         Text(
-                            "Resumen del enrolamiento",
+                            stringResource(R.string.resumen_enrolamiento),
                             color      = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize   = 15.sp
                         )
                         Spacer(Modifier.height(16.dp))
-                        FilaResumen("✅", "Identidad verificada por DNI")
-                        FilaResumen("✅", "Preguntas de seguridad correctas")
-                        FilaResumen("✅", "Biometría facial validada")
-                        FilaResumen("✅", "Datos electorales revisados")
+                        FilaResumen("✅", stringResource(R.string.identidad_verificada_dni))
+                        FilaResumen("✅", stringResource(R.string.preguntas_seguridad_correctas))
+                        FilaResumen("✅", stringResource(R.string.biometria_facial_validada))
+                        FilaResumen("✅", stringResource(R.string.datos_electorales_revisados))
                     }
                 }
 
@@ -73,7 +74,7 @@ fun SlideConfirmarEnviar(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        "Al confirmar declaras que los datos proporcionados son correctos y tienen carácter de declaración jurada.",
+                        stringResource(R.string.declaracion_jurada),
                         color     = Color.White.copy(0.75f),
                         fontSize  = 12.sp,
                         textAlign = TextAlign.Center,
@@ -90,7 +91,7 @@ fun SlideConfirmarEnviar(
                 }
 
                 Button(
-                    onClick  = { onConfirmarEnrolamiento() }, // ← Delegación limpia al ViewModel
+                    onClick  = { onConfirmarEnrolamiento() },
                     enabled  = !enviando,
                     shape    = RoundedCornerShape(28.dp),
                     colors   = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF4527A0)),
@@ -99,7 +100,7 @@ fun SlideConfirmarEnviar(
                     if (enviando)
                         CircularProgressIndicator(color = Color(0xFF4527A0), modifier = Modifier.size(24.dp))
                     else
-                        Text("Confirmar enrolamiento", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                        Text(stringResource(R.string.confirmar_enrolamiento), fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
                 }
             }
         }
@@ -112,7 +113,7 @@ fun SlideConfirmarEnviar(
                 Text("🎉", fontSize = 56.sp)
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "¡Enrolamiento completado!",
+                    stringResource(R.string.enrolamiento_completado),
                     color      = Color.White,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize   = 22.sp,
@@ -120,7 +121,7 @@ fun SlideConfirmarEnviar(
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "Tu registro ha sido procesado exitosamente.",
+                    stringResource(R.string.registro_procesado),
                     color    = Color.White.copy(0.8f),
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
@@ -133,10 +134,10 @@ fun SlideConfirmarEnviar(
                     colors    = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Column(
-                        modifier            = Modifier.padding(Espaciados.xl) ,
+                        modifier            = Modifier.padding(Espaciados.xl),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Código de constancia", color = Color.Gray, fontSize = 12.sp)
+                        Text(stringResource(R.string.codigo_constancia), color = Color.Gray, fontSize = 12.sp)
                         Spacer(Modifier.height(8.dp))
                         Text(
                             codigoConstancia,
@@ -149,7 +150,7 @@ fun SlideConfirmarEnviar(
                         HorizontalDivider()
                         Spacer(Modifier.height(16.dp))
                         Text(
-                            "Guarda este código. Lo necesitarás si realizas consultas sobre tu enrolamiento.",
+                            stringResource(R.string.guarda_codigo),
                             color     = Color.DarkGray,
                             fontSize  = 12.sp,
                             textAlign = TextAlign.Center,
@@ -167,7 +168,7 @@ fun SlideConfirmarEnviar(
                     ),
                     modifier = Modifier.fillMaxWidth().height(TamanosAdaptativos.altoProporcional(0.07))
                 ) {
-                    Text("🏠 VOLVER AL INICIO", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                    Text(stringResource(R.string.volver_inicio), fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
                 }
             }
         }

@@ -1,3 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TECVOTE</string>
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- CONFIGURACIÓN -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="configuracion">Configuración</string>
+    <string name="volver">Volver</string>
+    <string name="idioma">Idioma / Simi</string>
+    <string name="tema">Tema / Achkiy</string>
+    <string name="modo_oscuro">Modo Oscuro</string>
+    <string name="modo_claro">Modo Claro</string>
+    <string name="tamano_letra">Tamaño de Letra</string>
+    <string name="tamano_actual">Tamaño: </string>
+    <string name="accesibilidad">Accesibilidad</string>
+    <string name="desc_accesibilidad">Contraste, lectores de pantalla</string>
+    <string name="acerca_de">Acerca de TecVote</string>
+    <string name="privacidad">Privacidad y Seguridad</string>
+    <string name="desc_privacidad">Políticas de protección de datos</string>
+    <string name="cerrar_sesion">CERRAR SESIÓN</string>
+    <string name="seleccionar_idioma">Seleccionar Idioma / Simi</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="confirmar_cierre">¿Cerrar Sesión?</string>
+    <string name="mensaje_cierre">¿Estás seguro que deseas cerrar sesión? Deberás iniciar sesión nuevamente.</string>
+    <string name="desc_sistema">Sistema Nacional de Enrolamiento Tecnológico</string>
+    <string name="desc_accesibilidad_completo">• Tamaño de letra ajustable\n• Alto contraste\n• Compatibilidad con TalkBack</string>
+    <string name="desc_privacidad_completo">• Encriptación de extremo a extremo\n• Cumplimiento de Ley de Protección de Datos\n• Datos almacenados de forma segura</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE INICIO -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="app_name">TecVote</string>
+    <string name="tecvote">TECVOTE</string>
+    <string name="sistema_enrolamiento">Sistema Nacional de Enrolamiento</string>
+    <string name="onpe_nombre">Oficina Nacional de Procesos Electorales</string>
+    <string name="iniciar_enrolamiento">🆕 INICIAR ENROLAMIENTO</string>
+    <string name="ver_mis_datos">📋 VER MIS DATOS</string>
+    <string name="version_onpe">Versión 2.0.1 | ONPE 2026</string>
+
+    <!-- SlideBienvenida -->
+    <string name="logo_tecvote">Logo TECVOTE</string>
+    <string name="bienvenidos_a">BIENVENIDOS A</string>
+    <string name="su_voto_seguro">SU VOTO SEGURO Y DIGITAL</string>
+    <string name="comenzar">COMENZAR</string>
+
+    <!-- SlideConfirmarEnviar -->
+    <string name="confirmar_enviar">Confirmar y enviar</string>
+    <string name="revisa_todo">Revisa todo antes de finalizar.</string>
+    <string name="resumen_enrolamiento">Resumen del enrolamiento</string>
+    <string name="identidad_verificada_dni">Identidad verificada por DNI</string>
+    <string name="preguntas_seguridad_correctas">Preguntas de seguridad correctas</string>
+    <string name="biometria_facial_validada">Biometría facial validada</string>
+    <string name="datos_electorales_revisados">Datos electorales revisados</string>
+    <string name="declaracion_jurada">Al confirmar declaras que los datos proporcionados son correctos y tienen carácter de declaración jurada.</string>
+    <string name="confirmar_enrolamiento">Confirmar enrolamiento</string>
+    <string name="enrolamiento_completado">¡Enrolamiento completado!</string>
+    <string name="registro_procesado">Tu registro ha sido procesado exitosamente.</string>
+    <string name="codigo_constancia">Código de constancia</string>
+    <string name="guarda_codigo">Guarda este código. Lo necesitarás si realizas consultas sobre tu enrolamiento.</string>
+    <string name="volver_inicio">🏠 VOLVER AL INICIO</string>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- BOTTOM NAVIGATION -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="inicio">Inicio</string>
+    <string name="mis_datos">Mis datos</string>
+    <string name="informacion">Información</string>
+    <string name="ayuda">Ayuda</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE INFORMACIÓN -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="info_sistema">INFORMACIÓN DEL SISTEMA</string>
+    <string name="info_subtitulo">Detalles técnicos y legales de TecVote</string>
+    <string name="info_version">Versión</string>
+    <string name="info_desarrollado">Desarrollado por</string>
+    <string name="info_desarrollado_contenido">Equipo TecVote - Oficina Nacional de Procesos Electorales (ONPE)</string>
+    <string name="info_anio">Año</string>
+    <string name="info_proposito">Propósito</string>
+    <string name="info_proposito_contenido">Sistema Nacional de Enrolamiento Tecnológico para procesos electorales peruanos</string>
+    <string name="info_seguridad">Seguridad</string>
+    <string name="info_seguridad_contenido">Encriptación biométrica con AWS Rekognition y validación de identidad RENIEC</string>
+    <string name="info_marco_legal">Marco Legal</string>
+    <string name="info_marco_legal_contenido">Ley N° 26859 - Ley Orgánica de Elecciones</string>
+    <string name="info_cobertura">Cobertura</string>
+    <string name="info_cobertura_contenido">Todo el territorio nacional - 24 departamentos</string>
+    <string name="info_copyright">© 2026 Oficina Nacional de Procesos Electorales\nTodos los derechos reservados</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE AYUDA -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="ayuda_soporte">AYUDA Y SOPORTE</string>
+    <string name="portal_oficial">Portal oficial de la ONPE</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE INGRESO DNI -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="ingrese_dni">INGRESE SU DNI</string>
+    <string name="para_validar">Para validar su identidad y acceder a la plataforma de votación, por favor digite su número de DNI.</string>
+    <string name="numero_dni">NÚMERO DE DNI</string>
+    <string name="digito_verificacion">El dígito de verificación se encuentra al final de su DNI.</string>
+    <string name="verificar_dni">VERIFICAR DNI</string>
+    <string name="verificando">Verificando…</string>
+    <string name="identidad">IDENTIDAD</string>
+    <string name="encontrada">ENCONTRADA</string>
+    <string name="confirme_datos">Confirme que sus datos son correctos para continuar.</string>
+    <string name="confirmar_continuar">CONFIRMAR Y CONTINUAR</string>
+    <string name="no_son_datos">¿Estos no son sus datos? [Cerrar Sesión]</string>
+    <string name="problemas_dni">¿Problemas con su DNI? Contacte con soporte.</string>
+    <string name="seguridad_protocolo">© 2026 TECVOTE  |  Verificado por Protocolo de Seguridad Avanzado</string>
+    <string name="dni">DNI</string>
+    <string name="dv">D.V.</string>
+    <string name="nombre_completo">NOMBRE COMPLETO</string>
+    <string name="oficina_nacional">OFICINA NACIONAL DE</string>
+    <string name="procesos_electorales">PROCESOS ELECTORALES</string>
+    <string name="sistema_enrolamiento_tec">SISTEMA DE ENROLAMIENTO</string>
+    <string name="tecvote_digital">TECVOTE DIGITAL</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE PREGUNTAS -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="confirmacion_datos">CONFIRMACIÓN DE DATOS PERSONALES</string>
+    <string name="seguridad_verifique">Para su seguridad, verifique los siguientes datos adicionales.</string>
+    <string name="nombre_padre">NOMBRE DEL PADRE</string>
+    <string name="ingrese_primer_nombre">Ingresa el primer nombre</string>
+    <string name="nombre_madre">NOMBRE DE LA MADRE</string>
+    <string name="fecha_nacimiento">FECHA DE NACIMIENTO</string>
+    <string name="dd_mm_aaaa">DD / MM / AAAA</string>
+    <string name="intentos">Intentos</string>
+    <string name="datos_incorrectos">Datos incorrectos. Verifica tu información e intenta de nuevo.</string>
+    <string name="sesion_bloqueada">SESIÓN BLOQUEADA</string>
+    <string name="multiple_intentos">Múltiples intentos incorrectos detectados. Contacte con soporte electoral.</string>
+    <string name="sin_conexion_servidor">Sin conexión con el servidor central ONPE.</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE BIOMÉTRICA -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="registro_biometrico">REGISTRO BIOMÉTRICO</string>
+    <string name="mire_frente">Por favor, mire de frente al lente para indexar su cuenta en el sistema.</string>
+    <string name="buscando_rostro">Buscando rostro…</string>
+    <string name="rostro_detectado">Rostro detectado — listo para registrar</string>
+    <string name="solo_un_rostro">Solo debe haber un rostro</string>
+    <string name="mire_fijamente">MIRE FIJAMENTE A LA CÁMARA</string>
+    <string name="centrar_rostro">CENTRAR EL ROSTRO</string>
+    <string name="buena_iluminacion">ASEGURE BUENA ILUMINACIÓN</string>
+    <string name="finalizar_registro">FINALIZAR REGISTRO</string>
+    <string name="registrar_rostro">REGISTRAR ROSTRO</string>
+    <string name="verificacion_biometrica">VERIFICACIÓN BIOMÉTRICA</string>
+    <string name="acceso_camara">Necesitamos acceso a tu cámara para verificar tu identidad.</string>
+    <string name="verificacion_completada">VERIFICACIÓN COMPLETADA</string>
+    <string name="identidad_verificada">Tu identidad biométrica ha sido verificada exitosamente.</string>
+    <string name="identidad_confirmada">Identidad confirmada y credenciales de usuario emitidas por la pasarela Tecvote.</string>
+    <string name="encuadre_bien">Por favor, encuadre bien su rostro antes de capturar.</string>
+    <string name="fallo_conexion">Fallo de conexión: No se pudo enlazar con el servidor central de Tecvote.</string>
+    <string name="fallo_captura">Fallo al capturar foto: %1$s</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE SELECCIÓN LOCALIDAD -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="tu_local_votacion">TU LOCAL DE VOTACIÓN</string>
+    <string name="ubicacion_centro">Ubicación del centro de sufragio</string>
+    <string name="buscando_local">Buscando tu local de votación…</string>
+    <string name="local_pendiente">LOCAL PENDIENTE</string>
+    <string name="error">ERROR</string>
+    <string name="reintentar">REINTENTAR</string>
+    <string name="como_llegar">CÓMO LLEGAR (ABRIR EN GOOGLE MAPS)</string>
+    <string name="confirmar_ver_datos">CONFIRMAR Y VER MIS DATOS</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE GESTIÓN ENROLAMIENTO -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="gestion_enrolamiento">GESTIÓN DE ENROLAMIENTO</string>
+    <string name="verifique_informacion">Verifique la información y guarde el enrolamiento del ciudadano.</string>
+    <string name="verificacion">Verificación</string>
+    <string name="completada">Completada</string>
+    <string name="guardar">Guardar</string>
+    <string name="enrolamiento">Enrolamiento</string>
+    <string name="confirmacion">Confirmación</string>
+    <string name="pendiente">Pendiente</string>
+    <string name="informacion_ciudadano">INFORMACIÓN DEL CIUDADANO</string>
+    <string name="apellidos_nombres">Apellidos y Nombres</string>
+    <string name="ubigeo_legal">Ubigeo Legal</string>
+    <string name="datos_enrolados">DATOS ENROLADOS</string>
+    <string name="rostro_biometrico">Rostro Biométrico</string>
+    <string name="enrolado">Enrolado</string>
+    <string name="firma_digital">Firma Digital</string>
+    <string name="vinculada">Vinculada</string>
+    <string name="sincronizacion">Sincronización del dispositivo</string>
+    <string name="datos_guardaran">Los datos se guardarán localmente para transmisión inmediata.</string>
+    <string name="listo">Listo</string>
+    <string name="guardar_enrolamiento">💾 GUARDAR ENROLAMIENTO</string>
+    <string name="problemas_guardar">¿Tienes problemas al guardar?</string>
+    <string name="ver_ayuda"> Ver ayuda</string>
+    <string name="cargando_informacion">Cargando información del ciudadano…</string>
+    <string name="sin_nombre">Sin nombre</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SLIDE MIS DATOS -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="documento_identidad">Documento Nacional de Identidad: %1$s</string>
+    <string name="verificado">VERIFICADO</string>
+    <string name="biometria_ok">BIOMETRÍA OK</string>
+    <string name="datos_filiatorios">DATOS FILIATORIOS DEL ELECTOR</string>
+    <string name="condicion_enrolamiento">Condición de Enrolamiento</string>
+    <string name="asignacion_geografica">ASIGNACIÓN GEOGRÁFICA Y LOGÍSTICA DE SUFRAGIO</string>
+    <string name="numero_mesa">Número de Mesa</string>
+    <string name="ubicacion_centro_mesa">Ubicación en Centro</string>
+    <string name="aula_piso">Aula: %1$s / Piso: %2$s</string>
+    <string name="centro_votacion">Centro de Votación</string>
+    <string name="direccion_local">Dirección del Local</string>
+    <string name="ubigeo_geografico">Ubigeo Geográfico</string>
+    <string name="condicion_miembro">CONDICIÓN DE MIEMBRO DE MESA</string>
+    <string name="designado">DESIGNADO</string>
+    <string name="no_seleccionado">NO SELECCIONADO</string>
+    <string name="cargo_asignado">Cargo Asignado</string>
+    <string name="horario_obligacion">Horario de Obligación</string>
+    <string name="descargar_constancia">DESCARGAR CONSTANCIA DE SUFRAGIO</string>
+    <string name="no_registrado">NO REGISTRADO</string>
+    <string name="no_asignado">NO ASIGNADO</string>
+    <string name="no_asignada">NO ASIGNADA</string>
+    <string name="na">N/A</string>
+    <string name="sistema_nacional_enrolamiento">SISTEMA NACIONAL DE ENROLAMIENTO TECNOLÓGICO</string>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ERRORES GENERALES -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <string name="error_sincronizacion">ERROR DE SINCRONIZACIÓN</string>
+    <string name="fallo_conexion_institucional">Fallo de conexión institucional: %1$s</string>
+    <string name="sin_conexion_tecvote">Sin conexión al servidor central TECVOTE.</string>
+    <string name="ciudadano_no_apto">El ciudadano no está apto para este proceso.</string>
+    <string name="dni_no_registrado">El DNI no está registrado en el sistema.</string>
+
+
 </resources>

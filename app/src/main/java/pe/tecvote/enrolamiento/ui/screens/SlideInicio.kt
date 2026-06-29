@@ -10,10 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pe.tecvote.enrolamiento.R
 
 @Composable
 fun SlideInicio(
@@ -47,6 +49,8 @@ fun SlideInicio(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Spacer(Modifier.height(40.dp))
+
             Box(
                 modifier = Modifier
                     .size(140.dp)
@@ -59,7 +63,7 @@ fun SlideInicio(
             Spacer(Modifier.height(32.dp))
 
             Text(
-                "TECVOTE",
+                stringResource(R.string.tecvote),
                 color = Color.White,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -69,14 +73,14 @@ fun SlideInicio(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                "Sistema Nacional de Enrolamiento",
+                stringResource(R.string.sistema_enrolamiento),
                 color = Color.White.copy(0.7f),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
 
             Text(
-                "Oficina Nacional de Procesos Electorales",
+                stringResource(R.string.onpe_nombre),
                 color = cyanBrillante.copy(0.8f),
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
@@ -93,7 +97,7 @@ fun SlideInicio(
                 colors = ButtonDefaults.buttonColors(containerColor = cyanBrillante)
             ) {
                 Text(
-                    "🆕 INICIAR ENROLAMIENTO",
+                    stringResource(R.string.iniciar_enrolamiento),
                     color = azulProfundo,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 15.sp
@@ -118,7 +122,7 @@ fun SlideInicio(
                 )
             ) {
                 Text(
-                    "📋 VER MIS DATOS",
+                    stringResource(R.string.ver_mis_datos),
                     color = cyanBrillante,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp
@@ -128,7 +132,7 @@ fun SlideInicio(
             Spacer(Modifier.height(48.dp))
 
             Text(
-                "Versión 2.0.1 | ONPE 2026",
+                stringResource(R.string.version_onpe),
                 color = Color.White.copy(0.3f),
                 fontSize = 11.sp,
                 textAlign = TextAlign.Center
