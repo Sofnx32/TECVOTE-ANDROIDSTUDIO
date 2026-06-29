@@ -1,6 +1,5 @@
 package pe.tecvote.enrolamiento.ui.screens
 
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -13,11 +12,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,75 +27,43 @@ import kotlinx.coroutines.launch
 import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.ClienteRed
 import pe.tecvote.enrolamiento.ui.*
+import pe.tecvote.enrolamiento.ui.theme.*
 
 @Composable
-fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit = {}) {
-    val azulProfundo = Color(0xFF020B18)
-    val azulOscuro = Color(0xFF041529)
-    val azulMedio = Color(0xFF0A2547)
-    val cyanBrillante = Color(0xFF00C8FF)
-    val cyanOscuro = Color(0xFF0090CC)
-
-    val degradeFondo = Brush.verticalGradient(
-        colorStops = arrayOf(
-            0.0f to azulMedio,
-            0.4f to azulOscuro,
-            1.0f to azulProfundo
-        )
-    )
-
+fun SlideIngresoDNI(
+    modifier: Modifier = Modifier,
+    onContinuar: (String) -> Unit = {}
+) {
     var dni by remember { mutableStateOf("") }
+    var dniBuscado by remember { mutableStateOf<String?>(null) }
     var nombreCompleto by remember { mutableStateOf<String?>(null) }
     var mensajeError by remember { mutableStateOf<String?>(null) }
     var buscando by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-
-    var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { visible = true }
-    val alpha by animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(1000, easing = LinearOutSlowInEasing),
-        label = "alpha"
-    )
-
-    val inf = rememberInfiniteTransition(label = "inf")
-    val botonScale by inf.animateFloat(
-        initialValue = 1f, targetValue = 1.02f,
-        animationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse),
-        label = "boton"
-    )
-    val aroAlpha by inf.animateFloat(
-        initialValue = 0.4f, targetValue = 0.9f,
-        animationSpec = infiniteRepeatable(tween(1500), RepeatMode.Reverse),
-        label = "aro"
-    )
+    val context = LocalContext.current
 
     LaunchedEffect(dni) {
-        if (dni.length == 8) {
+        if (dni.length == 8 && dni != dniBuscado) {
             buscando = true
             mensajeError = null
             nombreCompleto = null
+            dniBuscado = dni
             scope.launch {
                 try {
                     val resp = ClienteRed.api.buscarElector(dni)
-                    if (resp.existe) {
-                        if (resp.apto) {
-                            nombreCompleto = resp.nombre
-                        } else {
-                            mensajeError = resp.mensaje
-                        }
+                    if (resp.existe && resp.apto) {
+                        nombreCompleto = resp.nombre
                     } else {
                         mensajeError = resp.mensaje
                     }
                 } catch (e: Exception) {
-                    Log.e("TECVOTE_NET", "Error DNI FASE 1: ${e.localizedMessage}", e)
-                    // La cadena de error de red alternativa ahora proviene de strings.xml
-                    mensajeError = null
+                    mensajeError = context.getString(R.string.sin_conexion_servidor)
                 } finally {
                     buscando = false
                 }
             }
-        } else {
+        } else if (dni.length < 8) {
+            dniBuscado = null
             nombreCompleto = null
             mensajeError = null
         }
@@ -106,16 +72,23 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(degradeFondo)
+            .background(
+                Brush.verticalGradient(
+                    colorStops = arrayOf(
+                        0.0f to AzulMedio,
+                        0.4f to AzulOscuro,
+                        1.0f to AzulProfundo
+                    )
+                )
+            )
     ) {
+        // Orbes de luz
         Box(
             modifier = Modifier
                 .size(350.dp)
                 .offset(x = (-80).dp, y = (-60).dp)
                 .background(
-                    Brush.radialGradient(
-                        listOf(cyanBrillante.copy(0.06f), Color.Transparent)
-                    ),
+                    Brush.radialGradient(listOf(CyanBrillante.copy(0.06f), Color.Transparent)),
                     CircleShape
                 )
         )
@@ -125,9 +98,7 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                 .align(Alignment.BottomEnd)
                 .offset(x = 60.dp, y = 60.dp)
                 .background(
-                    Brush.radialGradient(
-                        listOf(cyanBrillante.copy(0.04f), Color.Transparent)
-                    ),
+                    Brush.radialGradient(listOf(CyanBrillante.copy(0.04f), Color.Transparent)),
                     CircleShape
                 )
         )
@@ -136,13 +107,11 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
-                .padding(horizontal = TamanosAdaptativos.paddingHorizontalPantalla())
-                .alpha(alpha),
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-
-            EspacioPequeno()
+            // HEADER
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -157,68 +126,84 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                         .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = stringResource(R.string.tecvote), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(
+                        text = stringResource(R.string.tecvote),
+                        color = Color.White,
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold)
+                    )
                 }
-                EspacioMedio()
+                Spacer(modifier = Modifier.width(12.dp))
                 Column {
-                    Text(text = stringResource(R.string.oficina_nacional), color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
-                    Text(text = stringResource(R.string.procesos_electorales), color = Color.White.copy(0.8f), fontSize = 10.sp, letterSpacing = 0.5.sp)
+                    Text(
+                        text = stringResource(R.string.oficina_nacional),
+                        color = Color.White,
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Text(
+                        text = stringResource(R.string.procesos_electorales),
+                        color = Color.White.copy(0.8f),
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
             }
 
+            // CENTRO
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
+                // Icono animado
+                val inf = rememberInfiniteTransition(label = "inf")
+                val aroAlpha by inf.animateFloat(
+                    initialValue = 0.4f, targetValue = 0.9f,
+                    animationSpec = infiniteRepeatable(tween(1500), RepeatMode.Reverse),
+                    label = "aro"
+                )
 
-                val tamanoIcono = TamanosAdaptativos.tamanoIconoCircular()
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(tamanoIcono)
-                ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(120.dp)) {
                     Box(
                         modifier = Modifier
-                            .size(tamanoIcono * 0.95f)
+                            .size(110.dp)
                             .background(
-                                Brush.radialGradient(
-                                    listOf(cyanBrillante.copy(aroAlpha * 0.15f), Color.Transparent)
-                                ),
+                                Brush.radialGradient(listOf(CyanBrillante.copy(aroAlpha * 0.15f), Color.Transparent)),
                                 CircleShape
                             )
                     )
                     Box(
                         modifier = Modifier
                             .size(90.dp)
-                            .border(1.5.dp, cyanBrillante.copy(aroAlpha * 0.6f), CircleShape)
+                            .border(1.5.dp, CyanBrillante.copy(aroAlpha * 0.6f), CircleShape)
                     )
-                    // CORREGIDO: Reemplazo del emoji por el icono de documento de identidad institucional
                     Icon(
                         painter = painterResource(id = R.drawable.ic_dni_tarjeta),
-                        contentDescription = null,
+                        contentDescription = "Documento Nacional de Identidad",
                         tint = Color.White,
                         modifier = Modifier.size(36.dp)
                     )
                 }
 
-                EspacioMedio()
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Surface(
-                    shape = RoundedCornerShape(6.dp),
-                    color = cyanBrillante.copy(0.15f)
-                ) {
+                // Badge
+                Surface(shape = RoundedCornerShape(6.dp), color = CyanBrillante.copy(0.15f)) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(Modifier.size(5.dp).background(cyanBrillante, CircleShape))
-                        EspacioPequeno()
-                        Text(text = stringResource(R.string.tecvote), color = cyanBrillante, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
+                        Box(Modifier.size(5.dp).background(CyanBrillante, CircleShape))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = stringResource(R.string.tecvote),
+                            color = CyanBrillante,
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
+                        )
                     }
                 }
 
-                EspacioGrande()
+                Spacer(modifier = Modifier.height(32.dp))
 
+                // Título animado
                 AnimatedContent(
                     targetState = nombreCompleto != null,
                     transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(200)) },
@@ -229,70 +214,63 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                             Text(
                                 text = stringResource(R.string.ingrese_dni),
                                 color = Color.White,
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 1.sp,
-                                textAlign = TextAlign.Center
+                                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold)
                             )
-                            EspacioPequeno()
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = stringResource(R.string.para_validar),
                                 color = Color.White.copy(0.65f),
-                                fontSize = 13.sp,
-                                textAlign = TextAlign.Center,
-                                lineHeight = 20.sp
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         } else {
                             Text(
                                 text = stringResource(R.string.identidad),
                                 color = Color.White,
-                                fontSize = 30.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 1.sp,
-                                textAlign = TextAlign.Center
+                                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold)
                             )
                             Text(
                                 text = stringResource(R.string.encontrada),
-                                color = cyanBrillante,
-                                fontSize = 30.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 1.sp,
-                                textAlign = TextAlign.Center
+                                color = CyanBrillante,
+                                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold)
                             )
-                            EspacioPequeno()
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = stringResource(R.string.confirme_datos),
                                 color = Color.White.copy(0.65f),
-                                fontSize = 13.sp,
-                                textAlign = TextAlign.Center,
-                                lineHeight = 20.sp
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
                 }
 
-                EspacioGrande()
+                Spacer(modifier = Modifier.height(32.dp))
 
+                // Panel animado
                 AnimatedContent(
                     targetState = nombreCompleto != null,
-                    transitionSpec = { fadeIn(tween(500)) + slideInVertically { 40 } togetherWith fadeOut(tween(200)) },
+                    transitionSpec = {
+                        fadeIn(tween(500)) + slideInVertically { 40 } togetherWith fadeOut(tween(200))
+                    },
                     label = "panel"
                 ) { encontrado ->
                     if (!encontrado) {
-
+                        // INPUT DNI
                         Column {
                             Text(
                                 text = stringResource(R.string.numero_dni),
                                 color = Color.White.copy(0.7f),
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 1.sp,
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                style = MaterialTheme.typography.labelMedium
                             )
+                            Spacer(modifier = Modifier.height(8.dp))
 
+                            val borderColor = if (mensajeError != null) Color(0xFFFF4444) else Color.White.copy(0.25f)
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(60.dp)
+                                    .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                                    .background(Color.White.copy(0.04f), RoundedCornerShape(12.dp))
+                                    .clip(RoundedCornerShape(12.dp))
                             ) {
                                 OutlinedTextField(
                                     value = dni,
@@ -300,67 +278,66 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                     singleLine = true,
                                     placeholder = {
                                         Text(
-                                            text = stringResource(R.string.dd_mm_aaaa), // Usa una máscara o recurso genérico de strings
+                                            text = stringResource(R.string.dni),
                                             color = Color.White.copy(0.3f),
-                                            fontSize = 18.sp,
-                                            letterSpacing = 4.sp
+                                            style = MaterialTheme.typography.titleMedium
                                         )
                                     },
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                     isError = mensajeError != null,
-                                    textStyle = androidx.compose.ui.text.TextStyle(
+                                    textStyle = MaterialTheme.typography.titleLarge.copy(
                                         color = Color.White,
-                                        fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold,
                                         letterSpacing = 6.sp
                                     ),
                                     colors = OutlinedTextFieldDefaults.colors(
-                                        focusedBorderColor = cyanBrillante,
-                                        unfocusedBorderColor = Color.White.copy(0.25f),
-                                        errorBorderColor = Color(0xFFFF4444),
-                                        focusedContainerColor = Color.White.copy(0.06f),
-                                        unfocusedContainerColor = Color.White.copy(0.04f),
-                                        cursorColor = cyanBrillante
+                                        focusedBorderColor = Color.Transparent,
+                                        unfocusedBorderColor = Color.Transparent,
+                                        errorBorderColor = Color.Transparent,
+                                        focusedContainerColor = Color.Transparent,
+                                        unfocusedContainerColor = Color.Transparent,
+                                        cursorColor = CyanBrillante
                                     ),
-                                    shape = RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp),
-                                    modifier = Modifier.weight(1f).height(60.dp)
+                                    modifier = Modifier.weight(1f).fillMaxHeight()
                                 )
                                 Box(
                                     modifier = Modifier
-                                        .height(60.dp)
+                                        .width(1.dp)
+                                        .fillMaxHeight()
+                                        .background(Color.White.copy(0.25f))
+                                )
+                                Box(
+                                    modifier = Modifier
                                         .width(56.dp)
-                                        .background(
-                                            Color.White.copy(0.12f),
-                                            RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp)
-                                        )
-                                        .border(
-                                            1.dp,
-                                            Color.White.copy(0.25f),
-                                            RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp)
-                                        ),
+                                        .fillMaxHeight()
+                                        .background(Color.White.copy(0.08f)),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(text = stringResource(R.string.dv), color = Color.White.copy(0.6f), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                    Text(
+                                        text = stringResource(R.string.dv),
+                                        color = Color.White.copy(0.6f),
+                                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                                    )
                                 }
                             }
 
-                            EspacioPequeno()
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = stringResource(R.string.problemas_dni), // Reorientado a un recurso global descriptivo
-                                color = Color.White.copy(0.4f),
-                                fontSize = 11.sp
+                                text = stringResource(R.string.problemas_dni),
+                                color = Color.White.copy(0.5f),
+                                style = MaterialTheme.typography.labelSmall
                             )
 
                             AnimatedVisibility(visible = mensajeError != null) {
                                 Surface(
                                     modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                                     shape = RoundedCornerShape(8.dp),
-                                    color = Color(0xFFB71C1C).copy(0.7f)
+                                    color = Color(0xFFB71C1C).copy(0.8f)
                                 ) {
                                     Text(
-                                        text = mensajeError ?: stringResource(R.string.sin_conexion_servidor),
+                                        text = mensajeError ?: "",
                                         color = Color.White,
-                                        fontSize = 12.sp,
+                                        style = MaterialTheme.typography.bodySmall,
                                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
                                     )
                                 }
@@ -373,24 +350,27 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     CircularProgressIndicator(
-                                        color = cyanBrillante,
+                                        color = CyanBrillante,
                                         modifier = Modifier.size(18.dp),
                                         strokeWidth = 2.dp
                                     )
-                                    EspacioMedio()
-                                    Text(text = stringResource(R.string.buscando_rostro), color = cyanBrillante, fontSize = 13.sp)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = stringResource(R.string.buscando_rostro),
+                                        color = CyanBrillante,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
                                 }
                             }
                         }
-
                     } else {
-
+                        // TARJETA USUARIO
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(Color.White.copy(0.07f))
-                                .border(1.dp, cyanBrillante.copy(0.3f), RoundedCornerShape(16.dp))
+                                .border(1.dp, CyanBrillante.copy(0.3f), RoundedCornerShape(16.dp))
                                 .padding(20.dp)
                         ) {
                             Row(
@@ -403,26 +383,25 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Column {
-                                    Text(text = stringResource(R.string.dni), color = Color.White.copy(0.5f), fontSize = 10.sp, letterSpacing = 1.sp)
-                                    Text(text = dni, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 3.sp)
+                                    Text(text = stringResource(R.string.dni), color = Color.White.copy(0.6f), style = MaterialTheme.typography.labelSmall)
+                                    Text(text = dni, color = Color.White, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold, letterSpacing = 3.sp))
                                 }
                                 Box(
                                     modifier = Modifier
                                         .size(40.dp)
-                                        .background(cyanBrillante.copy(0.15f), CircleShape),
+                                        .background(CyanBrillante.copy(0.15f), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    // CORREGIDO: Reemplazo del emoji por icono de avatar de usuario corporativo
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_usuario_avatar),
-                                        contentDescription = null,
-                                        tint = cyanBrillante,
+                                        contentDescription = "Avatar de usuario",
+                                        tint = CyanBrillante,
                                         modifier = Modifier.size(20.dp)
                                     )
                                 }
                             }
 
-                            EspacioPequeno()
+                            Spacer(modifier = Modifier.height(12.dp))
 
                             Row(
                                 modifier = Modifier
@@ -434,29 +413,26 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(text = stringResource(R.string.nombre_completo), color = Color.White.copy(0.5f), fontSize = 10.sp, letterSpacing = 1.sp)
-                                    EspacioPequeno()
+                                    Text(text = stringResource(R.string.nombre_completo), color = Color.White.copy(0.6f), style = MaterialTheme.typography.labelSmall)
+                                    Spacer(modifier = Modifier.height(4.dp))
                                     Text(
                                         text = nombreCompleto ?: "",
                                         color = Color.White,
-                                        fontSize = 17.sp,
-                                        fontWeight = FontWeight.ExtraBold,
-                                        lineHeight = 22.sp
+                                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
                                     )
                                 }
-                                EspacioMedio()
+                                Spacer(modifier = Modifier.width(12.dp))
                                 Box(
                                     modifier = Modifier
                                         .size(36.dp)
-                                        .background(cyanBrillante.copy(0.2f), CircleShape)
-                                        .border(1.5.dp, cyanBrillante, CircleShape),
+                                        .background(CyanBrillante.copy(0.2f), CircleShape)
+                                        .border(1.5.dp, CyanBrillante, CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    // CORREGIDO: Check de verificación por icono vectorial nativo
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_check_simple),
-                                        contentDescription = null,
-                                        tint = cyanBrillante,
+                                        contentDescription = "Datos verificados",
+                                        tint = CyanBrillante,
                                         modifier = Modifier.size(16.dp)
                                     )
                                 }
@@ -466,76 +442,70 @@ fun SlideIngresoDNI(modifier: Modifier = Modifier, onContinuar: (String) -> Unit
                 }
             }
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(bottom = 0.dp)
-            ) {
+            // FOOTER
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                val isEnabled = nombreCompleto != null || (dni.length == 8 && !buscando)
+                val buttonBrush = if (isEnabled) {
+                    Brush.horizontalGradient(listOf(CyanOscuro, CyanBrillante, CyanOscuro))
+                } else {
+                    Brush.horizontalGradient(listOf(Color.White.copy(0.08f), Color.White.copy(0.08f)))
+                }
+
                 Button(
-                    onClick = {
-                        if (nombreCompleto != null) onContinuar(dni)
-                    },
-                    enabled = if (nombreCompleto != null) true else (dni.length == 8 && !buscando),
+                    onClick = { if (nombreCompleto != null) onContinuar(dni) },
+                    enabled = isEnabled,
                     shape = RoundedCornerShape(50.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
-                        contentColor = Color.White,
-                        disabledContainerColor = Color.White.copy(0.08f),
-                        disabledContentColor = Color.White.copy(0.3f)
+                        disabledContainerColor = Color.Transparent
                     ),
                     contentPadding = PaddingValues(0.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(TamanosAdaptativos.altoProporcional(0.07))
-                        .scale(if (nombreCompleto != null) botonScale else 1f)
+                        .height(56.dp)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(
-                                brush = if (nombreCompleto != null || (dni.length == 8 && !buscando))
-                                    Brush.horizontalGradient(listOf(cyanOscuro, cyanBrillante, cyanOscuro))
-                                else
-                                    Brush.horizontalGradient(listOf(Color.White.copy(0.08f), Color.White.copy(0.08f))),
-                                shape = RoundedCornerShape(50.dp)
-                            ),
+                            .background(brush = buttonBrush, shape = RoundedCornerShape(50.dp)),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = if (nombreCompleto != null) stringResource(R.string.confirmar_continuar) else stringResource(R.string.registrar_rostro), // Reutiliza stringResource descriptivo para verificar
-                            color = if (nombreCompleto != null || (dni.length == 8 && !buscando)) Color.White else Color.White.copy(0.3f),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 2.sp
+                            text = if (nombreCompleto != null) stringResource(R.string.confirmar_continuar) else stringResource(R.string.registrar_rostro),
+                            color = if (isEnabled) Color.White else Color.White.copy(0.3f),
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                         )
                     }
                 }
 
-                EspacioMedio()
+                Spacer(modifier = Modifier.height(16.dp))
 
-                TextButton(onClick = { dni = ""; nombreCompleto = null; mensajeError = null }) {
+                TextButton(
+                    onClick = {
+                        dni = ""
+                        nombreCompleto = null
+                        mensajeError = null
+                        dniBuscado = null
+                    }
+                ) {
                     Text(
-                        text = if (nombreCompleto != null)
-                            stringResource(R.string.no_son_datos)
-                        else
-                            stringResource(R.string.problemas_dni),
-                        color = Color.White.copy(0.4f),
-                        fontSize = 11.sp,
-                        textAlign = TextAlign.Center
+                        text = if (nombreCompleto != null) stringResource(R.string.no_son_datos) else stringResource(R.string.problemas_dni),
+                        color = Color.White.copy(0.5f),
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
 
-                EspacioPequeno()
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = stringResource(R.string.seguridad_protocolo),
-                    color = Color.White.copy(0.25f),
-                    fontSize = 9.sp,
+                    color = Color.White.copy(0.3f),
+                    style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center
                 )
 
-                EspacioPequeno()
-                PuntosIndicadores(total = 6, actual = 1)
-                EspacioPequeno()
+                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }

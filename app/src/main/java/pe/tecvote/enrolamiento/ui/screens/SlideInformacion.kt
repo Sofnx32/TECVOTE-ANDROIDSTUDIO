@@ -19,8 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pe.tecvote.enrolamiento.R
 
-// Estructura de datos interna para optimizar el renderizado en listas
-private datainit class ItemInformacion(val titulo: String, val contenido: String)
+private data class ItemInformacion(
+    val titulo: String,
+    val contenido: String
+)
 
 @Composable
 fun SlideInformacion(modifier: Modifier = Modifier) {

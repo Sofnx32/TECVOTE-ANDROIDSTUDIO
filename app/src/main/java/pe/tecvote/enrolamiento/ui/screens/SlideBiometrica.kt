@@ -49,6 +49,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.Executors
 
+
 private enum class EstadoCara {
     BUSCANDO, CARA_OK, MUCHAS_CARAS, LISTO
 }
@@ -78,7 +79,10 @@ fun SlideBiometrica(
 
     var tieneCamara by remember { mutableStateOf(false) }
     var enviando by remember { mutableStateOf(false) }
+
+    // SOLUCIÓN AL ERROR DE TIPO DE DATO: Ahora acepta nulos
     var mensajeError by remember { mutableStateOf<String?>(null) }
+
     var fotoValidada by remember { mutableStateOf(false) }
     var estadoCara by remember { mutableStateOf(EstadoCara.BUSCANDO) }
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
@@ -424,7 +428,7 @@ fun SlideBiometrica(
                                                         onContinuar(response.token)
 
                                                     } else {
-                                                        Log.e("TECVOTE_BIO", "❌ Error en validación ML Kit: ${response.mensaje}")
+                                                        Log.e("TECVOTE_BIO", "Error en validación ML Kit: ${response.mensaje}")
                                                         mensajeError = response.mensaje ?: "La validación biométrica falló"
                                                     }
 
@@ -432,6 +436,7 @@ fun SlideBiometrica(
                                                         fotoOptimizada.delete()
                                                     }
                                                 } catch (e: Exception) {
+                                                    // Usando el Context clásico de Android de forma segura dentro del evento onClick
                                                     mensajeError = context.getString(R.string.error_conexion_servidor)
                                                     Log.e("TECVOTE", "Fallo al procesar login biométrico", e)
                                                 } finally {

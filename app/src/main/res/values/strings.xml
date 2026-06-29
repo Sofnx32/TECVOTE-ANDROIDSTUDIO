@@ -186,7 +186,7 @@
     <string name="no_registrado">No registrado</string>
     <string name="na">N/A</string>
     <string name="sistema_nacional_enrolamiento">Sistema Nacional de Enrolamiento Digital</string>
-
+    <string name="error_conexion_servidor">Error de conexión con el servidor</string>
     <string name="error_sincronizacion">Error de Sincronización</string>
     <string name="fallo_conexion_institucional">Fallo de comunicación institucional: %1$s</string>
     <string name="sin_conexion_tecvote">Sin conexión al servidor central de TecVote.</string>

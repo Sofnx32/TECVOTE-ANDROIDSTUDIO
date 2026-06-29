@@ -188,7 +188,7 @@
     <string name="no_registrado">Mana qillqasqa</string>
     <string name="na">N/A</string>
     <string name="sistema_nacional_enrolamiento">Llika Kamachiy Suti Qillqay Yanapakuy</string>
-
+    <string name="error_conexion_servidor">Servidorwan tupanakuypi pantay</string>
     <string name="error_sincronizacion">Tinkuypi Pantay</string>
     <string name="fallo_conexion_institucional">Wasi tinkuypi pantay kachkan: %1$s</string>
     <string name="sin_conexion_tecvote">TecVote chawpi qaraqwan mana tinkuyniyuq.</string>
