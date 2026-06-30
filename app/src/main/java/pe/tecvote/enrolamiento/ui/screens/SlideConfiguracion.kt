@@ -1,6 +1,7 @@
 package pe.tecvote.enrolamiento.ui.screens
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pe.tecvote.enrolamiento.R
+import pe.tecvote.enrolamiento.data.ClienteRed // 🔹 Importamos tu ClienteRed para cambiar la IP
 import pe.tecvote.enrolamiento.ui.EspacioGrande
 import pe.tecvote.enrolamiento.ui.EspacioMedio
 import pe.tecvote.enrolamiento.viewmodels.SettingsViewModel
@@ -50,6 +52,7 @@ fun SlideConfiguracion(
     val azulOscuro = Color(0xFF041529)
     val azulMedio = Color(0xFF0A2547)
     val cyanBrillante = Color(0xFF00C8FF)
+    val moradoBoton = Color(0xFF6A5ACD) // 🔹 Color aproximado para el botón "GUARDAR IP"
 
     val degradeFondo = Brush.verticalGradient(
         colorStops = arrayOf(
@@ -68,6 +71,11 @@ fun SlideConfiguracion(
     var showPrivacyDialog by remember { mutableStateOf(false) }
     var showFontSizeDialog by remember { mutableStateOf(false) }
     var showConfirmLogoutDialog by remember { mutableStateOf(false) }
+
+    // 🔹 Estados nuevos para manejar la IP dinámica del servidor/ESP32
+    var showIpConfigDialog by remember { mutableStateOf(false) }
+    var ipTextoInput by remember { mutableStateOf("192.168.1.3:8000") } // Valor inicial sugerido
+    var ipActualMostrada by remember { mutableStateOf("192.168.1.3:8000") }
 
     Scaffold(
         topBar = {
@@ -176,6 +184,27 @@ fun SlideConfiguracion(
                 cyanBrillante = cyanBrillante
             )
 
+            // 🔹 NUEVA SECCIÓN: CONFIGURACIÓN DE RED LOCAL / ESP32-CAM
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                text = "DISPOSITIVO EXTERNO (ESP32-CAM)",
+                color = cyanBrillante.copy(alpha = 0.8f),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+            )
+
+            ConfiguracionItem(
+                icono = Icons.Default.SettingsRemote,
+                titulo = "Dirección IP del Servidor",
+                descripcion = "Configura el destino de la API local de Django",
+                valorActual = ipActualMostrada,
+                onClick = { showIpConfigDialog = true },
+                cyanBrillante = cyanBrillante
+            )
+
             EspacioGrande()
 
             OutlinedButton(
@@ -216,6 +245,81 @@ fun SlideConfiguracion(
         selectedColor = cyanBrillante,
         unselectedColor = Color.White.copy(alpha = 0.4f)
     )
+
+    // 🔹 NUEVO DIÁLOGO: Configuración Dinámica de la IP para Django/ESP32
+    if (showIpConfigDialog) {
+        AlertDialog(
+            onDismissRequest = { showIpConfigDialog = false },
+            shape = RoundedCornerShape(24.dp),
+            title = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.DeveloperMode, contentDescription = null, tint = cyanBrillante)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Configuración IP", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                }
+            },
+            text = {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Ingrese la dirección IP local de su servidor Django (con su puerto correspondiente):",
+                        fontSize = 13.sp,
+                        color = Color.White.copy(alpha = 0.7f),
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = ipTextoInput,
+                        onValueChange = { ipTextoInput = it },
+                        label = { Text("Dirección IP del ESP32 / Django", color = Color.White.copy(alpha = 0.5f)) },
+                        placeholder = { Text("Ej: 192.168.1.3:8000") },
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = cyanBrillante,
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.3f),
+                            focusedLabelColor = cyanBrillante,
+                            cursorColor = cyanBrillante,
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    // Botón estilizado que imita tu diseño nativo "GUARDAR IP"
+                    Button(
+                        onClick = {
+                            if (ipTextoInput.trim().isNotEmpty()) {
+                                // ⚡ LLAMADA CRUCIAL AL CLIENTERED MODIFICADO DINÁMICAMENTE ⚡
+                                ClienteRed.actualizarBaseUrl(ipTextoInput)
+                                ipActualMostrada = ipTextoInput.trim()
+                                showIpConfigDialog = false
+                                Toast.makeText(context, "IP de red local actualizada!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "La IP no puede estar vacía", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = moradoBoton),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                    ) {
+                        Text("GUARDAR IP", color = Color.White, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showIpConfigDialog = false }) {
+                    Text("Cancelar", color = Color.White.copy(alpha = 0.6f))
+                }
+            },
+            containerColor = Color(0xFF041529),
+            titleContentColor = Color.White,
+            textContentColor = Color.White
+        )
+    }
 
     if (showLanguageDialog) {
         AlertDialog(
