@@ -18,6 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,6 +34,7 @@ import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
 import java.text.Normalizer
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.Image
 
 fun normalizarTexto(texto: String): String =
     Normalizer.normalize(texto.trim().uppercase(), Normalizer.Form.NFD)
@@ -163,17 +166,30 @@ fun SlidePreguntas(
                     .padding(horizontal = 16.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
+
+                Image(
+                    painter = painterResource(id = R.drawable.logotecvote),  // ← CAMBIA por el nombre real de tu imagen
+                    contentDescription = "Logo TecVote",
                     modifier = Modifier
                         .size(44.dp)
-                        .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(stringResource(R.string.tecvote), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
-                }
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text(stringResource(R.string.procesos_electorales), color = Color.White.copy(0.8f), fontSize = 10.sp, letterSpacing = 0.5.sp)
+                    Text(
+                        text = stringResource(R.string.oficina_nacional),
+                        color = Color.White,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp
+                    )
+                    Text(
+                        text = stringResource(R.string.procesos_electorales),
+                        color = Color.White.copy(0.8f),
+                        fontSize = 12.sp,
+                        letterSpacing = 0.5.sp
+                    )
                 }
             }
 

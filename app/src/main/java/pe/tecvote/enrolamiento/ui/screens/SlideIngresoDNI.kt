@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,7 @@ import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.ClienteRed
 import pe.tecvote.enrolamiento.ui.*
 import pe.tecvote.enrolamiento.ui.theme.*
+import androidx.compose.foundation.Image
 
 @Composable
 fun SlideIngresoDNI(
@@ -118,34 +120,42 @@ fun SlideIngresoDNI(
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color.White.copy(0.06f))
                     .padding(horizontal = 16.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween  // ← Esto separa logo y texto
             ) {
-                Box(
+                // ← IZQUIERDA: IMAGEN DEL LOGO
+                Image(
+                    painter = painterResource(id = R.drawable.logotecvote),  // ← CAMBIA por tu imagen
+                    contentDescription = "Logo institucional",
                     modifier = Modifier
-                        .size(44.dp)
-                        .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
+                        .size(50.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+
+                // → DERECHA/CENTRO: TEXTO
+                Column(
+                    modifier = Modifier.weight(1f),  // ← Esto centra el texto
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = stringResource(R.string.tecvote),
-                        color = Color.White,
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold)
-                    )
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                Column {
                     Text(
                         text = stringResource(R.string.oficina_nacional),
                         color = Color.White,
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
                     )
                     Text(
                         text = stringResource(R.string.procesos_electorales),
                         color = Color.White.copy(0.8f),
-                        style = MaterialTheme.typography.labelSmall
+                        style = MaterialTheme.typography.labelSmall,
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
+
+            EspacioGrande()
 
             // CENTRO
             Column(
@@ -175,11 +185,13 @@ fun SlideIngresoDNI(
                             .size(90.dp)
                             .border(1.5.dp, CyanBrillante.copy(aroAlpha * 0.6f), CircleShape)
                     )
-                    Icon(
+                    Image(
                         painter = painterResource(id = R.drawable.ic_dni_tarjeta),
-                        contentDescription = "Documento Nacional de Identidad",
-                        tint = Color.White,
-                        modifier = Modifier.size(36.dp)
+                        contentDescription = "DNI de ejemplo",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp),  // Tamaño más grande
+                        contentScale = ContentScale.Fit
                     )
                 }
 
@@ -392,11 +404,12 @@ fun SlideIngresoDNI(
                                         .background(CyanBrillante.copy(0.15f), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(
+                                    Image(
                                         painter = painterResource(id = R.drawable.ic_usuario_avatar),
                                         contentDescription = "Avatar de usuario",
-                                        tint = CyanBrillante,
-                                        modifier = Modifier.size(20.dp)
+                                        modifier = Modifier
+                                            .size(20.dp),
+                                        contentScale = ContentScale.Crop
                                     )
                                 }
                             }
@@ -429,11 +442,11 @@ fun SlideIngresoDNI(
                                         .border(1.5.dp, CyanBrillante, CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(
+                                    Image(
                                         painter = painterResource(id = R.drawable.ic_check_simple),
                                         contentDescription = "Datos verificados",
-                                        tint = CyanBrillante,
-                                        modifier = Modifier.size(16.dp)
+                                        modifier = Modifier.size(16.dp),
+                                        contentScale = ContentScale.Fit
                                     )
                                 }
                             }

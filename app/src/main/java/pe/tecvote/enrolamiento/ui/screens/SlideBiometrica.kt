@@ -29,8 +29,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +50,7 @@ import pe.tecvote.enrolamiento.ui.TamanosAdaptativos
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.Executors
+import androidx.compose.foundation.Image
 
 
 private enum class EstadoCara {
@@ -225,14 +228,14 @@ fun SlideBiometrica(
                     .padding(horizontal = 16.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
+                Image(
+                    painter = painterResource(id = R.drawable.logotecvote),
+                    contentDescription = "Logo TecVote",
                     modifier = Modifier
                         .size(44.dp)
-                        .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(stringResource(R.string.tecvote), color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
-                }
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(stringResource(R.string.sistema_enrolamiento_tec), color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)

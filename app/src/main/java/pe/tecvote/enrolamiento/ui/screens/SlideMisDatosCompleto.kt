@@ -17,6 +17,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +31,7 @@ import pe.tecvote.enrolamiento.data.MesaData
 import pe.tecvote.enrolamiento.data.LocalVotacionData
 import pe.tecvote.enrolamiento.data.MiembroMesaData
 import pe.tecvote.enrolamiento.ui.*
+import androidx.compose.foundation.Image
 
 @Composable
 fun SlideMisDatosCompleto(
@@ -83,18 +86,14 @@ fun SlideMisDatosCompleto(
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(Color.White.copy(0.12f), RoundedCornerShape(4.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    // CORREGIDO: "ONPE" ahora se maneja de forma segura o explícita como texto de marca
-                    Text(text = "ONPE", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Black)
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.logotecvote),  // ← Tu logo
+                    contentDescription = "Logo TecVote",
+                    modifier = Modifier.size(44.dp).clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    // CORREGIDO: Eliminación de concatenación literal de strings en favor de recursos compuestos o limpios
                     Text(
                         text = stringResource(R.string.oficina_nacional) + " " + stringResource(R.string.procesos_electorales),
                         color = Color.White,
@@ -148,6 +147,7 @@ fun SlideMisDatosCompleto(
 
             EspacioGrande()
 
+            // Columna principal con scroll que ocupa todo el espacio disponible
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -158,23 +158,9 @@ fun SlideMisDatosCompleto(
                 datos.elector?.let { CardMisDatos(it, cyanBrillante, verdeExito, superficieGris) }
                 CardMesaVotacion(datos.mesa, datos.localVotacion, cyanBrillante, superficieGris)
                 datos.miembroMesa?.let { CardMiembroMesa(it, verdeExito, cyanBrillante, superficieGris) }
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                OutlinedButton(
-                    onClick = { onDescargarConstancia(datos.codigoConstancia) },
-                    modifier = Modifier.fillMaxWidth().height(52.dp),
-                    shape = RoundedCornerShape(6.dp),
-                    border = BorderStroke(1.dp, cyanBrillante.copy(0.6f)),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = cyanBrillante)
-                ) {
-                    Text(text = stringResource(R.string.descargar_constancia), fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                }
+                // Espacio adicional al final para que se vea bien
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
             EspacioMedio()

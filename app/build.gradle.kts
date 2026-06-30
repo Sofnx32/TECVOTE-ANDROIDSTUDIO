@@ -60,6 +60,7 @@ dependencies {
 
     // ── Corrutinas    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
     implementation(libs.androidx.tv.material)
+    implementation(libs.androidx.ui)
 
     // ── CameraX (Actualizado a 1.4.1 para soporte estricto de 16 KB) ──
     val camerax_version = "1.4.1"

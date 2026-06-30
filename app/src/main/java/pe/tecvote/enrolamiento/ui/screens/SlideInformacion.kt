@@ -39,8 +39,6 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         )
     )
 
-    // Almacenamos las traducciones en memoria mediante 'remember' para evitar que
-    // se vuelvan a consultar los recursos XML del sistema durante el scroll.
     val listaInformacion = remember {
         listOf(
             ItemInformacion("info_version", "TecVote v2.0.1"),
@@ -53,7 +51,6 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
         )
     }
 
-    // Mapa dinámico para transformar los identificadores string estáticos en recursos del proyecto de forma limpia
     val mapeoRecursos = mapOf(
         "info_version" to stringResource(R.string.info_version),
         "info_desarrollado" to stringResource(R.string.info_desarrollado),
@@ -94,10 +91,9 @@ fun SlideInformacion(modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Center,
                 lineHeight = 20.sp
             )
-            Spacer(Modifier.height(28.dp)) // Ajuste proporcional de espaciado por el spacedBy del LazyColumn
+            Spacer(Modifier.height(28.dp))
         }
 
-        // Renderizado eficiente y dinámico por demanda (solo dibuja lo que se ve en pantalla)
         items(listaInformacion) { item ->
             val tituloResuelto = mapeoRecursos[item.titulo] ?: item.titulo
             val contenidoResuelto = mapeoRecursos[item.contenido] ?: item.contenido
@@ -128,30 +124,27 @@ private fun InformacionCard(
     contenido: String,
     cyanBrillante: Color
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.08f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = Color.White.copy(0.08f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(20.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        ) {
-            Text(
-                text = titulo,
-                color = cyanBrillante,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = contenido,
-                color = Color.White.copy(0.9f),
-                fontSize = 14.sp,
-                lineHeight = 20.sp
-            )
-        }
+        Text(
+            text = titulo,
+            color = cyanBrillante,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = contenido,
+            color = Color.White.copy(0.9f),
+            fontSize = 14.sp,
+            lineHeight = 20.sp
+        )
     }
 }

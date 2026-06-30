@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +28,9 @@ import androidx.compose.ui.unit.sp
 import pe.tecvote.enrolamiento.R
 import pe.tecvote.enrolamiento.data.RespuestaElector
 import pe.tecvote.enrolamiento.ui.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun SlideGestionEnrolamiento(
@@ -95,6 +99,7 @@ fun SlideGestionEnrolamiento(
                 .systemBarsPadding()
                 .padding(horizontal = TamanosAdaptativos.paddingHorizontalPantalla())
                 .alpha(alpha)
+                .verticalScroll(rememberScrollState())
         ) {
             EspacioMedio()
             Row(
@@ -105,14 +110,12 @@ fun SlideGestionEnrolamiento(
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "ONPE", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.logotecvote),  // ← Tu logo
+                    contentDescription = "Logo TecVote",
+                    modifier = Modifier.size(44.dp).clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(text = stringResource(R.string.oficina_nacional), color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
@@ -148,7 +151,6 @@ fun SlideGestionEnrolamiento(
 
             Column(
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -253,19 +255,14 @@ private fun CardInformacionCiudadano(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
+                Image(
+                    painter = painterResource(id = R.drawable.ic_usuario_avatar),
+                    contentDescription = "Foto del ciudadano",
                     modifier = Modifier
                         .size(54.dp)
-                        .background(cyanBrillante.copy(0.15f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_usuario_avatar),
-                        contentDescription = null,
-                        tint = cyanBrillante,
-                        modifier = Modifier.size(26.dp)
-                    )
-                }
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
 
                 Spacer(Modifier.width(16.dp))
 
@@ -363,11 +360,11 @@ private fun CardDatosEnrolados(cyanBrillante: Color, verdeExito: Color) {
 private fun FilaDatoEnrolado(icono: Painter, label: String, estado: String, colorExito: Color) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
+            Image(
                 painter = icono,
-                contentDescription = null,
-                tint = Color.White.copy(0.8f),
-                modifier = Modifier.size(20.dp)
+                contentDescription = label,
+                modifier = Modifier.size(20.dp),
+                contentScale = ContentScale.Fit
             )
             Spacer(Modifier.width(12.dp))
             Text(text = label, color = Color.White.copy(0.8f), fontSize = 13.sp)
@@ -376,11 +373,11 @@ private fun FilaDatoEnrolado(icono: Painter, label: String, estado: String, colo
             Text(text = estado, color = colorExito, fontSize = 12.sp, fontWeight = FontWeight.Medium)
             Spacer(Modifier.width(8.dp))
             Box(modifier = Modifier.size(20.dp).background(colorExito.copy(0.2f), CircleShape), contentAlignment = Alignment.Center) {
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.ic_check_simple),
                     contentDescription = null,
-                    tint = colorExito,
-                    modifier = Modifier.size(10.dp)
+                    modifier = Modifier.size(10.dp),
+                    contentScale = ContentScale.Fit
                 )
             }
         }
@@ -391,14 +388,15 @@ private fun FilaDatoEnrolado(icono: Painter, label: String, estado: String, colo
 private fun CardSincronizacion(cyanBrillante: Color) {
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color.White.copy(0.05f))) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.size(44.dp).background(cyanBrillante.copy(0.15f), CircleShape), contentAlignment = Alignment.Center) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_nube_firma),
-                    contentDescription = null,
-                    tint = cyanBrillante,
-                    modifier = Modifier.size(22.dp)
-                )
-            }
+            Image(
+                painter = painterResource(id = R.drawable.ic_nube_firma),
+                contentDescription = "Sincronización",
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(cyanBrillante.copy(0.15f), CircleShape)
+                    .padding(8.dp),
+                contentScale = ContentScale.Fit
+            )
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = stringResource(R.string.sincronizacion), color = Color.White, fontWeight = FontWeight.Medium, fontSize = 12.sp)

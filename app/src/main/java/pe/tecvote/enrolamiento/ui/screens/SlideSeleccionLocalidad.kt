@@ -3,7 +3,9 @@ package pe.tecvote.enrolamiento.ui.screens
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.CheckCircle
@@ -35,7 +37,10 @@ import pe.tecvote.enrolamiento.ui.screens.localidad.LocalidadState
 import pe.tecvote.enrolamiento.ui.screens.localidad.LocalidadViewModel
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
 
 @Composable
 fun SlideSeleccionLocalidad(
@@ -96,14 +101,12 @@ fun SlideSeleccionLocalidad(
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .background(Color.White.copy(0.15f), RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("ONPE", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.logotecvote),  // ← Tu logo
+                    contentDescription = "Logo TecVote",
+                    modifier = Modifier.size(44.dp).clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
@@ -180,9 +183,12 @@ private fun ContenidoLocalDetectado(
     onContinuar: () -> Unit
 ) {
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -295,6 +301,8 @@ private fun ContenidoLocalDetectado(
                 )
             }
         }
+
+        EspacioExtraGrande()
     }
 }
 
