@@ -91,7 +91,6 @@ data class RespuestaGuardarPreferencia(val exitoso: Boolean, val mensaje: String
 data class BodyPreferenciaLocal(val dni: String, val local_id: String)
 
 
-// --- Tu Interfaz de API se mantiene Igual ---
 
 interface TecvoteApi {
     @GET("api/v1/elector/{dni_buscado}/")
