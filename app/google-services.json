@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "882789260021",
+    "project_id": "tecvote-android",
+    "storage_bucket": "tecvote-android.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882789260021:android:cbe814aacdd40c297503bc",
+        "android_client_info": {
+          "package_name": "pe.tecvote.enrolamiento"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeIERgEo-ABJSWZHrosBt1wdr6M_YxP-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

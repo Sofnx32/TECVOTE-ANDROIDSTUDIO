@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -52,6 +53,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.0")
     implementation("androidx.compose.ui:ui-viewbinding:1.4.0")
     implementation("com.google.accompanist:accompanist-webview:0.30.1")
+    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
 
     // ── Red (Retrofit & OkHttp) ───────────────────────────────────────
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
